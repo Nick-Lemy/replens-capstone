@@ -19,5 +19,5 @@ COPY app/backend /workspace/app/backend
 RUN python app/backend/setup_models.py
 
 USER 10001
-EXPOSE 10000
-CMD ["sh", "-c", "exec python -m uvicorn app.backend.main:app --host 0.0.0.0 --port ${PORT:-10000}"]
+EXPOSE 8000
+CMD ["sh", "-c", "exec python -m uvicorn app.backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
