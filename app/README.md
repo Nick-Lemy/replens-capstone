@@ -85,12 +85,32 @@ Install `training/requirements.txt` for notebook/model development. Run `python 
 
 The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is not the default and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. Missing bundles return an explicit unavailable state; there is no silent model fallback.
 
-## VPS deployment
+## Azure VM deployment
 
-The Docker backend is configured for the existing ARM64 VPS at `api.replens.lemy.dev`, using Kamal and the existing TLS proxy. The application listens on port 8000 inside its container. GitHub Actions builds on a native ARM runner; no database migrations or authentication secrets are needed.
+Use an Ubuntu 24.04 LTS VM with SSH-key authentication, an x64 CPU, at least 2 vCPUs and 4 GB RAM, and a static public IP. These are initial sizing recommendations; video processing still needs a real upload benchmark. Select a VM size available under your Azure subscription and check its estimated cost against your remaining credits.
 
-Required GitHub secret: `DEPLOY_SSH_PRIVATE_KEY`. Public variables: `REPLENS_VPS_IP`, `REPLENS_API_HOST`, `REPLENS_FRONTEND_ORIGIN`, `REPLENS_SSH_USER`, `REPLENS_VPS_ARCH`, and `DEPLOY_ENABLED`. An optional `REPLENS_APPROVED_DEPLOY_SHA` permits one explicitly requested `dev` deployment before merging its PR; ordinary production deployments follow pushes to `main`.
+Allow inbound TCP ports 22 (SSH), 80 and 443 (HTTPS). Use an admin user with passwordless sudo. Do not expose container port 8000. Point the DNS A record for `api.replens.lemy.dev` to the new public IP before enabling deployment.
 
-Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. SSH is checked before building. The current setup reuses the existing Kamal service, proxy and hostname.
+GitHub Actions settings:
 
-The Netlify frontend currently remains pointed at the temporary Render API until the VPS is reachable and its new backend passes health checks. After cutover, set its production `VITE_API_URL` to `https://api.replens.lemy.dev`, build, and deploy. Render free hosting was memory-constrained and is not the chosen target.
+| Setting | Value |
+| --- | --- |
+| Secret `DEPLOY_SSH_PRIVATE_KEY` | Private key matching the VM's authorized public key |
+| Variable `REPLENS_VPS_IP` | New Azure VM public IP |
+| Variable `REPLENS_SSH_USER` | VM admin username, for example `azureuser` |
+| Variable `REPLENS_VPS_ARCH` | `amd64` for an x64 VM; `arm64` only for an ARM VM |
+| Variable `REPLENS_API_HOST` | `api.replens.lemy.dev` |
+| Variable `REPLENS_FRONTEND_ORIGIN` | `https://replens.lemy.dev` |
+| Variable `DEPLOY_ENABLED` | Keep `false` until the VM and DNS are ready; then `true` |
+
+Use `gh variable set NAME --body VALUE` to update variables. Set the private key from its local file without copying it into chat:
+
+```sh
+gh secret set DEPLOY_SSH_PRIVATE_KEY < /path/to/private-key
+```
+
+For the first deployment, run **Deploy VPS backend** manually with `first_setup` checked. Kamal installs Docker and starts the HTTPS proxy and backend. If deploying through a push instead, temporarily set `REPLENS_FIRST_SETUP=true`, then remove that variable after successful setup. Subsequent pushes to `main` use `kamal deploy`. An optional `REPLENS_APPROVED_DEPLOY_SHA` permits a specific approved `dev` commit to deploy before its PR is merged.
+
+Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. No database migrations or authentication secrets are needed by this version. Deployment finishes by checking the public API and selected model.
+
+The Netlify frontend remains pointed at the temporary Render API until Azure passes its health check. After cutover, set its production `VITE_API_URL` to `https://api.replens.lemy.dev`, rebuild and deploy. Test a complete upload before retiring Render. Free Render hosting hit memory limits with this workload.
