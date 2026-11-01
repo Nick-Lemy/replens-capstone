@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ScanLine, Clock3, Download, RefreshCw } from "lucide-react";
 import { useRegisterSW } from "virtual:pwa-register/react";
 import { api } from "./lib/api";
 import { historyStore } from "./lib/history";
-import type { AnalysisResult, SavedSession } from "./lib/types";
+import type { AnalysisResult, SavedSession, SetReview } from "./lib/types";
 import { Analyze } from "./components/analyze";
+import { initialReview } from "./components/set-review";
 import { Results } from "./components/results";
 import { History } from "./components/history";
 import { Button, Notice, ThemeSwitch } from "./components/ui";
@@ -23,6 +24,9 @@ export default function App() {
   const [video, setVideo] = useState<Blob | null>(null);
   const [url, setUrl] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
+  const [activeSession, setActiveSession] = useState<SavedSession | null>(null);
+  const [review, setReview] = useState<SetReview | null>(null);
+  const reviewRef = useRef<SetReview | null>(null);
   const [message, setMessage] = useState("");
   const [online, setOnline] = useState(navigator.onLine);
   const [install, setInstall] = useState<InstallPrompt | null>(null);
@@ -58,8 +62,9 @@ export default function App() {
   });
   const save = useMutation({
     mutationFn: historyStore.save,
-    onSuccess: () => {
-      setSaved(true);
+    onSuccess: (_data, session) => {
+      setActiveSession(session);
+      setSaved(reviewRef.current === session.review);
       void queryClient.invalidateQueries({ queryKey: ["history"] });
     },
   });
@@ -94,6 +99,10 @@ export default function App() {
   useEffect(() => {
     if (job.data?.state === "completed" && job.data.result) {
       setResult(job.data.result);
+      const nextReview = initialReview(job.data.result);
+      reviewRef.current = nextReview;
+      setReview(nextReview);
+      setActiveSession(null);
       setVideo(file);
       setSaved(false);
     }
@@ -115,6 +124,9 @@ export default function App() {
   }, []);
   function reset() {
     setResult(null);
+    reviewRef.current = null;
+    setReview(null);
+    setActiveSession(null);
     setJobId(null);
     setSaved(false);
     setVideo(null);
@@ -133,6 +145,10 @@ export default function App() {
     }
     setJobId(null);
     setResult(session.result);
+    const nextReview = session.review ?? initialReview(session.result);
+    reviewRef.current = nextReview;
+    setReview(nextReview);
+    setActiveSession(session);
     setVideo(session.video);
     setSaved(true);
     setTab("analyze");
@@ -237,23 +253,26 @@ export default function App() {
             onRemove={(id) => remove.mutate(id)}
             onAnalyze={() => (busy ? setTab("analyze") : reset())}
           />
-        ) : result ? (
+        ) : result && review ? (
           <Results
-            key={jobId ?? video?.size}
+            key={activeSession?.id ?? jobId ?? "new"}
             result={result}
             url={url}
             onBack={reset}
             saved={saved}
             saving={save.isPending}
+            review={review}
+            onReviewChange={(next) => { reviewRef.current = next; setReview(next); setSaved(false); }}
             onSave={
               video
                 ? () =>
                     save.mutate({
-                      id: crypto.randomUUID(),
-                      title: "Dumbbell curl",
-                      createdAt: new Date().toISOString(),
+                      id: activeSession?.id ?? crypto.randomUUID(),
+                      title: activeSession?.title ?? "Dumbbell curl",
+                      createdAt: activeSession?.createdAt ?? new Date().toISOString(),
                       result,
                       video,
+                      review,
                     })
                 : undefined
             }

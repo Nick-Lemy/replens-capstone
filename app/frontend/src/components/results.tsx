@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Bookmark, Check, Play, RotateCcw, ChevronLeft } from "lucide-react";
-import type { AnalysisResult } from "../lib/types";
+import type { AnalysisResult, SetReview } from "../lib/types";
+import { SetReviewCard } from "./set-review";
 import { Button, Notice, seconds } from "./ui";
 export function Results({
   result,
@@ -9,6 +10,8 @@ export function Results({
   onSave,
   saved,
   saving,
+  review,
+  onReviewChange,
 }: {
   result: AnalysisResult;
   url: string | null;
@@ -16,6 +19,8 @@ export function Results({
   onSave?: () => void;
   saved: boolean;
   saving: boolean;
+  review: SetReview;
+  onReviewChange: (review: SetReview) => void;
 }) {
   const [selected, setSelected] = useState(Math.max(0, result.reps.length - 1));
   const [previewError, setPreviewError] = useState(false);
@@ -205,6 +210,7 @@ export function Results({
           )}
         </section>
       )}
+      <SetReviewCard analysis={result} review={review} onChange={onReviewChange} onSeek={(time) => { if (player.current) { player.current.currentTime = time; void player.current.play().catch(() => {}); } }} />
       <div className="space-y-2 text-xs leading-5 text-muted">
         {result.warnings.map((w) => (
           <p key={w}>{w}</p>
