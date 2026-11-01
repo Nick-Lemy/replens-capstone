@@ -1,0 +1,42 @@
+{
+  "encoder": {
+    "encoder": "r3d18_kinetics400_v1",
+    "weights_sha256": "b3b3357ead25631ec9c57362ff2128a92d0427e01e2cd184951a44380c3f2e9d",
+    "preprocessing": "native_frames_rgb_aspect_pad112_kinetics_norm_v1",
+    "chunk_frames": 16,
+    "partial_chunk_padding": "repeat_last_observed_frame",
+    "cache_point": "final_block_conv1_and_pre_relu_sum_v1",
+    "video_variant": "cropped",
+    "torch": "2.14.1"
+  },
+  "preparation_id": "9f528c70e2c385f0",
+  "scope": "exploratory",
+  "participants": [
+    "P001",
+    "P002",
+    "P003",
+    "P005",
+    "P006",
+    "P012"
+  ],
+  "reps": 124,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "max_epochs": 12,
+  "patience": 3,
+  "adapter_rank": 4,
+  "head_hidden_size": 24,
+  "conditions": [
+    "r3d_adapter_tcn",
+    "r3d_adapter_tcn_prefix"
+  ],
+  "history_modes": [
+    "rolling4",
+    "prefix"
+  ],
+  "history_reps": null,
+  "note": "Retrospective whole-lifter crops; no physiological tremor validation or live causal crop claim."
+}

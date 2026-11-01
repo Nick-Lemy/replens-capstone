@@ -1,0 +1,4 @@
+task,model,examples,mae
+rir,speed_only,8.25,2.2511656107863036
+rir,speed_plus_candidate_tremor,8.25,2.8817978692775905
+rir,training_median,8.25,2.452838827838828

@@ -1,0 +1,98 @@
+sample_id,video_id,participant_id,rep,accepted,reason
+2f654aa5f83e940e87e7083f,V001,P001,4,True,
+6ec3c2a1a7cae28112ce247e,V001,P001,5,True,
+bff1485d9560acd7d9b50d0c,V001,P001,6,True,
+d9da829b7d4f8855a1229366,V001,P001,7,True,
+a2467bf8b119cb31c9eeb315,V001,P001,8,True,
+0011b10e6148d3c0a800961c,V001,P001,9,True,
+1cbb10d29a27d0588aa16aa6,Vfb5fee7743ec,P001,4,False,tracking gap exceeds two frames or reaches an edge
+635077ce63182abc6d83df00,Vfb5fee7743ec,P001,5,False,tracking gap exceeds two frames or reaches an edge
+2855a6b173d236e676268e79,Vfb5fee7743ec,P001,6,False,tracking gap exceeds two frames or reaches an edge
+6176ca51b41dc8aa9ed31b08,Vfb5fee7743ec,P001,7,False,tracking gap exceeds two frames or reaches an edge
+c1af49036ca2b69bb4d2ded2,Vfb5fee7743ec,P001,8,False,tracking gap exceeds two frames or reaches an edge
+55984cfb2a957b3a17b2a91e,Vfb5fee7743ec,P001,9,True,
+d407ea4558eb1301c071c467,Vfb5fee7743ec,P001,10,True,
+bcf4e257e7e5b9ea479ad7c9,Vfb5fee7743ec,P001,11,True,
+6d9635baebe79acc1aa4cd25,Vfb5fee7743ec,P001,12,True,
+0380e5473778a4c25e9ab8f1,Vfb5fee7743ec,P001,13,False,tracking gap exceeds two frames or reaches an edge
+faf9e11daa8bc52499f15f7e,Vfb5fee7743ec,P001,14,False,tracking gap exceeds two frames or reaches an edge
+028a3b99c96e9a6dd30873f4,Vfb5fee7743ec,P001,15,False,tracking gap exceeds two frames or reaches an edge
+1609d9a015657b4cfb0be0b1,Vfb5fee7743ec,P001,16,False,tracking gap exceeds two frames or reaches an edge
+3515382045a43be88e58aadd,Vfb5fee7743ec,P001,17,True,
+f97f6a71753a8409ad2d10d8,Vfb5fee7743ec,P001,18,True,
+2af11494772f7f66cfdf611b,Vc2b7e31d0a92,P002,4,False,less than 85% valid wrist/camera tracking
+5c9287f9724029c4fbeb3d9e,Vc2b7e31d0a92,P002,5,False,less than 85% valid wrist/camera tracking
+f06cd5e8b63a684fcdd6fdcc,Vc2b7e31d0a92,P002,6,False,less than 85% valid wrist/camera tracking
+e8971ce0c090ab0740e17c17,Vc2b7e31d0a92,P002,7,False,less than 85% valid wrist/camera tracking
+8a0383788669a477aa25b723,Vc2b7e31d0a92,P002,8,False,less than 85% valid wrist/camera tracking
+197bae6b0148edecbf820bbb,Vc2b7e31d0a92,P002,9,False,less than 85% valid wrist/camera tracking
+f881bb7ed0f821a1eacb5d38,Vde309ba0dab8,P002,4,False,tracking gap exceeds two frames or reaches an edge
+34591d5538b6abd854c4dc97,Vde309ba0dab8,P002,5,False,tracking gap exceeds two frames or reaches an edge
+a04d53db74919f0f49d25192,Vde309ba0dab8,P002,6,False,tracking gap exceeds two frames or reaches an edge
+46c2a2d9858d17468342ce11,Vde309ba0dab8,P002,7,False,tracking gap exceeds two frames or reaches an edge
+64250f2c428ccbc71797dd85,Vde309ba0dab8,P002,8,True,
+320d94fd1b69e94fc8cec0ac,Vde309ba0dab8,P002,9,False,tracking gap exceeds two frames or reaches an edge
+d2e262f6053f01c043942e59,Vde309ba0dab8,P002,10,False,tracking gap exceeds two frames or reaches an edge
+9a6a39ba18cf6927e6850ce2,Vde309ba0dab8,P002,11,False,tracking gap exceeds two frames or reaches an edge
+1dcd853fa817c3652d9e8b41,Vde309ba0dab8,P002,12,False,tracking gap exceeds two frames or reaches an edge
+ea5ef39118cc71746b07e66b,V0ec24ce000f9,P003,4,False,less than 85% valid wrist/camera tracking
+74fa2fd371281592b6de642c,V0ec24ce000f9,P003,5,False,less than 85% valid wrist/camera tracking
+ff495c3c6737286e5127fe95,V0ec24ce000f9,P003,6,False,less than 85% valid wrist/camera tracking
+b4d26dddc35d3cc7c9e0827d,V0ec24ce000f9,P003,7,False,less than 85% valid wrist/camera tracking
+78cd8c4d2b22ddb2fd2c2182,V0ec24ce000f9,P003,8,False,less than 85% valid wrist/camera tracking
+ff79010706a0a0254bec450f,V0ec24ce000f9,P003,9,False,less than 85% valid wrist/camera tracking
+11b9ba1ffc886c6a5f0923c7,V0ec24ce000f9,P003,10,False,less than 85% valid wrist/camera tracking
+ca61198b24684982c6afe95f,V5dd65202f184,P003,4,False,tracking gap exceeds two frames or reaches an edge
+5a85df4244ab371e991d5991,V5dd65202f184,P003,5,False,tracking gap exceeds two frames or reaches an edge
+70af52040c4c8b842db3a3f7,V5dd65202f184,P003,6,False,tracking gap exceeds two frames or reaches an edge
+2856a2c73e1c38556d3e11c7,V5dd65202f184,P003,7,True,
+901b833806bba5fdc70ba719,V5dd65202f184,P003,8,True,
+a55a183f8711d81e54610c87,V5dd65202f184,P003,9,True,
+1db59b6574688c19a21cc084,V5dd65202f184,P003,10,True,
+45182f7e6d09d5685ff94d9e,V5dd65202f184,P003,11,True,
+7cbc49a228a637d6876a56e2,V5dd65202f184,P003,12,True,
+fc88ac3ceca2e8edadc7f319,V5dd65202f184,P003,13,True,
+12ad876056945c308894a96d,V5dd65202f184,P003,14,True,
+5e472a4862c0a102fe024843,V5dd65202f184,P003,15,True,
+20c2951520f8c52eb2eca0e7,V5dd65202f184,P003,16,True,
+b28b978410a1913ccabecb68,V5dd65202f184,P003,17,True,
+be99f5ec92eb34266bc5b259,V5dd65202f184,P003,18,True,
+5f1594b5596b6de15014bcc5,V5dd65202f184,P003,19,True,
+7b6724ac229aeac6ec6a743b,V5dd65202f184,P003,20,False,tracking gap exceeds two frames or reaches an edge
+ecf2317191377461ac0d0951,V008,P005,4,True,
+14ddcb82ad158e0a98da6117,V008,P005,5,True,
+8a34ff4749d6dd0aaa05ef3d,V008,P005,6,True,
+b36a6bfa8f4813e26dc3a476,V008,P005,7,True,
+a1879372266b9c204266af85,V008,P005,8,True,
+93d3813b16b462282e5e87ba,V008,P005,9,True,
+99c31efcd4e5d5ce02ec8cba,V008,P005,10,True,
+519aea1b792ecf9a3dae3f85,V009_S01,P006,4,False,less than 85% valid wrist/camera tracking
+1af8c55835f4d6cf72f50539,V009_S01,P006,5,False,less than 85% valid wrist/camera tracking
+09c623c5ad94ac3fd62d48d8,V009_S01,P006,6,False,less than 85% valid wrist/camera tracking
+94c783ac802598090b161e27,V009_S01,P006,7,False,less than 85% valid wrist/camera tracking
+8a148b8bc6beb0296a103018,V009_S01,P006,8,False,less than 85% valid wrist/camera tracking
+d565d4c328fc086e02a8dc3a,V009_S01,P006,9,False,less than 85% valid wrist/camera tracking
+404ccda16a057aa22ec07dbf,V009_S01,P006,10,False,less than 85% valid wrist/camera tracking
+f87664d64851f0733fcf7841,V009_S01,P006,11,False,less than 85% valid wrist/camera tracking
+deecca55a416a6badad68ecb,V009_S01,P006,12,False,less than 85% valid wrist/camera tracking
+efab285a1e5854658cb14c5e,V009_S01,P006,13,False,less than 85% valid wrist/camera tracking
+2cd56769b788151796c36cbf,V009_S01,P006,14,False,less than 85% valid wrist/camera tracking
+6e9a264467db76a9e64a2ceb,V009_S01,P006,15,False,less than 85% valid wrist/camera tracking
+1f6daac3862afb619dab2ee9,V009_S01,P006,16,False,less than 85% valid wrist/camera tracking
+b16bf8b367414a78a72c4bbd,V009_S01,P006,17,False,less than 85% valid wrist/camera tracking
+fde7e0c3a87ff026529489fc,V009_S01,P006,18,False,less than 85% valid wrist/camera tracking
+4fd25fa7dbaae1936f7deb5d,V009_S01,P006,19,False,less than 85% valid wrist/camera tracking
+8289d5a8ad9b15b2c1f57cc2,V009_S01,P006,20,False,less than 85% valid wrist/camera tracking
+19559f356d71bee379dba13a,V009_S01,P006,21,False,less than 85% valid wrist/camera tracking
+567b878a1452384a7c8ff1c8,V009_S01,P006,22,False,less than 85% valid wrist/camera tracking
+ff70a346e0cdcee81e36b222,V009_S01,P006,23,False,less than 85% valid wrist/camera tracking
+c3d1a8486a9b96637cf50a60,V009_S01,P006,24,False,less than 85% valid wrist/camera tracking
+2bd29276ba8e7ec73e312d86,V009_S01,P006,25,False,less than 85% valid wrist/camera tracking
+861fa6289804812f4b853445,V009_S01,P006,26,False,less than 85% valid wrist/camera tracking
+ab557232687d23b40498feb9,V009_S01,P006,27,False,less than 85% valid wrist/camera tracking
+fa27187ff0b90938e8a7063e,V009_S01,P006,28,False,less than 85% valid wrist/camera tracking
+6e692a66403f70de5b88fd01,V009_S01,P006,29,False,less than 85% valid wrist/camera tracking
+73375a29506efe113ee46df6,V015_S03,P012,4,False,less than 85% valid wrist/camera tracking
+ce68221fd79e3d3b0d3f8fec,V015_S03,P012,5,False,less than 85% valid wrist/camera tracking
+c7159f97350ff9ebfefe255a,V015_S03,P012,6,False,tracking gap exceeds two frames or reaches an edge
+9122a4347ed0e5900026f95a,V015_S03,P012,7,False,less than 85% valid wrist/camera tracking
