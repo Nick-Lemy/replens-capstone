@@ -1,0 +1,39 @@
+{
+  "mode": "pilot",
+  "dataset_scope": "exploratory",
+  "video_variant": "cropped",
+  "preparation_id": "9f528c70e2c385f0",
+  "encoder": {
+    "encoder": "resnet18_imagenet1k_v1",
+    "weights_sha256": "f37072fd47e89c5e827621c5baffa7500819f7896bbacec160b1a16c560e07ec",
+    "preprocessing": "rgb_aspect_pad_224_imagenet_normalization_v1",
+    "temporal_downsampling": false,
+    "torch": "2.14.1",
+    "torchvision": "0.29.1",
+    "opencv": "5.0.0"
+  },
+  "hidden_size": 64,
+  "batch_size": 4,
+  "learning_rate": 0.001,
+  "weight_decay": 0.0001,
+  "patience": 5,
+  "max_epochs": 25,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "models": [
+    "tcn",
+    "lstm"
+  ],
+  "labeled_videos": 9,
+  "prediction_only_videos": 0,
+  "versions": {
+    "torch": "2.14.1",
+    "torchvision": "0.29.1",
+    "wandb": "0.31.0",
+    "numpy": "2.5.4",
+    "pandas": "3.0.6"
+  }
+}

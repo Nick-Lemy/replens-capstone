@@ -1,0 +1,8 @@
+{
+  "name": "replens-api",
+  "private": true,
+  "scripts": {
+    "setup:models": "python3 setup_models.py",
+    "start:dev": "../../training/.venv/bin/python -m uvicorn app.backend.main:app --app-dir ../.. --host 127.0.0.1 --port 8000"
+  }
+}

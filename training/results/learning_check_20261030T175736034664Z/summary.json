@@ -1,0 +1,9 @@
+{
+  "video_id": "V001",
+  "reps": 9,
+  "initial_training_mae": 3.9924682155251503,
+  "final_training_mae": 0.14362407392925686,
+  "passed": true,
+  "note": "Deliberate training-set memorization only; no generalization claim.",
+  "epochs": 80
+}

@@ -1,0 +1,9 @@
+fold_id,task,model,regularization
+test_P001,rir,speed_only,100.0
+test_P001,rir,speed_plus_candidate_tremor,100.0
+test_P002,rir,speed_only,100.0
+test_P002,rir,speed_plus_candidate_tremor,100.0
+test_P003,rir,speed_only,100.0
+test_P003,rir,speed_plus_candidate_tremor,100.0
+test_P005,rir,speed_only,100.0
+test_P005,rir,speed_plus_candidate_tremor,100.0

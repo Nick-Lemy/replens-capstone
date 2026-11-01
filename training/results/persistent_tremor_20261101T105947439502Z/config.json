@@ -1,0 +1,46 @@
+{
+  "reference_run": "/Users/zkaynl7/Projects/alu/velocity-tremor-ml/training/artifacts/candidate_tremor_20261101T103627645167Z",
+  "reference_examples": 33,
+  "accepted_examples": 33,
+  "participants": 4,
+  "method": "persistent forward-backward checked image points; robust median point displacement minus background affine; transverse projection relative to 1.5 Hz main-movement PCA axis",
+  "comparison": "original speed inputs unchanged; old, persistent-2D and persistent-transverse 4\u201310 Hz features; same quality-passing examples for every method",
+  "reference_features_sha256": "2210acb5d44816e733c8520d5f7d849f0d91e0684f6c0368ed28b3933d0655fb",
+  "sources": [
+    {
+      "video_id": "V001",
+      "source_sha256": "4d6664b7e241fb027d9a0dab1ec81f7683c6f00b221313fd5add1c2fb8e5b527",
+      "pose_sha256": "37925e73e5b34343043a4e1742976e3f5bbc0b976cdcf19dea240a2e8eba6805"
+    },
+    {
+      "video_id": "Vfb5fee7743ec",
+      "source_sha256": "d09a7864194940e54a75d29cd5a45374d2b9647cc3e07647cd27397d4093ee79",
+      "pose_sha256": "4e40a32eacf950bc10c7688a89360dd120ad8225801f02470aca9744d57e496b"
+    },
+    {
+      "video_id": "Vde309ba0dab8",
+      "source_sha256": "75aa3815f771f7fa334742cf4b0b485a55815833132824ace8886e0b704f0df4",
+      "pose_sha256": "a1b932d48872a42132248e0d9934d6800cc8cc21e35a4c8f260e5f4f61c9fa71"
+    },
+    {
+      "video_id": "V5dd65202f184",
+      "source_sha256": "51cd94a09090c3a26d217ed124dca7f05a20e056f52529821d6d7a44cab5d623",
+      "pose_sha256": "e45916d00702f5605eda3e770f517edaf9d3fd0c1e8817fde601998b674cfd7c"
+    },
+    {
+      "video_id": "V008",
+      "source_sha256": "7ac016657100f8c4aacd744182b1ed5cc61373601f9b05526ad32cf71f3d5124",
+      "pose_sha256": "ee8a9ec59ba18bb8144b2a15941281bdc4c06930abf602a2021f9874a22abc8b"
+    }
+  ],
+  "regularization": [
+    0.1,
+    1,
+    10,
+    100
+  ],
+  "evaluation": "nested leave-person-out Ridge; no outer-test tuning",
+  "research": "https://arxiv.org/html/1809.03218",
+  "limitations": "Exploratory follow-up after inspecting previous results, not an untouched confirmation set. Not a replication of phase-pyramid research. No sensor reference. Small selected subset and uneven people. No app promotion.",
+  "deployment_approved": false
+}
