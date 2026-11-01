@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { Bookmark, Check, Play, RotateCcw, ChevronLeft } from "lucide-react";
+import { roundedRir } from "../lib/display";
 import type { AnalysisResult, SetReview } from "../lib/types";
 import { SetReviewCard } from "./set-review";
 import { Button, Notice, seconds } from "./ui";
@@ -27,9 +28,9 @@ export function Results({
   const player = useRef<HTMLVideoElement>(null);
   const rep = result.reps[selected];
   const valid = result.reps.filter((r) => r.rir !== null);
-  const maxY = Math.max(5, ...valid.map((r) => Math.max(0, r.rir!)));
+  const maxY = Math.max(5, ...valid.map((r) => roundedRir(r.rir!)));
   const x = (i: number) => 15 + (i / Math.max(1, result.reps.length - 1)) * 310;
-  const y = (v: number) => 125 - (Math.max(0, v) / maxY) * 100;
+  const y = (v: number) => 125 - (roundedRir(v) / maxY) * 100;
   function seek(i: number) {
     setSelected(i);
     if (player.current) {
@@ -95,7 +96,7 @@ export function Results({
             </p>
             <p className="mt-2 text-4xl font-medium tracking-tight tabular-nums">
               {rep?.rir != null ? (
-                Math.max(0, rep.rir).toFixed(1)
+                roundedRir(rep.rir)
               ) : (
                 <span className="text-base text-muted">{rep?.prediction_status === "building_history" ? "Building history" : "Unavailable"}</span>
               )}
@@ -182,7 +183,7 @@ export function Results({
             </text>
           </svg>
           <p className="mt-3 text-xs leading-5 text-muted">
-            Display estimates use one decimal place and are floored at zero. Raw predictions
+            Display estimates are rounded to nonnegative whole numbers. Raw predictions
             are retained in the saved result.
           </p>
         </section>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { api } from "../lib/api";
+import { roundedRir } from "../lib/display";
 import type {
   AnalysisResult,
   ReviewDraftRow,
@@ -318,7 +319,7 @@ function ReviewComparison({
                     {prediction && !unchanged
                       ? "Unavailable for edited interval"
                       : prediction?.rir != null
-                        ? Math.max(0, prediction.rir).toFixed(1)
+                        ? roundedRir(prediction.rir)
                         : "Unavailable"}
                   </td>
                 </tr>
