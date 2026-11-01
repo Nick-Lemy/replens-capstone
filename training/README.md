@@ -13,6 +13,7 @@ The [results notebook](notebooks/07_results.ipynb) summarizes the saved experime
 | [05_near_failure](notebooks/05_near_failure.ipynb) | Can a classifier distinguish 0–2 RIR from more than 2? |
 | [06_speed_and_shaking](notebooks/06_speed_and_shaking.ipynb) | Does candidate shaking help beyond speed? |
 | [07_results](notebooks/07_results.ipynb) | What do the matched comparisons show? |
+| [08_relative_speed](notebooks/08_relative_speed.ipynb) | Do relative speed or different regularization fix flat predictions? |
 
 Each experiment documents its rationale, method, results and conclusions. Notebooks 03–06 show saved results first, followed by optional training/extraction code. Their run/export flags default to false. Open each independently; do not rerun review or preparation just to view results.
 

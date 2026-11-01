@@ -1,0 +1,11 @@
+cohort,model,mae,people
+recent_history,nonlinear_relative_speed,3.080837148354508,3
+recent_history,nonlinear_speed,3.1005657389020893,3
+recent_history,nonlinear_speed_shaking,2.9887753092590743,3
+recent_history,relative_speed,3.067910039229322,3
+recent_history,relative_speed_shaking,3.0669191650711536,3
+recent_history,shaking_original_search,2.9616050021079867,3
+recent_history,shaking_wider_search,3.018071704162646,3
+recent_history,speed_original_search,2.8705716412497444,3
+recent_history,speed_wider_search,3.0135693616178822,3
+recent_history,training_median,3.103785103785104,3
