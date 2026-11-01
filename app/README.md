@@ -84,3 +84,21 @@ Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `
 Install `training/requirements.txt` for notebook/model development. Run `python -m training.model_export` from the root to reproduce the JSON refit using packaged derived features; notebook 06 exposes the same optional export. No private video is needed for that refit. The original held-out results are preserved separately.
 
 The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is not the default and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. Missing bundles return an explicit unavailable state; there is no silent model fallback.
+
+## Current deployment
+
+- Frontend: https://replens.lemy.dev (Netlify).
+- Backend: https://replens-api.onrender.com (Render, free plan).
+- API documentation: https://replens-api.onrender.com/docs.
+
+The free instance has a small shared CPU. Video processing can take many minutes; idle services can also take time to wake. The deployment has verified health, uploads, CORS and the browser connection; the long cloud inference benchmark was canceled to free the test worker. Local full inference and history checks are recorded separately.
+
+The service was created using the Render CLI from `dev`, with automatic deployment off. Netlify is linked to this repository with automatic builds paused. Once the deployment PR is merged, production branches can be switched to `main` and automatic deployment enabled. The configuration is in `render.yaml`, `Dockerfile` and `netlify.toml`.
+
+Manual backend release (authenticated Render CLI):
+
+```sh
+render deploys create srv-dbjmigc9v7es73ahuo8g --commit COMMIT_SHA --wait --output json --confirm
+```
+
+Netlify builds use the public production variable `VITE_API_URL=https://replens-api.onrender.com`. Render uses `FRONTEND_ORIGINS=https://replens.lemy.dev`. No database, OAuth or VPS credentials are needed.
