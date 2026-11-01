@@ -1,0 +1,23 @@
+{
+  "frontend": "https://replens.lemy.dev",
+  "api": "https://replens-api.onrender.com",
+  "provider": "Render",
+  "plan": "free",
+  "render_service_id": "srv-dbjmigc9v7es73ahuo8g",
+  "netlify_site_id": "52f89b4a-1100-4abd-b72f-568616a14b6b",
+  "health": "passed",
+  "model_available": true,
+  "live_browser_checks": {
+    "frontend": "https://replens.lemy.dev",
+    "api": "https://replens-api.onrender.com",
+    "mobile_viewport": "390x844",
+    "video_preview": true,
+    "theme": true,
+    "real_upload": true,
+    "cors_post_and_delete": true,
+    "queued_job_cancelled": true,
+    "page_errors": []
+  },
+  "cloud_inference_test": "Upload and pose stage succeeded; canceled during optical-flow processing after more than nine minutes to release the free instance. Full cloud inference completion is not verified.",
+  "automatic_deployment": "Paused until deployment PR is merged; current live version is manually deployed from dev."
+}
