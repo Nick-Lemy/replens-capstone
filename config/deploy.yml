@@ -18,13 +18,13 @@ registry:
   server: localhost:5555
 
 builder:
-  arch: <%= ENV.fetch("REPLENS_VPS_ARCH", "arm64") %>
+  arch: <%= ENV.fetch("REPLENS_VPS_ARCH", "amd64") %>
   context: .
   dockerfile: Dockerfile
 <% if !ENV.fetch("ACTIONS_RUNTIME_TOKEN", "").empty? %>
   cache:
     type: gha
-    options: version=2,mode=max,scope=replens-python-<%= ENV.fetch("REPLENS_VPS_ARCH", "arm64") %>
+    options: version=2,mode=max,scope=replens-python-<%= ENV.fetch("REPLENS_VPS_ARCH", "amd64") %>
 <% end %>
 
 ssh:
