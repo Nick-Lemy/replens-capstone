@@ -1,0 +1,47 @@
+{
+  "status": "local_checks_passed",
+  "active_model": "ridge_speed_transverse",
+  "model_evaluation_scope": "33 filtered examples / four people; 2.22 MAE from held-out exploratory folds, not an independent refit evaluation",
+  "feature_parity": {
+    "examples": 33,
+    "maximum_absolute_difference": 2.1316282072803006e-14
+  },
+  "real_video_browser": {
+    "real_video": "collector video 1, H264-compatible copy",
+    "video_playback": true,
+    "rep_count": 9,
+    "predicted_reps": 6,
+    "model_family": "ridge_speed_transverse",
+    "upload_and_polling": true,
+    "save_reload_reopen_delete": true,
+    "theme_switch": true,
+    "mobile_viewport": "390x844",
+    "page_errors": []
+  },
+  "api_checks": [
+    "health and selected model",
+    "invalid extension rejected",
+    "empty upload rejected",
+    "unknown analysis returns 404",
+    "corrupt video fails cleanly; server stays healthy"
+  ],
+  "fresh_submission_reports": [
+    "03_video_baselines",
+    "04_video_adaptation",
+    "05_near_failure",
+    "06_speed_and_shaking",
+    "07_results"
+  ],
+  "reports_need_private_videos": false,
+  "model_refit_from_packaged_features_matches": true,
+  "fresh_pose_model_download_and_sha256_check": true,
+  "default_app_requires_pytorch": false,
+  "frontend_production_build": "passed",
+  "raw_videos_and_private_review_outputs_packaged": false,
+  "not_verified": [
+    "real-device PWA installation after HTTPS deployment",
+    "public hosting",
+    "physiological tremor accuracy",
+    "clinical or safety performance"
+  ]
+}

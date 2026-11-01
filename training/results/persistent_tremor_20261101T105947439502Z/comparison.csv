@@ -1,0 +1,6 @@
+task,model,examples,mae
+rir,speed_only,8.25,2.2511656107863036
+rir,speed_plus_original_shaking,8.25,2.88179786927759
+rir,speed_plus_persistent_2d,8.25,2.7340696266616598
+rir,speed_plus_persistent_transverse,8.25,2.221453838366069
+rir,training_median,8.25,2.452838827838828

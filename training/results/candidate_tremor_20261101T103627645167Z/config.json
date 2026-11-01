@@ -1,0 +1,67 @@
+{
+  "feature_family": "camera-compensated wrist-region optical flow; pose only locates ROI",
+  "band_hz": [
+    4,
+    10
+  ],
+  "speed_lowpass_hz": 3,
+  "history": "four completed reps only",
+  "max_image_dimension": 1280,
+  "target": "RIR from reviewed failure endpoints; secondary RIR<=2",
+  "evaluation": "same quality-passing examples and outer people; nested participant regularization; fixed 0.5 classification threshold",
+  "source_hashes": [
+    {
+      "video_id": "V001",
+      "video_sha256": "4d6664b7e241fb027d9a0dab1ec81f7683c6f00b221313fd5add1c2fb8e5b527",
+      "pose_sha256": "37925e73e5b34343043a4e1742976e3f5bbc0b976cdcf19dea240a2e8eba6805"
+    },
+    {
+      "video_id": "Vfb5fee7743ec",
+      "video_sha256": "d09a7864194940e54a75d29cd5a45374d2b9647cc3e07647cd27397d4093ee79",
+      "pose_sha256": "4e40a32eacf950bc10c7688a89360dd120ad8225801f02470aca9744d57e496b"
+    },
+    {
+      "video_id": "Vc2b7e31d0a92",
+      "video_sha256": "bf1eb40256a86e5278f6adae592d229f144b9aafddb861c4c08da920ec40a484",
+      "pose_sha256": "9e2dd7dedb33b559dbe9ba6d6a8ffe03336eecca1fe702be886a4479b8054aa9"
+    },
+    {
+      "video_id": "Vde309ba0dab8",
+      "video_sha256": "75aa3815f771f7fa334742cf4b0b485a55815833132824ace8886e0b704f0df4",
+      "pose_sha256": "a1b932d48872a42132248e0d9934d6800cc8cc21e35a4c8f260e5f4f61c9fa71"
+    },
+    {
+      "video_id": "V0ec24ce000f9",
+      "video_sha256": "c783b44abe90c60380cb1fddeafd1c8c7f90135314c6436b373a8fe737ade34b",
+      "pose_sha256": "0411dee8388cda456df808997260d51c2bb78c6bd826ceb6fc110b6002adfcbb"
+    },
+    {
+      "video_id": "V5dd65202f184",
+      "video_sha256": "51cd94a09090c3a26d217ed124dca7f05a20e056f52529821d6d7a44cab5d623",
+      "pose_sha256": "e45916d00702f5605eda3e770f517edaf9d3fd0c1e8817fde601998b674cfd7c"
+    },
+    {
+      "video_id": "V008",
+      "video_sha256": "7ac016657100f8c4aacd744182b1ed5cc61373601f9b05526ad32cf71f3d5124",
+      "pose_sha256": "ee8a9ec59ba18bb8144b2a15941281bdc4c06930abf602a2021f9874a22abc8b"
+    },
+    {
+      "video_id": "V009_S01",
+      "video_sha256": "cdbe7c3f9283bbc3428090069f1a0755067fe584c1168edfe2e17763e36278f8",
+      "pose_sha256": "52cede19248d30ed819e23b141f47f808a97def4bc5fcb28e667a4aac8f0575c"
+    },
+    {
+      "video_id": "V015_S03",
+      "video_sha256": "711425c87f16c5aa2a85cf4f55d03290c21de92b8720fbc0b221be891ba9906a",
+      "pose_sha256": "d9be1bf959827925a1c1418fd0610c15417e479c635355427745dd41cfadfbcf"
+    }
+  ],
+  "windows_sha256": "f276c397b8d73e989632e4e4e609eaefd635b8ee3bea378dd432a944af80187f",
+  "labels_sha256": "b58381f9780282faddde6d1e3fcf8e41641fb02859ac8d050f6434f90947d155",
+  "candidate_examples": 97,
+  "accepted_examples": 33,
+  "participants": 4,
+  "limitations": "Not validated physiological tremor. Optical-flow error, body sway, camera/parallax, compression and blur can produce high-frequency energy. Whole-rep filtering is retrospective within the completed history. Original targets and app unchanged.",
+  "reference": "https://pmc.ncbi.nlm.nih.gov/articles/PMC11192937/",
+  "deployment_approved": false
+}

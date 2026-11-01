@@ -1,0 +1,80 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+@theme inline {
+    --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+    --color-page: var(--page);
+    --color-panel: var(--panel);
+    --color-ink: var(--ink);
+    --color-muted: var(--muted);
+    --color-line: var(--line);
+    --color-soft: var(--soft);
+    --color-stage: var(--stage);
+    --animate-enter: enter 0.26s cubic-bezier(0.2, 0, 0, 1) both;
+    @keyframes enter {
+        from {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+:root {
+    --page: #fafafa;
+    --panel: #ffffff;
+    --ink: #202226;
+    --muted: #73767c;
+    --line: #e7e7e9;
+    --soft: #f2f2f3;
+    --stage: #171819;
+    color-scheme: light;
+}
+.dark {
+    --page: #161719;
+    --panel: #1b1c1f;
+    --ink: #eeeeef;
+    --muted: #a0a2a8;
+    --line: #2c2d31;
+    --soft: #232428;
+    --stage: #101113;
+    color-scheme: dark;
+}
+@layer base {
+    body {
+        margin: 0;
+        min-width: 320px;
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        background: var(--page);
+    }
+    button,
+    a,
+    input {
+        -webkit-tap-highlight-color: transparent;
+    }
+    button {
+        cursor: pointer;
+    }
+    button:disabled {
+        cursor: default;
+    }
+    :focus-visible {
+        outline: 2px solid var(--ink);
+        outline-offset: 4px;
+    }
+    ::selection {
+        background: var(--ink);
+        color: var(--page);
+    }
+}
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}

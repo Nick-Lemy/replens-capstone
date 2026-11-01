@@ -1,0 +1,26 @@
+import type { AnalysisJob } from "./types";
+const base = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
+async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(`${base}/api${path}`, init);
+  if (!response.ok) {
+    const body = await response.json().catch(() => null);
+    throw new Error(
+      typeof body?.detail === "string"
+        ? body.detail
+        : "The analyzer could not be reached. Check the backend and try again.",
+    );
+  }
+  return response.status === 204 ? (undefined as T) : response.json();
+}
+export const api = {
+  health: () =>
+    request<{ status: string; model_available: boolean }>("/health"),
+  analyze: (file: File) => {
+    const body = new FormData();
+    body.append("video", file);
+    return request<{ id: string }>("/analyses", { method: "POST", body });
+  },
+  job: (id: string) => request<AnalysisJob>(`/analyses/${id}`),
+  cancel: (id: string) =>
+    request<void>(`/analyses/${id}`, { method: "DELETE" }),
+};

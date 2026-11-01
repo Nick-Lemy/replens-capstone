@@ -1,0 +1,28 @@
+{
+  "participants": {
+    "P001": [
+      "V001",
+      "Vfb5fee7743ec"
+    ],
+    "P002": [
+      "Vc2b7e31d0a92",
+      "Vde309ba0dab8"
+    ],
+    "P003": [
+      "V0ec24ce000f9",
+      "V5dd65202f184"
+    ]
+  },
+  "base_experiment": "r3d_adaptation_20261030T180126927110Z",
+  "personal_ridge_alpha": 10.0,
+  "seeds": [
+    42,
+    43,
+    44
+  ],
+  "test_min_rep": 4,
+  "calibration_uses_all_reviewed_reps": true,
+  "recording_chronology_verified": false,
+  "loads_verified_equal": false,
+  "note": "Preliminary within-person set transfer; distinct videos, no target-set fitting; not cross-person generalization. Only three paired people. No app auto-learning or model promotion."
+}
