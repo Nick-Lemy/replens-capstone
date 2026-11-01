@@ -1,0 +1,5 @@
+name: Expose BuildKit cache runtime
+description: Safely expose the GitHub Actions cache runtime to BuildKit
+runs:
+  using: node24
+  main: index.js

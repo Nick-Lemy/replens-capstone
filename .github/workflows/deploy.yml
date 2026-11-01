@@ -1,0 +1,66 @@
+name: Deploy VPS backend
+
+on:
+  push:
+    branches: [main, dev]
+  workflow_dispatch:
+    inputs:
+      first_setup:
+        description: Install Docker and deploy to a fresh VM
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  group: replens-production-backend
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: vars.DEPLOY_ENABLED == 'true' && (github.ref == 'refs/heads/main' || github.sha == vars.REPLENS_APPROVED_DEPLOY_SHA)
+    runs-on: ${{ vars.REPLENS_VPS_ARCH == 'arm64' && 'ubuntu-24.04-arm' || 'ubuntu-latest' }}
+    env:
+      REPLENS_VPS_IP: ${{ vars.REPLENS_VPS_IP }}
+      REPLENS_API_HOST: ${{ vars.REPLENS_API_HOST }}
+      REPLENS_FRONTEND_ORIGIN: ${{ vars.REPLENS_FRONTEND_ORIGIN }}
+      REPLENS_SSH_USER: ${{ vars.REPLENS_SSH_USER }}
+      REPLENS_VPS_ARCH: ${{ vars.REPLENS_VPS_ARCH }}
+    steps:
+      - uses: actions/checkout@v6
+      - name: Prepare SSH
+        env:
+          DEPLOY_SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          umask 077
+          mkdir -p "$HOME/.ssh" .kamal
+          key_path="$HOME/.ssh/replens-deploy-key"
+          printf '%s\n' "$DEPLOY_SSH_PRIVATE_KEY" > "$key_path"
+          printf 'REPLENS_SSH_KEY=%s\n' "$key_path" >> "$GITHUB_ENV"
+          touch .kamal/secrets
+          ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new -i "$key_path" "$REPLENS_SSH_USER@$REPLENS_VPS_IP" 'set -e; uname -m; free -m; if command -v docker >/dev/null; then docker version --format "{{.Server.Version}}"; else sudo -n true; fi'
+      - name: Set up build cache
+        run: docker buildx create --use --name replens-builder
+      - uses: ./.github/actions/expose-buildkit-runtime
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4'
+      - name: Install Kamal
+        run: gem install kamal -v 2.12.0 --no-document
+      - name: Verify artifacts
+        run: python3 scripts/check_submission.py
+      - name: Deploy backend
+        env:
+          FIRST_SETUP: ${{ inputs.first_setup || vars.REPLENS_FIRST_SETUP || 'false' }}
+        run: |
+          if [ "$FIRST_SETUP" = 'true' ]; then
+            kamal setup
+          else
+            kamal deploy
+          fi
+      - name: Verify public model
+        run: |
+          curl --fail --silent --show-error --retry 5 --retry-delay 3 --max-time 20 "https://$REPLENS_API_HOST/api/health" > /tmp/health.json
+          python3 -c 'import json; x=json.load(open("/tmp/health.json")); assert x["model_available"] and x["model_family"] == "ridge_speed_transverse"; print("Deployed model is healthy.")'

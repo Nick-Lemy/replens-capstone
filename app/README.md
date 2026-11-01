@@ -84,3 +84,33 @@ Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `
 Install `training/requirements.txt` for notebook/model development. Run `python -m training.model_export` from the root to reproduce the JSON refit using packaged derived features; notebook 06 exposes the same optional export. No private video is needed for that refit. The original held-out results are preserved separately.
 
 The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is not the default and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. Missing bundles return an explicit unavailable state; there is no silent model fallback.
+
+## Azure VM deployment
+
+Use an Ubuntu 24.04 LTS VM with SSH-key authentication, an x64 CPU, at least 2 vCPUs and 4 GB RAM, and a static public IP. These are initial sizing recommendations; video processing still needs a real upload benchmark. Select a VM size available under your Azure subscription and check its estimated cost against your remaining credits.
+
+Allow inbound TCP ports 22 (SSH), 80 and 443 (HTTPS). Use an admin user with passwordless sudo. Do not expose container port 8000. Point the DNS A record for `api.replens.lemy.dev` to the new public IP before enabling deployment.
+
+GitHub Actions settings:
+
+| Setting | Value |
+| --- | --- |
+| Secret `DEPLOY_SSH_PRIVATE_KEY` | Private key matching the VM's authorized public key |
+| Variable `REPLENS_VPS_IP` | New Azure VM public IP |
+| Variable `REPLENS_SSH_USER` | VM admin username, for example `azureuser` |
+| Variable `REPLENS_VPS_ARCH` | `amd64` for an x64 VM; `arm64` only for an ARM VM |
+| Variable `REPLENS_API_HOST` | `api.replens.lemy.dev` |
+| Variable `REPLENS_FRONTEND_ORIGIN` | `https://replens.lemy.dev` |
+| Variable `DEPLOY_ENABLED` | Keep `false` until the VM and DNS are ready; then `true` |
+
+Use `gh variable set NAME --body VALUE` to update variables. Set the private key from its local file without copying it into chat:
+
+```sh
+gh secret set DEPLOY_SSH_PRIVATE_KEY < /path/to/private-key
+```
+
+For the first deployment, run **Deploy VPS backend** manually with `first_setup` checked. Kamal installs Docker and starts the HTTPS proxy and backend. If deploying through a push instead, temporarily set `REPLENS_FIRST_SETUP=true`, then remove that variable after successful setup. Subsequent pushes to `main` use `kamal deploy`. An optional `REPLENS_APPROVED_DEPLOY_SHA` permits a specific approved `dev` commit to deploy before its PR is merged.
+
+Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. No database migrations or authentication secrets are needed by this version. Deployment finishes by checking the public API and selected model.
+
+The frontend is live at `https://replens.lemy.dev` and uses the Azure backend at `https://api.replens.lemy.dev`. GitHub Actions deployment, HTTPS, CORS and a complete 19.4-second upload were verified: nine reps and six available predictions. This is a deployment check, not an accuracy evaluation; processing still takes several minutes on the current CPU. The temporary Render service is no longer used by the frontend.

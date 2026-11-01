@@ -1,0 +1,38 @@
+service: replens-api
+image: replens-api
+deploy_timeout: 120
+
+servers:
+  web:
+    - <%= ENV.fetch("REPLENS_VPS_IP") %>
+
+proxy:
+  host: <%= ENV.fetch("REPLENS_API_HOST") %>
+  ssl: true
+  app_port: 8000
+  response_timeout: 300
+  healthcheck:
+    path: /api/health
+
+registry:
+  server: localhost:5555
+
+builder:
+  arch: <%= ENV.fetch("REPLENS_VPS_ARCH", "amd64") %>
+  context: .
+  dockerfile: Dockerfile
+<% if !ENV.fetch("ACTIONS_RUNTIME_TOKEN", "").empty? %>
+  cache:
+    type: gha
+    options: version=2,mode=max,scope=replens-python-<%= ENV.fetch("REPLENS_VPS_ARCH", "amd64") %>
+<% end %>
+
+ssh:
+  user: <%= ENV.fetch("REPLENS_SSH_USER", "ubuntu") %>
+  keys:
+    - <%= ENV.fetch("REPLENS_SSH_KEY") %>
+
+env:
+  clear:
+    PORT: "8000"
+    FRONTEND_ORIGINS: <%= ENV.fetch("REPLENS_FRONTEND_ORIGIN") %>
