@@ -1,9 +1,6 @@
-import os
-from pathlib import Path
 from threading import Lock
 
-ROOT = Path(__file__).resolve().parents[3]
-BUNDLE = Path(os.environ.get("REPLENS_MODEL_PATH") or Path(__file__).parent / "assets/rir_model.json")
+from ..config.settings import BUNDLE
 
 
 class Predictor:

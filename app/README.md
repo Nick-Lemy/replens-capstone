@@ -14,9 +14,23 @@ training/.venv/bin/python -m pip install -r app/backend/requirements.txt
 training/.venv/bin/python app/backend/setup_models.py
 ```
 
-The selected Ridge model is bundled as `app/backend/replens/assets/rir_model.json`. Setup downloads and verifies only the public MediaPipe Heavy pose locator. The default app does not require PyTorch, ResNet/R3D weights, raw research videos or a database.
+The selected Ridge model is bundled as `app/backend/assets/rir_model.json`. Setup downloads and verifies only the public MediaPipe Heavy pose locator. The default app does not require PyTorch, ResNet/R3D weights, raw research videos or a database.
 
 ## Start separately
+
+Backend layout:
+
+```text
+backend/
+├── main.py
+├── config/settings.py
+├── services/
+├── assets/
+├── requirements.txt
+└── setup_models.py
+```
+
+`main.py` exposes the API, `config` contains paths and environment settings, and `services` contains analysis and prediction logic.
 
 Backend:
 

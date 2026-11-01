@@ -5,14 +5,15 @@ import mediapipe as mp
 import numpy as np
 import pandas as pd
 
-from .predictor import ROOT, Predictor
+from .predictor import Predictor
+from ..config.settings import ROOT, POSE_MODEL
 from .rep_signals import _landmarks, detect_reps
 
 predictor = Predictor()
 
 
 def analyze(path: Path, progress, cancelled):
-    model_path = ROOT / "training/models/pose_landmarker_heavy.task"
+    model_path = POSE_MODEL
     if not model_path.is_file():
         matches = list((ROOT / "training/models").rglob("*heavy*.task"))
         if not matches:

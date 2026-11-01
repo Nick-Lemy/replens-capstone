@@ -1,5 +1,4 @@
 import logging
-import os
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -10,15 +9,14 @@ from uuid import uuid4
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
-from .analysis import analyze, predictor
-from .video import discard_audio
+from .services.analysis import analyze, predictor
+from .config.settings import FRONTEND_ORIGINS
+from .services.video import discard_audio
 
 app = FastAPI(title="RepLens API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.environ.get(
-        "FRONTEND_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173"
-    ).split(","),
+    allow_origins=FRONTEND_ORIGINS,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type"],
 )

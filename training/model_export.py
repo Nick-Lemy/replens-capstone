@@ -56,7 +56,7 @@ def export_demo(root):
               "coefficients": model.coef_.tolist(), "intercept": float(model.intercept_)}
     exported = ((table[FEATURES].to_numpy() - scaler.mean_) / scaler.scale_) @ model.coef_ + model.intercept_
     np.testing.assert_allclose(exported, pipeline.predict(table[FEATURES]), rtol=1e-12, atol=1e-12)
-    destination = root / "app/backend/replens/assets/rir_model.json"
+    destination = root / "app/backend/assets/rir_model.json"
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(json.dumps(bundle, indent=2, allow_nan=False) + "\n")
     return destination
