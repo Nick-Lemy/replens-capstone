@@ -61,7 +61,7 @@ Some phone MOV files use HEVC, which not every browser can play. Analysis can st
 ffmpeg -i input.MOV -an -c:v libx264 -crf 18 -pix_fmt yuv420p -movflags +faststart output.mp4
 ```
 
-Displayed estimates use one decimal place and floor negative values at zero. Saved results retain raw predictions, model version and quality information. The analyzer uses the same numerical feature functions as notebook 06; no future reps or a declared final rep count are prediction inputs.
+Displayed estimates are rounded to nonnegative whole numbers. Saved results retain raw predictions, model version and quality information. The analyzer uses the same numerical feature functions as notebook 06; no future reps or a declared final rep count are prediction inputs.
 
 ## Privacy and history
 
