@@ -27,6 +27,8 @@ export default function App() {
   const [activeSession, setActiveSession] = useState<SavedSession | null>(null);
   const [review, setReview] = useState<SetReview | null>(null);
   const reviewRef = useRef<SetReview | null>(null);
+  const viewRef = useRef<string | null>(null);
+  const [viewId, setViewId] = useState<string | null>(null);
   const [message, setMessage] = useState("");
   const [online, setOnline] = useState(navigator.onLine);
   const [install, setInstall] = useState<InstallPrompt | null>(null);
@@ -61,10 +63,13 @@ export default function App() {
     onSuccess: (data) => setJobId(data.id),
   });
   const save = useMutation({
-    mutationFn: historyStore.save,
-    onSuccess: (_data, session) => {
-      setActiveSession(session);
-      setSaved(reviewRef.current === session.review);
+    mutationFn: ({ session }: { session: SavedSession; viewId: string }) =>
+      historyStore.save(session),
+    onSuccess: (_data, { session, viewId: savedViewId }) => {
+      if (viewRef.current === savedViewId) {
+        setActiveSession(session);
+        setSaved(reviewRef.current === session.review);
+      }
       void queryClient.invalidateQueries({ queryKey: ["history"] });
     },
   });
@@ -102,7 +107,20 @@ export default function App() {
       const nextReview = initialReview(job.data.result);
       reviewRef.current = nextReview;
       setReview(nextReview);
-      setActiveSession(null);
+      const nextViewId = crypto.randomUUID();
+      viewRef.current = nextViewId;
+      setViewId(nextViewId);
+      setActiveSession(
+        file
+          ? {
+              id: crypto.randomUUID(),
+              title: "Dumbbell curl",
+              createdAt: new Date().toISOString(),
+              result: job.data.result,
+              video: file,
+            }
+          : null,
+      );
       setVideo(file);
       setSaved(false);
     }
@@ -123,6 +141,8 @@ export default function App() {
     };
   }, []);
   function reset() {
+    viewRef.current = null;
+    setViewId(null);
     setResult(null);
     reviewRef.current = null;
     setReview(null);
@@ -143,6 +163,9 @@ export default function App() {
       setTab("analyze");
       return;
     }
+    const nextViewId = crypto.randomUUID();
+    viewRef.current = nextViewId;
+    setViewId(nextViewId);
     setJobId(null);
     setResult(session.result);
     const nextReview = session.review ?? initialReview(session.result);
@@ -255,24 +278,32 @@ export default function App() {
           />
         ) : result && review ? (
           <Results
-            key={activeSession?.id ?? jobId ?? "new"}
+            key={viewId}
             result={result}
             url={url}
             onBack={reset}
             saved={saved}
             saving={save.isPending}
             review={review}
-            onReviewChange={(next) => { reviewRef.current = next; setReview(next); setSaved(false); }}
+            onReviewChange={(next) => {
+              reviewRef.current = next;
+              setReview(next);
+              setSaved(false);
+            }}
             onSave={
-              video
+              video && viewId
                 ? () =>
                     save.mutate({
-                      id: activeSession?.id ?? crypto.randomUUID(),
-                      title: activeSession?.title ?? "Dumbbell curl",
-                      createdAt: activeSession?.createdAt ?? new Date().toISOString(),
-                      result,
-                      video,
-                      review,
+                      viewId,
+                      session: {
+                        id: activeSession?.id ?? crypto.randomUUID(),
+                        title: activeSession?.title ?? "Dumbbell curl",
+                        createdAt:
+                          activeSession?.createdAt ?? new Date().toISOString(),
+                        result,
+                        video,
+                        review,
+                      },
                     })
                 : undefined
             }

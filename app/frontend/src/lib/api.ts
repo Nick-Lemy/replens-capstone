@@ -8,17 +8,28 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
       typeof body?.detail === "string"
         ? body.detail
         : Array.isArray(body?.detail)
-          ? body.detail.map((item: { loc?: (string | number)[]; msg?: string }) => `${item.loc?.filter((part) => part !== "body").join(".") || "Review"}: ${item.msg ?? "Invalid value"}`).join("; ")
-        : "The analyzer could not be reached. Check the backend and try again.",
+          ? body.detail
+              .map(
+                (item: { loc?: (string | number)[]; msg?: string }) =>
+                  `${item.loc?.filter((part) => part !== "body").join(".") || "Review"}: ${item.msg ?? "Invalid value"}`,
+              )
+              .join("; ")
+          : "The analyzer could not be reached. Check the backend and try again.",
     );
   }
   return response.status === 204 ? (undefined as T) : response.json();
 }
 export const api = {
-  reviewSet: (reps: ReviewInterval[]) => request<SetReviewResponse>("/set-reviews", {
-    method: "POST", headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ failure_confirmed: true, all_remaining_reps_visible: true, reps }),
-  }),
+  reviewSet: (reps: ReviewInterval[]) =>
+    request<SetReviewResponse>("/set-reviews", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        failure_confirmed: true,
+        all_remaining_reps_visible: true,
+        reps,
+      }),
+    }),
   health: () =>
     request<{ status: string; model_available: boolean }>("/health"),
   analyze: (file: File) => {
