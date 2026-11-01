@@ -85,20 +85,12 @@ Install `training/requirements.txt` for notebook/model development. Run `python 
 
 The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is not the default and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. Missing bundles return an explicit unavailable state; there is no silent model fallback.
 
-## Current deployment
+## VPS deployment
 
-- Frontend: https://replens.lemy.dev (Netlify).
-- Backend: https://replens-api.onrender.com (Render, free plan).
-- API documentation: https://replens-api.onrender.com/docs.
+The Docker backend is configured for the existing ARM64 VPS at `api.replens.lemy.dev`, using Kamal and the existing TLS proxy. The application listens on port 8000 inside its container. GitHub Actions builds on a native ARM runner; no database migrations or authentication secrets are needed.
 
-The free instance has a small shared CPU. Video processing can take many minutes; idle services can also take time to wake. The deployment has verified health, uploads, CORS and the browser connection; the long cloud inference benchmark was canceled to free the test worker. Local full inference and history checks are recorded separately.
+Required GitHub secret: `DEPLOY_SSH_PRIVATE_KEY`. Public variables: `REPLENS_VPS_IP`, `REPLENS_API_HOST`, `REPLENS_FRONTEND_ORIGIN`, `REPLENS_SSH_USER`, `REPLENS_VPS_ARCH`, and `DEPLOY_ENABLED`. An optional `REPLENS_APPROVED_DEPLOY_SHA` permits one explicitly requested `dev` deployment before merging its PR; ordinary production deployments follow pushes to `main`.
 
-The service was created using the Render CLI from `dev`, with automatic deployment off. Netlify is linked to this repository with automatic builds paused. Once the deployment PR is merged, production branches can be switched to `main` and automatic deployment enabled. The configuration is in `render.yaml`, `Dockerfile` and `netlify.toml`.
+Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. SSH is checked before building. The current setup reuses the existing Kamal service, proxy and hostname.
 
-Manual backend release (authenticated Render CLI):
-
-```sh
-render deploys create srv-dbjmigc9v7es73ahuo8g --commit COMMIT_SHA --wait --output json --confirm
-```
-
-Netlify builds use the public production variable `VITE_API_URL=https://replens-api.onrender.com`. Render uses `FRONTEND_ORIGINS=https://replens.lemy.dev`. No database, OAuth or VPS credentials are needed.
+The Netlify frontend currently remains pointed at the temporary Render API until the VPS is reachable and its new backend passes health checks. After cutover, set its production `VITE_API_URL` to `https://api.replens.lemy.dev`, build, and deploy. Render free hosting was memory-constrained and is not the chosen target.
