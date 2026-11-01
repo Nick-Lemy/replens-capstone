@@ -1,0 +1,44 @@
+{
+  "frontend": "https://replens.lemy.dev",
+  "api": "https://api.replens.lemy.dev",
+  "provider": "Azure VM",
+  "deployment_commit": "2f8d67c0a45e888221474b759c77c9fdb697d8bd",
+  "github_actions_run": 41346141027,
+  "netlify_deploy_id": "6ae79fec5622a5744f6508ea",
+  "health": "passed",
+  "model_available": true,
+  "cors_preflight": "passed",
+  "frontend_api_bundle": "verified",
+  "cloud_inference_test": {
+    "state": "completed",
+    "video_duration_s": 19.4,
+    "rep_count": 9,
+    "available_predictions": 6,
+    "tracking_coverage": 1.0,
+    "accuracy_evaluation": false
+  },
+  "previous_render_attempt": {
+    "frontend": "https://replens.lemy.dev",
+    "api": "https://replens-api.onrender.com",
+    "provider": "Render",
+    "plan": "free",
+    "render_service_id": "srv-dbjmigc9v7es73ahuo8g",
+    "netlify_site_id": "52f89b4a-1100-4abd-b72f-568616a14b6b",
+    "health": "passed",
+    "model_available": true,
+    "live_browser_checks": {
+      "frontend": "https://replens.lemy.dev",
+      "api": "https://replens-api.onrender.com",
+      "mobile_viewport": "390x844",
+      "video_preview": true,
+      "theme": true,
+      "real_upload": true,
+      "cors_post_and_delete": true,
+      "queued_job_cancelled": true,
+      "page_errors": []
+    },
+    "cloud_inference_test": "Upload and pose stage succeeded; canceled during optical-flow processing after more than nine minutes to release the free instance. Full cloud inference completion is not verified.",
+    "automatic_deployment": "Paused until deployment PR is merged; current live version is manually deployed from dev."
+  },
+  "automatic_deployment": "Enabled for main; deployment PR remains open. Fresh-host setup flag removed."
+}
