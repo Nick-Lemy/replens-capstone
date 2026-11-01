@@ -1,0 +1,38 @@
+{
+  "reference": "persistent_tremor_20261101T105947439502Z",
+  "reference_sha256": "5373e09634144a1e89e82ddb8b8b67630a054b55050852ab290a3f2d8780a754",
+  "feature_sha256": "70efda755d5425d86689868d36821c8f212c67cef56bde0d8c3a687e9e1d0133",
+  "nonlinear_search": {
+    "model": "RBF SVR",
+    "C": [
+      0.1,
+      1.0,
+      10.0,
+      100.0
+    ],
+    "gamma": "scale",
+    "epsilon": 0.5
+  },
+  "early_reference_people": 2,
+  "history_reps": 4,
+  "early_reference_reps": 3,
+  "regularization": [
+    0.001,
+    0.01,
+    0.1,
+    1.0,
+    10.0,
+    100.0,
+    1000.0
+  ],
+  "evaluation": "nested leave-one-participant-out; participant-weighted fitting and macro MAE; training-only scaling",
+  "cohorts": {
+    "recent_history": {
+      "examples": 33,
+      "participants": 4
+    }
+  },
+  "future_information_inputs": false,
+  "limitations": "Exploratory reused participants; tiny quality-filtered cohort. No independent confirmation or sensor-validated tremor.",
+  "deployment_changed": false
+}
