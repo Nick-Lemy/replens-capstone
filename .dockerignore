@@ -1,0 +1,10 @@
+**
+!Dockerfile
+!app/
+!app/backend/
+!app/backend/**
+**/__pycache__/
+**/*.pyc
+**/node_modules/
+**/.env*
+!app/backend/.env.example

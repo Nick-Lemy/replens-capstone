@@ -6,13 +6,15 @@ from threading import Lock
 from time import monotonic
 from uuid import uuid4
 
+import cv2
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
 
 from .services.analysis import analyze, predictor
-from .config.settings import FRONTEND_ORIGINS
+from .config.settings import FRONTEND_ORIGINS, OPENCV_THREADS
 from .services.video import discard_audio
 
+cv2.setNumThreads(OPENCV_THREADS)
 app = FastAPI(title="RepLens API", version="0.1.0")
 app.add_middleware(
     CORSMiddleware,
