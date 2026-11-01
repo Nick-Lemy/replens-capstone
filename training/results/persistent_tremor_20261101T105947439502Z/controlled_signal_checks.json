@@ -1,0 +1,11 @@
+{
+  "hand_shaking": {
+    "peak_hz": 6.000000000000021,
+    "normalized_rms": 0.0041062623996258015
+  },
+  "camera_shaking_only": {
+    "peak_hz": 6.000000000000021,
+    "normalized_rms": 0.00014342999049496744
+  },
+  "verification": "subpixel 6 Hz recovery during large movement, with high-frequency camera-motion negative control"
+}

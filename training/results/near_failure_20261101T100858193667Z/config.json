@@ -1,0 +1,37 @@
+{
+  "task": "secondary binary proximity-to-failure experiment",
+  "positive_label": "RIR <= 2",
+  "negative_label": "RIR > 2",
+  "threshold": 0.5,
+  "test_min_rep": 4,
+  "training_min_rep": 4,
+  "examples": 97,
+  "positive_examples": 27,
+  "participants": [
+    "P001",
+    "P002",
+    "P003",
+    "P005",
+    "P006",
+    "P012"
+  ],
+  "preparation_id": "9f528c70e2c385f0",
+  "encoder": {
+    "encoder": "r3d18_kinetics400_v1",
+    "weights_sha256": "b3b3357ead25631ec9c57362ff2128a92d0427e01e2cd184951a44380c3f2e9d",
+    "preprocessing": "native_frames_rgb_aspect_pad112_kinetics_norm_v1",
+    "chunk_frames": 16,
+    "partial_chunk_padding": "repeat_last_observed_frame",
+    "cache_point": "final_block_conv1_and_pre_relu_sum_v1",
+    "video_variant": "cropped",
+    "torch": "2.14.1"
+  },
+  "neural_seeds": [
+    42,
+    43,
+    44
+  ],
+  "linear_seed": 42,
+  "evaluation": "outer leave-person-out; C/epochs selected on inner participant splits only",
+  "limitations": "Small exploratory dataset; retrospective crops; no physiological fatigue or injury-reduction validation. Original RIR results preserved."
+}

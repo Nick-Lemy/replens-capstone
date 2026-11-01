@@ -1,0 +1,17 @@
+fold_id,task,model,regularization
+test_P001,rir,speed_only,100.0
+test_P001,rir,speed_plus_original_shaking,100.0
+test_P001,rir,speed_plus_persistent_2d,10.0
+test_P001,rir,speed_plus_persistent_transverse,100.0
+test_P002,rir,speed_only,100.0
+test_P002,rir,speed_plus_original_shaking,100.0
+test_P002,rir,speed_plus_persistent_2d,100.0
+test_P002,rir,speed_plus_persistent_transverse,100.0
+test_P003,rir,speed_only,100.0
+test_P003,rir,speed_plus_original_shaking,100.0
+test_P003,rir,speed_plus_persistent_2d,100.0
+test_P003,rir,speed_plus_persistent_transverse,100.0
+test_P005,rir,speed_only,100.0
+test_P005,rir,speed_plus_original_shaking,100.0
+test_P005,rir,speed_plus_persistent_2d,100.0
+test_P005,rir,speed_plus_persistent_transverse,100.0
