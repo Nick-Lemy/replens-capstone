@@ -43,8 +43,9 @@ The selected signal model is bundled as portable JSON. Its pose locator download
 6. [Speed and candidate shaking](training/notebooks/06_speed_and_shaking.ipynb)
 7. [Results and conclusions](training/notebooks/07_results.ipynb)
 8. [Relative-speed follow-up](training/notebooks/08_relative_speed.ipynb)
+9. [Set progression and error analysis](training/notebooks/09_set_progression.ipynb)
 
-Notebooks 03–08 can recompute results from [included numeric artifacts](training/results/README.md), without private videos or retraining. Install `training/requirements.txt` and follow [notebook setup](training/README.md) to execute them. Optional experiment/export flags default to false.
+Notebooks 03–09 can recompute results from [included numeric artifacts](training/results/README.md), without private videos or retraining. Install `training/requirements.txt` and follow [notebook setup](training/README.md) to execute them. Optional experiment/export flags default to false.
 
 ## Findings and limits
 

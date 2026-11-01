@@ -1,0 +1,31 @@
+{
+  "status": "exploratory_completed",
+  "evaluation": "nested leave-person-out, training-only scalers, participant-balanced weights and macro scores; classification threshold fixed at 0.5",
+  "cohorts": {
+    "timing97": {
+      "examples": 97,
+      "people": 6,
+      "videos": 9,
+      "features_sha256": "17c951aa6737ec0150b17b2875d8b15835015b66e5a4c12f60b05784519b574c"
+    },
+    "motion58": {
+      "examples": 58,
+      "people": 5,
+      "videos": 6,
+      "features_sha256": "ce85a055e561c388adccc42b9c94fbd043f8677719ec10270cc0f86c62f578b2"
+    },
+    "matched33": {
+      "examples": 33,
+      "people": 4,
+      "videos": 5,
+      "features_sha256": "ddf75bb2d085a952ad8df99708bb2603b27b38117e0d0bfca03439409b3cb2a4"
+    }
+  },
+  "no_app_model_promotion": true,
+  "limits": "Sequential follow-ups on already inspected people. Quality cohorts differ. No fresh confirmation test. No proof of physiological fatigue or injury reduction.",
+  "references": [
+    "https://pmc.ncbi.nlm.nih.gov/articles/PMC10901726/",
+    "https://pubmed.ncbi.nlm.nih.gov/37552530/"
+  ],
+  "labels_sha256": "b58381f9780282faddde6d1e3fcf8e41641fb02859ac8d050f6434f90947d155"
+}
