@@ -47,7 +47,7 @@ The proposed 15% benefit from adding tremor has **not** been demonstrated. Video
 - `models/`: downloaded encoders and the current app bundle; ignored by Git.
 - `reporting.py`: shared metric and plotting helpers; no training or application logic.
 
-W&B logs are offline unless explicitly configured otherwise. The app uses a refit of the selected speed + transverse-shaking Ridge model. Shared feature code is in `app/backend/replens/motion_features.py`; the optional export in notebook 06 writes portable JSON.
+W&B logs are offline unless explicitly configured otherwise. The app uses a refit of the selected speed + transverse-shaking Ridge model. Shared feature code is in `app/backend/services/motion_features.py`; the optional export in notebook 06 writes portable JSON.
 
 ## New environment
 

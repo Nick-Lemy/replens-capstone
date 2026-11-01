@@ -10,7 +10,7 @@ from torch import nn
 from torch.nn import functional as F
 from torchvision.models import resnet18
 
-ROOT = Path(__file__).resolve().parents[3]
+from ..config.settings import ROOT
 BUNDLE = Path(
     os.environ.get("REPLENS_MODEL_PATH", ROOT / "training/models/demo/model.pt")
 )

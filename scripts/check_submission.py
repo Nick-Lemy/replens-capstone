@@ -26,7 +26,7 @@ def check():
                 ast.parse("".join(cell["source"]), filename=str(path))
                 if path.name.startswith(("01", "02")) and cell.get("outputs"):
                     raise AssertionError("Private review outputs must not be packaged.")
-    bundle = json.loads((ROOT / "app/backend/replens/assets/rir_model.json").read_text())
+    bundle = json.loads((ROOT / "app/backend/assets/rir_model.json").read_text())
     metadata = bundle["metadata"]
     for name in ["mean", "scale", "coefficients"]:
         assert len(bundle[name]) == len(metadata["feature_names"]) == 7

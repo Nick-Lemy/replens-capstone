@@ -11,7 +11,7 @@ def setup():
     if not shutil.which("ffmpeg") or not shutil.which("ffprobe"):
         raise RuntimeError("Install FFmpeg (including ffprobe) before setting up the analyzer.")
     directory = Path(__file__).resolve().parent
-    specification = json.loads((directory / "replens/assets/pose_model.json").read_text())
+    specification = json.loads((directory / "assets/pose_model.json").read_text())
     path = directory.parents[1] / "training/models" / specification["filename"]
     if path.exists() and hashlib.sha256(path.read_bytes()).hexdigest() == specification["sha256"]:
         print("Pose model already installed and verified.")
