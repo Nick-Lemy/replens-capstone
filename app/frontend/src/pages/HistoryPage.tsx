@@ -12,7 +12,7 @@ export function HistoryPage({
 }: {
   sessions: SavedSession[];
   loading: boolean;
-  onOpen: (s: SavedSession) => void;
+  onOpen: (session: SavedSession) => void;
   onRemove: (id: string) => void;
   onAnalyze: () => void;
 }) {
@@ -45,16 +45,16 @@ export function HistoryPage({
         </section>
       ) : (
         <div className="space-y-3">
-          {sessions.map((s) => (
+          {sessions.map((session) => (
             <SessionCard
-              key={s.id}
-              session={s}
-              confirming={confirm === s.id}
+              key={session.id}
+              session={session}
+              confirming={confirm === session.id}
               onOpen={onOpen}
-              onToggleConfirm={() => setConfirm(confirm === s.id ? null : s.id)}
+              onToggleConfirm={() => setConfirm(confirm === session.id ? null : session.id)}
               onCancelConfirm={() => setConfirm(null)}
               onConfirmRemove={() => {
-                onRemove(s.id);
+                onRemove(session.id);
                 setConfirm(null);
               }}
             />

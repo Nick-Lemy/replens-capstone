@@ -2,7 +2,7 @@ import { Film, Trash2 } from "lucide-react";
 import type { SavedSession } from "../../lib/types";
 import { Button, seconds } from "../shared/UI";
 export function SessionCard({
-  session: s,
+  session,
   confirming,
   onOpen,
   onToggleConfirm,
@@ -20,36 +20,36 @@ export function SessionCard({
     <div className="overflow-hidden rounded-2xl border border-line bg-panel">
       <div className="flex items-center gap-3 p-4">
         <button
-          onClick={() => onOpen(s)}
+          onClick={() => onOpen(session)}
           className="flex min-w-0 flex-1 items-center gap-4 text-left"
         >
           <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-soft">
             <Film size={20} strokeWidth={1.5} />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">{s.title}</p>
+            <p className="truncate text-sm font-medium">{session.title}</p>
             <p className="mt-1 text-xs text-muted">
-              {new Date(s.createdAt).toLocaleDateString(undefined, {
+              {new Date(session.createdAt).toLocaleDateString(undefined, {
                 month: "short",
                 day: "numeric",
               })}{" "}
-              · {s.result.rep_count} reps · {seconds(s.result.duration_s)}
+              · {session.result.rep_count} reps · {seconds(session.result.duration_s)}
             </p>
-            {(s.result.model_choice || s.result.model) && (
+            {(session.result.model_choice || session.result.model) && (
               <p className="mt-1 truncate text-xs text-muted">
-                {s.result.model_choice === "speed_only"
+                {session.result.model_choice === "speed_only"
                   ? "Speed only"
-                  : s.result.model_choice === "speed_shaking"
+                  : session.result.model_choice === "speed_shaking"
                     ? "Speed + shaking"
-                    : (s.result.model?.display_name ??
-                      s.result.model?.family ??
+                    : (session.result.model?.display_name ??
+                      session.result.model?.family ??
                       "Legacy model")}
               </p>
             )}
           </div>
         </button>
         <button
-          aria-label={`Delete ${s.title}`}
+          aria-label={`Delete ${session.title}`}
           onClick={onToggleConfirm}
           className="grid size-11 shrink-0 place-items-center rounded-full text-muted hover:bg-soft hover:text-ink"
         >
