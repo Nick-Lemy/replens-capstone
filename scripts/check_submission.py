@@ -26,28 +26,37 @@ def check():
                 ast.parse("".join(cell["source"]), filename=str(path))
                 if path.name.startswith(("01", "02")) and cell.get("outputs"):
                     raise AssertionError("Private review outputs must not be packaged.")
-    bundle = json.loads((ROOT / "app/backend/assets/rir_model.json").read_text())
-    metadata = bundle["metadata"]
-    for name in ["mean", "scale", "coefficients"]:
-        assert len(bundle[name]) == len(metadata["feature_names"]) == 7
-        assert all(math.isfinite(value) for value in bundle[name])
-    assert all(value > 0 for value in bundle["scale"])
-    source = ROOT / "training/results" / metadata["version"] / "predictions.csv"
-    errors = defaultdict(list)
-    seen = set()
-    with source.open() as stream:
-        for row in csv.DictReader(stream):
-            if row["model"] != "speed_plus_persistent_transverse":
-                continue
-            key = (row["participant_id"], row["video_id"], row["rep"])
-            assert key not in seen
-            seen.add(key)
-            errors[row["participant_id"]].append(abs(float(row["prediction"]) - float(row["reps_left"])))
-    assert len(seen) == metadata["evaluation_examples"] == 33
-    assert len(errors) == metadata["evaluation_participants"] == 4
-    assert math.isclose(mean(mean(values) for values in errors.values()), metadata["participant_mae_reps"], abs_tol=1e-10)
-    assert metadata["evaluated_refit"] is False
-    assert metadata["experimental"] is True
+    compared = []
+    for filename, family, count, model in [
+        ("rir_model.json", "ridge_speed_transverse", 7, "speed_plus_persistent_transverse"),
+        ("rir_speed_only.json", "ridge_speed_only", 4, "speed_only"),
+    ]:
+        bundle = json.loads((ROOT / "app/backend/assets" / filename).read_text())
+        metadata = bundle["metadata"]
+        assert metadata["family"] == family
+        assert math.isfinite(bundle["intercept"])
+        for name in ["mean", "scale", "coefficients"]:
+            assert len(bundle[name]) == len(metadata["feature_names"]) == count
+            assert all(math.isfinite(value) for value in bundle[name])
+        assert all(value > 0 for value in bundle["scale"])
+        source = ROOT / "training/results" / metadata["version"] / "predictions.csv"
+        errors = defaultdict(list)
+        seen = set()
+        with source.open() as stream:
+            for row in csv.DictReader(stream):
+                if row["model"] != model or row["task"] != "rir":
+                    continue
+                key = (row["participant_id"], row["video_id"], row["rep"])
+                assert key not in seen
+                seen.add(key)
+                errors[row["participant_id"]].append(abs(float(row["prediction"]) - float(row["reps_left"])))
+        assert len(seen) == metadata["evaluation_examples"] == 33
+        assert len(errors) == metadata["evaluation_participants"] == 4
+        assert math.isclose(mean(mean(values) for values in errors.values()), metadata["participant_mae_reps"], abs_tol=1e-10)
+        assert metadata["evaluated_refit"] is False
+        assert metadata["experimental"] is True
+        compared.append(seen)
+    assert compared[0] == compared[1]
     print("Submission checks passed: code syntax, private-output exclusion, model coefficients and held-out metric provenance.")
 
 

@@ -14,7 +14,7 @@ training/.venv/bin/python -m pip install -r app/backend/requirements.txt
 training/.venv/bin/python app/backend/setup_models.py
 ```
 
-The selected Ridge model is bundled as `app/backend/assets/rir_model.json`. Setup downloads and verifies only the public MediaPipe Heavy pose locator. The default app does not require PyTorch, ResNet/R3D weights, raw research videos or a database.
+The speed + shaking and speed-only Ridge models are bundled as `app/backend/assets/rir_model.json` and `app/backend/assets/rir_speed_only.json`. Setup downloads and verifies only the public MediaPipe Heavy pose locator. The default app does not require PyTorch, ResNet/R3D weights, raw research videos or a database.
 
 ## Start separately
 
@@ -53,7 +53,7 @@ Open **http://localhost:5173**. API documentation: **http://127.0.0.1:8000/docs*
 
 Upload a complete simultaneous two-arm dumbbell-curl set, at least 25 fps (30+ recommended), up to three minutes and 250 MB. Keep the camera steady, both arms visible and the wrists large enough to measure. MediaPipe proposes rep boundaries and locates image regions. Actual pixel movement supplies speed and candidate shaking features. Estimates can start at rep 4, using that rep and the previous three. Interrupted or poor tracking produces **Unavailable**, not invented estimates. Check the automatic count against the video.
 
-The active model is speed + persistent transverse shaking, a regularized Ridge model. On a selected 33-example/four-person test subset it had participant-mean MAE 2.22 reps versus 2.25 for speed alone. The small 1.32% gain is fragile and does not meet the proposed 15% benefit. The deployed bundle is a refit on all 33 accepted examples using inner-selected regularization; this refit has no independent test score. Candidate shaking is not sensor-validated physiological tremor, and estimates are not safety advice. The UI displays this limited evaluation scope.
+The default model is speed + persistent transverse shaking, a regularized Ridge model. The backend also offers a speed-only Ridge model. On a selected 33-example/four-person test subset it had participant-mean MAE 2.22 reps versus 2.25 for speed alone. The small 1.32% gain is fragile and does not meet the proposed 15% benefit. Both bundles are refits on all 33 accepted examples using inner-selected regularization; these refits have no independent test scores. The matched evaluation included shaking-quality filtering even for speed alone, while speed-only runtime availability can differ. Candidate shaking is not sensor-validated physiological tremor, and estimates are not safety advice. The UI displays this limited evaluation scope.
 
 Some phone MOV files use HEVC, which not every browser can play. Analysis can still finish; the player shows a compatibility message. H.264 MP4 is the recommended preview format. With FFmpeg installed, create a compatible copy without changing the original:
 
@@ -62,6 +62,8 @@ ffmpeg -i input.MOV -an -c:v libx264 -crf 18 -pix_fmt yuv420p -movflags +faststa
 ```
 
 Displayed estimates are rounded to nonnegative whole numbers. Saved results retain raw predictions, model version and quality information. The analyzer uses the same numerical feature functions as notebook 06; no future reps or a declared final rep count are prediction inputs.
+
+The API accepts multipart `POST /api/analyses` with `video` and an optional `model` of `speed_shaking` (default) or `speed_only`. `GET /api/models` lists the two choices and availability. The job and result include `model_choice`; result model metadata identifies the actual model. A configured model override must match an explicit selection or the request is rejected.
 
 ## Privacy and history
 
@@ -81,9 +83,9 @@ Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `
 
 ## Model reproduction / legacy model
 
-Install `training/requirements.txt` for notebook/model development. Run `python -m training.model_export` from the root to reproduce the JSON refit using packaged derived features; notebook 06 exposes the same optional export. No private video is needed for that refit. The original held-out results are preserved separately.
+Install `training/requirements.txt` for notebook/model development. Run `python -m training.model_export` for the shaking bundle or `python -m training.model_export --speed-only` for the speed-only bundle, using packaged derived features; notebook 06 exposes the same optional export. No private video is needed for that refit. The original held-out results are preserved separately.
 
-The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is not the default and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. Missing bundles return an explicit unavailable state; there is no silent model fallback.
+The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is retained for optional legacy/research use, is not a Ridge selector choice, and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. When a `.pt` override is configured, omit `model` to use the legacy model; explicit Ridge selections are rejected. JSON overrides must match an explicit choice. Missing or incompatible bundles do not silently fall back.
 
 ## Azure VM deployment
 
