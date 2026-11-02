@@ -1,5 +1,5 @@
-import { roundedRir } from "../lib/display";
-import type { AnalysisResult, SetReview } from "../lib/types";
+import { roundedRir } from "../../../lib/display";
+import type { AnalysisResult, SetReview } from "../../../lib/types";
 export function ReviewComparison({
   result,
   analysis,
