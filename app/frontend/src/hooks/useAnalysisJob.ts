@@ -7,7 +7,9 @@ export function useAnalysisJob() {
   const [model, setModel] = useState<ModelChoice>("speed_shaking");
   const [file, setFile] = useState<File | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
+
   const generation = useRef(0);
+
   const job = useQuery({
     queryKey: ["analysis", jobId],
     queryFn: () => api.job(jobId!),
@@ -47,16 +49,19 @@ export function useAnalysisJob() {
     (!!jobId &&
       !["completed", "failed", "cancelled"].includes(job.data?.state ?? "") &&
       !job.isError);
+
   function reset() {
     generation.current++;
     setJobId(null);
     upload.reset();
     cancel.reset();
   }
+
   function choose(value: File | null) {
     reset();
     setFile(value);
   }
+
   function start() {
     if (file) {
       generation.current++;
@@ -64,6 +69,7 @@ export function useAnalysisJob() {
       upload.mutate({ file, model, generation: generation.current });
     }
   }
+
   function cancelJob() {
     if (jobId) cancel.mutate({ id: jobId, generation: generation.current });
   }
