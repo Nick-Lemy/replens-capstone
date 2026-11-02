@@ -1,8 +1,8 @@
 import { Download, RefreshCw } from "lucide-react";
 import { useRegisterSW } from "virtual:pwa-register/react";
-import type { AnalysisJob } from "../lib/types";
-import type { InstallPrompt } from "../hooks/useBrowserStatus";
-import { Button, Notice } from "./UI";
+import type { AnalysisJob } from "../../lib/types";
+import type { InstallPrompt } from "../../hooks/useBrowserStatus";
+import { Button, Notice } from "../shared/UI";
 
 export function PwaUpdateNotice({ busy }: { busy: boolean }) {
   const {

@@ -1,4 +1,4 @@
-import type { ReviewDraftRow } from "../lib/types";
+import type { ReviewDraftRow } from "../../../lib/types";
 export function ReviewRepRow({
   row,
   index,

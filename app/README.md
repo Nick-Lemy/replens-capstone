@@ -119,7 +119,20 @@ The frontend is live at `https://replens.lemy.dev` and uses the Azure backend at
 
 ### Frontend structure
 
-The React app composes focused hooks in `frontend/src/hooks` for analysis jobs, active sessions, local history, reviews, browser status, health, and video URLs. `frontend/src/lib` contains the API transport, endpoint definitions, types, and IndexedDB storage. Components separate video input and progress, results and prediction charts, and completed-set review editing and comparison.
+The React app composes its screens in `frontend/src/pages` and keeps focused hooks for analysis jobs, history, reviews, browser status, health, and video URLs in `frontend/src/hooks`. API transport, types, and IndexedDB storage remain in `frontend/src/lib`.
+
+```text
+frontend/src/
+  pages/                    Analyze, history, and results screens
+  components/analyze/       Video input, progress, tips, model selector
+  components/results/       Video, chart, rep selector, model metadata
+  components/results/review/ Completed-set review controls
+  components/history/       Saved-session card
+  components/layout/         Navigation and status
+  components/shared/         Shared UI controls
+  hooks/                    State and workflow hooks
+  lib/                      API and local storage
+```
 
 ## Processing optimization and validation
 
