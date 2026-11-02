@@ -9,6 +9,7 @@ export function PwaUpdateNotice({ busy }: { busy: boolean }) {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW();
+
   return (
     <>
       {needRefresh && (
@@ -29,6 +30,7 @@ export function PwaUpdateNotice({ busy }: { busy: boolean }) {
     </>
   );
 }
+
 export function ApplicationStatusNotices({
   online,
   healthError,
@@ -86,6 +88,7 @@ export function ApplicationStatusNotices({
     </>
   );
 }
+
 export function InstallAppPrompt({
   install,
   busy,

@@ -1,4 +1,5 @@
 import { Camera, Check } from "lucide-react";
+
 export function FilmingTips() {
   return (
     <section>

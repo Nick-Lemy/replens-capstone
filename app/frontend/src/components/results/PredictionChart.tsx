@@ -1,5 +1,6 @@
 import { roundedRir } from "../../lib/display";
 import type { AnalysisResult } from "../../lib/types";
+
 export function PredictionChart({
   result,
   selected,
@@ -11,6 +12,7 @@ export function PredictionChart({
   const maxY = Math.max(5, ...valid.map((r) => roundedRir(r.rir!)));
   const x = (i: number) => 15 + (i / Math.max(1, result.reps.length - 1)) * 310;
   const y = (v: number) => 125 - (roundedRir(v) / maxY) * 100;
+
   return (
     <>
       {!!valid.length && (

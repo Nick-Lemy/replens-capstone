@@ -1,7 +1,9 @@
 import { ScanLine, Clock3 } from "lucide-react";
 import { ThemeSwitch } from "../shared/UI";
+
 type Tab = "analyze" | "history";
 type Props = { tab: Tab; setTab: (tab: Tab) => void };
+
 export function AppHeader({ tab, setTab }: Props) {
   return (
     <header className="border-b border-line">
@@ -37,6 +39,7 @@ export function AppHeader({ tab, setTab }: Props) {
     </header>
   );
 }
+
 export function AppNavigation({ tab, setTab }: Props) {
   return (
     <nav

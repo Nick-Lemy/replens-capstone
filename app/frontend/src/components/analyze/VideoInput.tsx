@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import { Film, Plus, ScanLine, X } from "lucide-react";
 import { Button, Notice, seconds } from "../shared/UI";
+
 export function VideoInput({
   file,
   url,
@@ -20,20 +21,24 @@ export function VideoInput({
   const [error, setError] = useState("");
   const [duration, setDuration] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
+
   function choose(value?: File) {
     if (!value || busy) return;
     if (!/\.(mp4|mov|m4v|webm)$/i.test(value.name)) {
       setError("Choose an MP4, MOV, M4V or WebM video.");
+
       return;
     }
     if (value.size > 250 * 1024 * 1024) {
       setError("Choose a video smaller than 250 MB.");
+
       return;
     }
     setError("");
     setDuration(null);
     onFile(value);
   }
+
   return (
     <>
       <input
