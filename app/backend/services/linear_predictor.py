@@ -3,7 +3,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .motion_features import candidate_features, pixel_motion, transverse_shaking
+from .motion_features import candidate_features, pixel_motion_dual, transverse_shaking
 
 
 FEATURES = [
@@ -41,9 +41,11 @@ class LinearPredictor:
         predictions = [None] * len(reps)
         if len(reps) < 4:
             return predictions, metadata
-        original = pixel_motion(path, pose_frames, progress=lambda p: progress(50 + int(20*p), "Measuring lifting speed"), cancelled=cancelled)
-        persistent = pixel_motion(path, pose_frames, persistent=True,
-                                  progress=lambda p: progress(70 + int(23*p), "Measuring small movements"), cancelled=cancelled)
+        original, persistent = pixel_motion_dual(
+            path, pose_frames,
+            progress=lambda p: progress(50 + int(43*p), "Measuring movement"),
+            cancelled=cancelled,
+        )
         for index in range(3, len(reps)):
             if cancelled():
                 raise ValueError("Analysis cancelled.")
