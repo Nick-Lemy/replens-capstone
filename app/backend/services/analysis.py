@@ -9,7 +9,7 @@ from .rep_signals import detect_reps
 predictor = Predictor()
 
 
-def analyze(path: Path, progress, cancelled):
+def analyze(path: Path, progress, cancelled, model_choice="speed_shaking"):
     frames, fps = track_pose(path, progress, cancelled)
     proposed = detect_reps(frames, fps)
     frames.attrs.clear()
@@ -34,7 +34,7 @@ def analyze(path: Path, progress, cancelled):
     elif reps:
         try:
             predictions, metadata = predictor.predict(
-                path, reps, progress, cancelled, pose_frames=frames
+                path, reps, progress, cancelled, pose_frames=frames, model_choice=model_choice
             )
         except (RuntimeError, ValueError, OSError) as exc:
             unavailable = str(exc)
@@ -43,11 +43,14 @@ def analyze(path: Path, progress, cancelled):
     if metadata is not None and len(reps) < 4:
         unavailable = "The first estimate is available after 4 completed reps. This set does not contain enough detected reps."
     elif metadata is not None and not any(value is not None for value in predictions):
-        unavailable = "Small movement could not be measured reliably. Use a steady camera, good light and a clear view of both arms."
+        if model_choice == "speed_only":
+            unavailable = "Lifting speed could not be measured reliably. Use a steady camera, good light and a clear view of both arms."
+        else:
+            unavailable = "Small movement could not be measured reliably. Use a steady camera, good light and a clear view of both arms."
     quality = {
         item["rep"]: item["reason"] for item in (metadata or {}).get("rep_quality", [])
     }
-    if metadata is not None and metadata.get("family") == "ridge_speed_transverse":
+    if metadata is not None and metadata.get("family") in {"ridge_speed_transverse", "ridge_speed_only"}:
         warnings.append(
             "This model was evaluated on only 33 quality-filtered examples from four people. Its error does not describe every uploaded video."
         )
@@ -68,6 +71,7 @@ def analyze(path: Path, progress, cancelled):
     progress(98, "Preparing your results")
     return {
         "exercise": "Simultaneous dumbbell curl",
+        "model_choice": model_choice,
         "reps": reps,
         "rep_count": len(reps),
         "duration_s": float(frames.time_s.iloc[-1]),
