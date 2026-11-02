@@ -1,8 +1,8 @@
 import { ReviewRepRow } from "./ReviewRepRow";
-import { initialReview, useSetReview } from "../hooks/useSetReview";
+import { initialReview, useSetReview } from "../../../hooks/useSetReview";
 import { ReviewComparison } from "./ReviewComparison";
-import type { AnalysisResult, SetReview } from "../lib/types";
-import { Button, Notice } from "./UI";
+import type { AnalysisResult, SetReview } from "../../../lib/types";
+import { Button, Notice } from "../../shared/UI";
 
 export function SetReviewCard({
   analysis,

@@ -2,13 +2,13 @@ import {
   ApplicationStatusNotices,
   InstallAppPrompt,
   PwaUpdateNotice,
-} from "./components/ApplicationStatus";
-import { AppHeader, AppNavigation } from "./components/AppNavigation";
+} from "./components/layout/ApplicationStatus";
+import { AppHeader, AppNavigation } from "./components/layout/AppNavigation";
 import { useEffect, useRef, useState } from "react";
 import type { SavedSession } from "./lib/types";
-import { Analyze } from "./components/Analyze";
-import { Results } from "./components/Results";
-import { History } from "./components/History";
+import { AnalyzePage } from "./pages/AnalyzePage";
+import { ResultsPage } from "./pages/ResultsPage";
+import { HistoryPage } from "./pages/HistoryPage";
 import { useAnalysisJob } from "./hooks/useAnalysisJob";
 import { useActiveSession } from "./hooks/useActiveSession";
 import { useBrowserStatus } from "./hooks/useBrowserStatus";
@@ -95,7 +95,7 @@ export default function App() {
           job={job.data}
         />
         {tab === "history" ? (
-          <History
+          <HistoryPage
             sessions={active.sessions.data ?? []}
             loading={active.sessions.isPending}
             onOpen={open}
@@ -103,7 +103,7 @@ export default function App() {
             onAnalyze={() => (busy ? setTab("analyze") : reset())}
           />
         ) : result && review ? (
-          <Results
+          <ResultsPage
             key={viewId}
             result={result}
             url={url}
@@ -115,7 +115,7 @@ export default function App() {
             onSave={active.saveSession}
           />
         ) : (
-          <Analyze
+          <AnalyzePage
             file={file}
             url={url}
             busy={busy}

@@ -1,6 +1,6 @@
 import { useState, type RefObject } from "react";
-import { roundedRir } from "../lib/display";
-import type { AnalysisResult } from "../lib/types";
+import { roundedRir } from "../../lib/display";
+import type { AnalysisResult } from "../../lib/types";
 export function ResultVideo({
   result,
   url,
