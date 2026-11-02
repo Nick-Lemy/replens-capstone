@@ -287,79 +287,124 @@ def _pixel_motion_modes(video, pose, modes, progress, cancelled):
 
 def candidate_features(flow, start, end, rep_start):
     if flow.empty or 'time_s' not in flow:
-        return None,'no usable wrist/camera tracking'
-    part = flow.loc[flow.time_s.between(start,end)].copy()
+        return None, 'no usable wrist/camera tracking'
+    part = flow.loc[flow.time_s.between(start, end)].copy()
     if len(part) < 60:
-        return None,'less than two seconds of tracking'
-    dt = float(np.median(part.dt)); fs = 1/dt
-    if fs < 25 or part.dt.max() > 1.5*dt or np.max(np.diff(part.time_s)) > 1.5*dt:
-        return None,'irregular or interrupted frame times'
-    coverage = {s:float(part[[f'{s}_dx',f'{s}_dy']].notna().all(axis=1).mean()) for s in ('left','right')}
-    side = max(coverage,key=coverage.get)
-    if coverage[side] < .85:
-        return None,'less than 85% valid wrist/camera tracking'
-    xy = part[[f'{side}_dx',f'{side}_dy']]
+        return None, 'less than two seconds of tracking'
+    dt = float(np.median(part.dt))
+    fs = 1 / dt
+    if fs < 25 or part.dt.max() > 1.5 * dt or np.max(np.diff(part.time_s)) > 1.5 * dt:
+        return None, 'irregular or interrupted frame times'
+    coverage = {
+        s: float(part[[f'{s}_dx', f'{s}_dy']].notna().all(axis=1).mean())
+        for s in ('left', 'right')
+    }
+    side = max(coverage, key=coverage.get)
+    if coverage[side] < 0.85:
+        return None, 'less than 85% valid wrist/camera tracking'
+    xy = part[[f'{side}_dx', f'{side}_dy']]
     missing = xy.isna().any(axis=1).to_numpy()
     longest = current = 0
     for absent in missing:
-        current = current+1 if absent else 0; longest = max(longest,current)
+        current = current + 1 if absent else 0
+        longest = max(longest, current)
     if longest > 2 or missing[0] or missing[-1]:
-        return None,'tracking gap exceeds two frames or reaches an edge'
+        return None, 'tracking gap exceeds two frames or reaches an edge'
     xy = xy.interpolate(limit=2).to_numpy(float)
     width = float(part.shoulder_px.median())
     if not np.isfinite(width) or width < 20 or not np.isfinite(xy).all():
-        return None,'invalid image scale or unfilled tracking gap'
-    velocity = xy/(part.dt.to_numpy()[:,None]*width)
-    smooth = sosfiltfilt(butter(3,3,fs=fs,output='sos'),velocity,axis=0)
-    speed = np.linalg.norm(smooth,axis=1)
-    f,power = welch(velocity,fs=fs,nperseg=min(len(velocity),int(2*fs)),axis=0,detrend='linear')
+        return None, 'invalid image scale or unfilled tracking gap'
+    velocity = xy / (part.dt.to_numpy()[:, None] * width)
+    smooth = sosfiltfilt(butter(3, 3, fs=fs, output='sos'), velocity, axis=0)
+    speed = np.linalg.norm(smooth, axis=1)
+
+    f, power = welch(
+        velocity,
+        fs=fs,
+        nperseg=min(len(velocity), int(2 * fs)),
+        axis=0,
+        detrend='linear',
+    )
     power = power.sum(axis=1)
-    band = (f>=4)&(f<=10); broad = (f>=.5)&(f<=12)
-    displacement_power = power[band]/(2*np.pi*f[band])**2
-    band_power = float(np.trapezoid(power[band],f[band]))
-    total_power = float(np.trapezoid(power[broad],f[broad]))
-    tremor_rms = float(np.sqrt(max(0,np.trapezoid(displacement_power,f[band]))))
+    band = (f >= 4) & (f <= 10)
+    broad = (f >= 0.5) & (f <= 12)
+    displacement_power = power[band] / (2 * np.pi * f[band]) ** 2
+    band_power = float(np.trapezoid(power[band], f[band]))
+    total_power = float(np.trapezoid(power[broad], f[broad]))
+    tremor_rms = float(np.sqrt(max(0, np.trapezoid(displacement_power, f[band]))))
     current_rep = part.time_s.to_numpy() >= rep_start
-    result = {'speed_mean':float(speed.mean()),'speed_p90':float(np.quantile(speed,.9)),
-              'speed_current':float(speed[current_rep].mean()),
-              'speed_change':float(speed[-max(1,len(speed)//4):].mean()-speed[:max(1,len(speed)//4)].mean()),
-              'candidate_log_rms':float(np.log10(tremor_rms+1e-8)),
-              'candidate_power_fraction':band_power/(total_power+1e-12),
-              'candidate_peak_fraction':float(power[band].max()/(power[band].sum()+1e-12)),
-              'peak_hz':float(f[band][np.argmax(power[band])]),'tracking_coverage':coverage[side],
-              'background_error_px':float(part.background_error_px.median()),'side':side,'fps':fs}
-    if not all(np.isfinite(v) for v in result.values() if not isinstance(v,str)):
-        return None,'nonfinite signal'
-    return result,None
+
+    result = {
+        'speed_mean': float(speed.mean()),
+        'speed_p90': float(np.quantile(speed, 0.9)),
+        'speed_current': float(speed[current_rep].mean()),
+        'speed_change': float(
+            speed[-max(1, len(speed) // 4) :].mean()
+            - speed[: max(1, len(speed) // 4)].mean()
+        ),
+        'candidate_log_rms': float(np.log10(tremor_rms + 1e-8)),
+        'candidate_power_fraction': band_power / (total_power + 1e-12),
+        'candidate_peak_fraction': float(
+            power[band].max() / (power[band].sum() + 1e-12)
+        ),
+        'peak_hz': float(f[band][np.argmax(power[band])]),
+        'tracking_coverage': coverage[side],
+        'background_error_px': float(part.background_error_px.median()),
+        'side': side,
+        'fps': fs,
+    }
+    if not all(np.isfinite(v) for v in result.values() if not isinstance(v, str)):
+        return None, 'nonfinite signal'
+    return result, None
+
 
 def transverse_shaking(flow, start, end, rep_start):
-    basic,reason = candidate_features(flow,start,end,rep_start)
+    basic, reason = candidate_features(flow, start, end, rep_start)
     if basic is None:
-        return None,reason
-    part=flow.loc[flow.time_s.between(start,end)].copy()
-    side=basic['side'];dt=float(np.median(part.dt));fs=1/dt
-    values=part[[f'{side}_dx',f'{side}_dy']].interpolate(limit=2).to_numpy(float)
-    velocity=values/(part.dt.to_numpy()[:,None]*float(part.shoulder_px.median()))
+        return None, reason
+    part = flow.loc[flow.time_s.between(start, end)].copy()
+    side = basic['side']
+    dt = float(np.median(part.dt))
+    fs = 1 / dt
+    values = part[[f'{side}_dx', f'{side}_dy']].interpolate(limit=2).to_numpy(float)
+    velocity = values / (part.dt.to_numpy()[:, None] * float(part.shoulder_px.median()))
+
     # Resample small timestamp jitter before spectral analysis.
-    times=part.time_s.to_numpy();grid=np.arange(times[0],times[-1],dt)
-    velocity=np.column_stack([np.interp(grid,times,velocity[:,i]) for i in range(2)])
-    slow=sosfiltfilt(butter(3,1.5,fs=fs,output='sos'),velocity,axis=0)
-    eigenvalues,axes=np.linalg.eigh(np.cov(slow.T))
-    if eigenvalues[-1]<1e-10:
-        return None,'no stable main movement axis'
-    transverse=velocity@axes[:,0]
-    f,power=welch(transverse,fs=fs,nperseg=min(len(transverse),int(2*fs)),detrend='linear')
-    band=(f>=4)&(f<=10);broad=(f>=.5)&(f<=12)
-    rms=float(np.sqrt(max(0,np.trapezoid(power[band]/(2*np.pi*f[band])**2,f[band]))))
-    features={
-        'persistent_log_rms':basic['candidate_log_rms'],
-        'persistent_power_fraction':basic['candidate_power_fraction'],
-        'persistent_peak_fraction':basic['candidate_peak_fraction'],
-        'transverse_log_rms':float(np.log10(rms+1e-8)),
-        'transverse_power_fraction':float(np.trapezoid(power[band],f[band])/(np.trapezoid(power[broad],f[broad])+1e-12)),
-        'transverse_peak_fraction':float(power[band].max()/(power[band].sum()+1e-12)),
-        'transverse_peak_hz':float(f[band][power[band].argmax()]),
-        'persistent_coverage':basic['tracking_coverage']}
+    times = part.time_s.to_numpy()
+    grid = np.arange(times[0], times[-1], dt)
+    velocity = np.column_stack(
+        [np.interp(grid, times, velocity[:, i]) for i in range(2)]
+    )
+
+    slow = sosfiltfilt(butter(3, 1.5, fs=fs, output='sos'), velocity, axis=0)
+    eigenvalues, axes = np.linalg.eigh(np.cov(slow.T))
+    if eigenvalues[-1] < 1e-10:
+        return None, 'no stable main movement axis'
+
+    transverse = velocity @ axes[:, 0]
+    f, power = welch(
+        transverse, fs=fs, nperseg=min(len(transverse), int(2 * fs)), detrend='linear'
+    )
+    band = (f >= 4) & (f <= 10)
+    broad = (f >= 0.5) & (f <= 12)
+    rms = float(
+        np.sqrt(max(0, np.trapezoid(power[band] / (2 * np.pi * f[band]) ** 2, f[band])))
+    )
+    features = {
+        'persistent_log_rms': basic['candidate_log_rms'],
+        'persistent_power_fraction': basic['candidate_power_fraction'],
+        'persistent_peak_fraction': basic['candidate_peak_fraction'],
+        'transverse_log_rms': float(np.log10(rms + 1e-8)),
+        'transverse_power_fraction': float(
+            np.trapezoid(power[band], f[band])
+            / (np.trapezoid(power[broad], f[broad]) + 1e-12)
+        ),
+        'transverse_peak_fraction': float(
+            power[band].max() / (power[band].sum() + 1e-12)
+        ),
+        'transverse_peak_hz': float(f[band][power[band].argmax()]),
+        'persistent_coverage': basic['tracking_coverage'],
+    }
     if not all(np.isfinite(v) for v in features.values()):
-        return None,'nonfinite stabilized signal'
-    return features,None
+        return None, 'nonfinite stabilized signal'
+    return features, None
