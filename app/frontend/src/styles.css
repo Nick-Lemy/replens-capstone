@@ -15,12 +15,14 @@
             opacity: 0;
             transform: translateY(5px);
         }
+
         to {
             opacity: 1;
             transform: translateY(0);
         }
     }
 }
+
 :root {
     --page: #fafafa;
     --panel: #ffffff;
@@ -31,6 +33,7 @@
     --stage: #171819;
     color-scheme: light;
 }
+
 .dark {
     --page: #161719;
     --panel: #1b1c1f;
@@ -41,6 +44,7 @@
     --stage: #101113;
     color-scheme: dark;
 }
+
 @layer base {
     body {
         margin: 0;
@@ -49,26 +53,32 @@
         -webkit-font-smoothing: antialiased;
         background: var(--page);
     }
+
     button,
     a,
     input {
         -webkit-tap-highlight-color: transparent;
     }
+
     button {
         cursor: pointer;
     }
+
     button:disabled {
         cursor: default;
     }
+
     :focus-visible {
         outline: 2px solid var(--ink);
         outline-offset: 4px;
     }
+
     ::selection {
         background: var(--ink);
         color: var(--page);
     }
 }
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

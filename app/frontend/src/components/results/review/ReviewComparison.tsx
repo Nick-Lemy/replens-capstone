@@ -1,5 +1,6 @@
 import { roundedRir } from "../../../lib/display";
 import type { AnalysisResult, SetReview } from "../../../lib/types";
+
 export function ReviewComparison({
   result,
   analysis,
@@ -37,6 +38,7 @@ export function ReviewComparison({
                 prediction.start_s === r.start_s &&
                 prediction.top_s === r.top_s &&
                 prediction.end_s === r.end_s;
+
               return (
                 <tr key={r.rep} className="border-b border-line">
                   <td className="py-2 pr-2">

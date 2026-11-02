@@ -20,6 +20,7 @@ export function SetReviewCard({
     review,
     onChange,
   );
+
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-panel p-5">
       <div>

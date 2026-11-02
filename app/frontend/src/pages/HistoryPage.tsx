@@ -18,6 +18,7 @@ export function HistoryPage({
   onAnalyze: () => void;
 }) {
   const [confirm, setConfirm] = useState<string | null>(null);
+
   return (
     <div className="animate-enter space-y-6">
       <div>

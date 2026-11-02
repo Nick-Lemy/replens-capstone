@@ -1,4 +1,5 @@
 import type { AnalysisResult } from "../../lib/types";
+
 export function ModelMetadata({ result }: { result: AnalysisResult }) {
   return (
     <div className="space-y-2 text-xs leading-5 text-muted">

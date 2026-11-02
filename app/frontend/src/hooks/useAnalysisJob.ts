@@ -22,6 +22,7 @@ export function useAnalysisJob() {
         ? false
         : 1000,
   });
+
   const upload = useMutation({
     mutationFn: ({
       file,
@@ -35,6 +36,7 @@ export function useAnalysisJob() {
       if (request.generation === generation.current) setJobId(data.id);
     },
   });
+
   const cancel = useMutation({
     mutationFn: ({ id }: { id: string; generation: number }) => api.cancel(id),
     onSuccess: (_, request) => {
@@ -44,6 +46,7 @@ export function useAnalysisJob() {
       }
     },
   });
+
   const busy =
     upload.isPending ||
     (!!jobId &&
@@ -73,6 +76,7 @@ export function useAnalysisJob() {
   function cancelJob() {
     if (jobId) cancel.mutate({ id: jobId, generation: generation.current });
   }
+
   return {
     file,
     model,

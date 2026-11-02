@@ -19,16 +19,25 @@ import { useHealth } from "./hooks/useHealth";
 export default function App() {
   const [tab, setTab] = useState<"analyze" | "history">("analyze");
   const [message, setMessage] = useState("");
+
   const analysis = useAnalysisJob();
+
   const active = useActiveSession();
+
   const health = useHealth();
+
   const models = useModels();
+
   const { online, install, dismissInstall } = useBrowserStatus();
+
   const { file, job, busy } = analysis;
   const { session, review, saved, viewId, complete } = active;
   const result = session?.result ?? null;
+
   const url = useObjectUrl(session?.video ?? file);
+
   const handledJob = useRef<string | null>(null);
+
   useEffect(() => {
     if (
       analysis.jobId &&
@@ -49,24 +58,28 @@ export default function App() {
     file,
     complete,
   ]);
+
   function reset() {
     analysis.reset();
     active.reset();
     setTab("analyze");
     setMessage("");
   }
+
   function open(session: SavedSession) {
     if (busy) {
       setMessage(
         "An analysis is running. Finish or cancel it before opening another session.",
       );
       setTab("analyze");
+
       return;
     }
     analysis.reset();
     active.open(session);
     setTab("analyze");
   }
+
   const errors = [
     analysis.upload.error,
     job.error,
@@ -75,6 +88,7 @@ export default function App() {
     analysis.cancel.error,
     active.sessions.error,
   ].filter(Boolean);
+
   return (
     <div className="min-h-dvh bg-page text-ink">
       <AppHeader tab={tab} setTab={setTab} />
