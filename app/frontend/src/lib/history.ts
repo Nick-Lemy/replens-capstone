@@ -20,6 +20,7 @@ async function transaction<T>(
   action: (store: IDBObjectStore) => IDBRequest<T>,
 ): Promise<T> {
   const db = await open();
+
   return new Promise((resolve, reject) => {
     const tx = db.transaction("sessions", mode);
     const request = action(tx.objectStore("sessions"));

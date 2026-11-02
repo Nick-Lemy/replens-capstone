@@ -1,6 +1,7 @@
 import type { ButtonHTMLAttributes, ReactNode } from "react";
 import { LoaderCircle, Moon, Sun, X, CircleAlert } from "lucide-react";
 import { useState } from "react";
+
 export function Button({
   children,
   secondary = false,
@@ -27,6 +28,7 @@ export function ThemeSwitch() {
   const [dark, setDark] = useState(
     document.documentElement.classList.contains("dark"),
   );
+
   return (
     <button
       className="grid size-11 place-items-center rounded-full text-muted transition hover:bg-soft hover:text-ink"
@@ -49,6 +51,7 @@ export function ThemeSwitch() {
     </button>
   );
 }
+
 export function Notice({
   children,
   onClose,

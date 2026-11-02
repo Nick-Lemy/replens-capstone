@@ -1,6 +1,7 @@
 import { useState, type RefObject } from "react";
 import { roundedRir } from "../../lib/display";
 import type { AnalysisResult } from "../../lib/types";
+
 export function ResultVideo({
   result,
   url,
@@ -16,6 +17,7 @@ export function ResultVideo({
 }) {
   const [previewError, setPreviewError] = useState(false);
   const rep = result.reps[selected];
+
   return (
     <div className="overflow-hidden rounded-3xl border border-line bg-panel p-2">
       <div className="relative overflow-hidden rounded-[18px] bg-stage">

@@ -2,15 +2,20 @@ import { useCallback, useRef, useState } from "react";
 import type { AnalysisResult, SavedSession, SetReview } from "../lib/types";
 import { initialReview } from "./useSetReview";
 import { useHistory } from "./useHistory";
+
 export function useActiveSession() {
   const history = useHistory();
   const [session, setSession] = useState<SavedSession | null>(null);
   const [review, setReview] = useState<SetReview | null>(null);
   const [saved, setSaved] = useState(false);
   const [viewId, setViewId] = useState<string | null>(null);
+
   const viewRef = useRef<string | null>(null);
+
   const reviewRef = useRef<SetReview | null>(null);
+
   const resetSave = history.save.reset;
+
   const open = useCallback(
     (next: SavedSession, isSaved = true) => {
       const id = crypto.randomUUID();
@@ -25,6 +30,7 @@ export function useActiveSession() {
     },
     [resetSave],
   );
+
   const complete = useCallback(
     (result: AnalysisResult, video: Blob) => {
       open(
@@ -40,6 +46,7 @@ export function useActiveSession() {
     },
     [open],
   );
+
   function reset() {
     viewRef.current = null;
     reviewRef.current = null;
@@ -49,11 +56,13 @@ export function useActiveSession() {
     setSaved(false);
     history.save.reset();
   }
+
   function changeReview(next: SetReview) {
     reviewRef.current = next;
     setReview(next);
     setSaved(false);
   }
+
   async function save() {
     if (!session || !review || !viewId) return;
     const next = { ...session, review };
@@ -68,6 +77,7 @@ export function useActiveSession() {
       /* exposed by mutation */
     }
   }
+
   return {
     ...history,
     session,
