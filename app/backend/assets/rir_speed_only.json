@@ -1,0 +1,47 @@
+{
+  "metadata": {
+    "family": "ridge_speed_only",
+    "display_name": "Speed only",
+    "version": "persistent_tremor_20261101T105947439502Z",
+    "experimental": true,
+    "evaluated_refit": false,
+    "participant_mae_reps": 2.2511656107863036,
+    "evaluation_examples": 33,
+    "evaluation_participants": 4,
+    "evaluation_scope": "33 matched quality-filtered examples from four people; exploratory reused test folds",
+    "training_reps": 33,
+    "training_participants": 4,
+    "preprocessing": "wrist_pixels_speed_v1",
+    "history_reps": 4,
+    "min_prediction_rep": 4,
+    "minimum_fps": 25,
+    "ridge_alpha": 100.0,
+    "feature_names": [
+      "speed_mean",
+      "speed_p90",
+      "speed_current",
+      "speed_change"
+    ],
+    "training_features_sha256": "5373e09634144a1e89e82ddb8b8b67630a054b55050852ab290a3f2d8780a754",
+    "limitations": "Exploratory matched cohort also required shaking quality; speed-only availability may differ. Automatic rep boundaries can differ from reviewed training boundaries."
+  },
+  "mean": [
+    1.7697027333732027,
+    3.5402241818703795,
+    2.0335062913311526,
+    -0.03539434075042642
+  ],
+  "scale": [
+    0.7104632605724154,
+    1.5018836746905082,
+    0.8744475095400127,
+    0.17446797469831374
+  ],
+  "coefficients": [
+    0.20250722643054825,
+    0.1802100322126127,
+    0.1863468425557522,
+    0.16932059514108555
+  ],
+  "intercept": 4.6554909937306475
+}
