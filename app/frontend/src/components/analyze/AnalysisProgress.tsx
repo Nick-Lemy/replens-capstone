@@ -1,4 +1,4 @@
-import type { AnalysisJob } from "../lib/types";
+import type { AnalysisJob } from "../../lib/types";
 export function AnalysisProgress({
   busy,
   job,
