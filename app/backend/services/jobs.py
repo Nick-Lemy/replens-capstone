@@ -22,7 +22,7 @@ class AnalysisJobManager:
         self.storage = TemporaryDirectory(prefix="replens-")
         self.worker = ThreadPoolExecutor(max_workers=1)
 
-    def create(self, video):
+    def create(self, video, model_choice="speed_shaking"):
         suffix = Path(video.filename or "").suffix.lower()
         if suffix not in {".mp4", ".mov", ".m4v", ".webm"}:
             video.file.close()
@@ -46,6 +46,7 @@ class AnalysisJobManager:
                     "state": "queued",
                     "progress": 0,
                     "message": "Waiting to analyze",
+                    "model_choice": model_choice,
                 }
                 self.inflight.add(job_id)
             path = Path(self.storage.name) / (job_id + suffix)
@@ -61,7 +62,7 @@ class AnalysisJobManager:
                         dest.write(chunk)
                 if not size:
                     raise HTTPException(422, "This video is empty.")
-                self.worker.submit(self.execute, job_id, path)
+                self.worker.submit(self.execute, job_id, path, model_choice)
             except Exception:
                 path.unlink(missing_ok=True)
                 with self.lock:
@@ -76,7 +77,7 @@ class AnalysisJobManager:
         with self.lock:
             return self.jobs[job_id].get("cancelled", False)
 
-    def execute(self, job_id, path):
+    def execute(self, job_id, path, model_choice):
         def progress(value, message):
             with self.lock:
                 if not self.jobs[job_id].get("cancelled"):
@@ -93,7 +94,7 @@ class AnalysisJobManager:
             discard_audio(path)
             if self.cancelled(job_id):
                 return
-            result = analyze(path, progress, lambda: self.cancelled(job_id))
+            result = analyze(path, progress, lambda: self.cancelled(job_id), model_choice=model_choice)
             with self.lock:
                 if not self.jobs[job_id].get("cancelled"):
                     self.jobs[job_id].update(
