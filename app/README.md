@@ -61,7 +61,7 @@ Some phone MOV files use HEVC, which not every browser can play. Analysis can st
 ffmpeg -i input.MOV -an -c:v libx264 -crf 18 -pix_fmt yuv420p -movflags +faststart output.mp4
 ```
 
-Displayed estimates use one decimal place and floor negative values at zero. Saved results retain raw predictions, model version and quality information. The analyzer uses the same numerical feature functions as notebook 06; no future reps or a declared final rep count are prediction inputs.
+Displayed estimates are rounded to nonnegative whole numbers. Saved results retain raw predictions, model version and quality information. The analyzer uses the same numerical feature functions as notebook 06; no future reps or a declared final rep count are prediction inputs.
 
 ## Privacy and history
 
@@ -114,3 +114,13 @@ For the first deployment, run **Deploy VPS backend** manually with `first_setup`
 Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. No database migrations or authentication secrets are needed by this version. Deployment finishes by checking the public API and selected model.
 
 The frontend is live at `https://replens.lemy.dev` and uses the Azure backend at `https://api.replens.lemy.dev`. GitHub Actions deployment, HTTPS, CORS and a complete 19.4-second upload were verified: nine reps and six available predictions. This is a deployment check, not an accuracy evaluation; processing still takes several minutes on the current CPU. The temporary Render service is no longer used by the frontend.
+
+### Frontend structure
+
+The React app composes focused hooks in `frontend/src/hooks` for analysis jobs, active sessions, local history, reviews, browser status, health, and video URLs. `frontend/src/lib` contains the API transport, endpoint definitions, types, and IndexedDB storage. Components separate video input and progress, results and prediction charts, and completed-set review editing and comparison.
+
+## Processing optimization and validation
+
+Speed and persistent-shaking tracking now share video decoding and background-motion estimation, retaining separate wrist-tracking state and the existing feature definitions. On one 19.43-second H.264 clip on the current Azure VM, accepted-upload-to-completed-poll time fell from 195.94 to 141.76 seconds (27.65%). Both runs detected nine reps and returned six estimates, with zero observed raw-prediction difference. This is a single paired measurement, not a latency percentile or accuracy improvement.
+
+See `training/results/processing_optimization.json` for local numerical-parity benchmarks and `training/results/refactor_validation.json` for integration evidence. To reproduce motion-only comparisons with local approved data, use `training/.venv/bin/python scripts/benchmark_processing.py --video VIDEO_PATH --pose MATCHING_POSE_CSV`; the default baseline is the recorded earlier commit. The API still uses one background worker and in-memory jobs.
