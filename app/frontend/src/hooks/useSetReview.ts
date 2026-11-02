@@ -7,6 +7,7 @@ import type {
   ReviewInterval,
   SetReview,
 } from "../lib/types";
+
 export function initialReview(result: AnalysisResult): SetReview {
   return {
     draft: result.reps.map((r) => ({
@@ -43,6 +44,7 @@ export function useSetReview(
     setValidation("");
     onChange({ ...next, result: null });
   }
+
   function updateRow(id: string, changes: Partial<ReviewDraftRow>) {
     edit({
       ...review,
@@ -51,6 +53,7 @@ export function useSetReview(
       ),
     });
   }
+
   async function submit() {
     if (!review.failureConfirmed || !review.allRemainingVisible) {
       setValidation("Confirm both statements before reviewing the set.");
