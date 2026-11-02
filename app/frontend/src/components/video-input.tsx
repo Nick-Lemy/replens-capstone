@@ -7,12 +7,14 @@ export function VideoInput({
   busy,
   onFile,
   onStart,
+  canStart,
 }: {
   file: File | null;
   url: string | null;
   busy: boolean;
   onFile: (file: File | null) => void;
   onStart: () => void;
+  canStart: boolean;
 }) {
   const picker = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
@@ -144,7 +146,7 @@ export function VideoInput({
         <Button
           className="w-full"
           onClick={onStart}
-          disabled={duration !== null && duration > 180}
+          disabled={!canStart || (duration !== null && duration > 180)}
         >
           <ScanLine size={17} />
           Analyze set
