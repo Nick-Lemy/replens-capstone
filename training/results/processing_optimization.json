@@ -1,0 +1,58 @@
+{
+  "baseline_commit": "a0f903da033f70aaf9a81adaae01fd65e76f0eb0",
+  "caveat": "Single local run per video; motion only; OpenCV configured for 2 threads. Timings are not upload-to-result latency.",
+  "model": "Same unchanged bundle in baseline and optimized implementation",
+  "model_sha256": "4128674aa56810f7d0f7d28433630d66860c812fcf159f7b7e057898aa7a0f20",
+  "videos": {
+    "video_1": {
+      "boundary_source": "supplied automatic suggestions CSV",
+      "rep_count": 9,
+      "quality_decisions_compared": 6,
+      "feature_vectors_and_predictions_compared": 6,
+      "absolute_tolerance": 1e-09,
+      "flows": {
+        "original": {
+          "rows": 582,
+          "columns": 9,
+          "nan_masks_match": true,
+          "max_finite_difference": 0.0
+        },
+        "persistent": {
+          "rows": 582,
+          "columns": 9,
+          "nan_masks_match": true,
+          "max_finite_difference": 0.0
+        }
+      },
+      "seconds": {
+        "baseline": 19.681,
+        "optimized": 13.194
+      }
+    },
+    "video_3": {
+      "boundary_source": "automatic detection",
+      "rep_count": 18,
+      "quality_decisions_compared": 15,
+      "feature_vectors_and_predictions_compared": 6,
+      "absolute_tolerance": 1e-09,
+      "flows": {
+        "original": {
+          "rows": 1093,
+          "columns": 9,
+          "nan_masks_match": true,
+          "max_finite_difference": 0.0
+        },
+        "persistent": {
+          "rows": 1093,
+          "columns": 9,
+          "nan_masks_match": true,
+          "max_finite_difference": 0.0
+        }
+      },
+      "seconds": {
+        "baseline": 37.596,
+        "optimized": 25.012
+      }
+    }
+  }
+}
