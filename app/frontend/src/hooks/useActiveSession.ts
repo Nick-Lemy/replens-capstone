@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import type { AnalysisResult, SavedSession, SetReview } from "../lib/types";
-import { initialReview } from "./use-set-review";
-import { useHistory } from "./use-history";
+import { initialReview } from "./useSetReview";
+import { useHistory } from "./useHistory";
 export function useActiveSession() {
   const history = useHistory();
   const [session, setSession] = useState<SavedSession | null>(null);
