@@ -1,7 +1,8 @@
 import { VideoInput } from "./video-input";
 import { AnalysisProgress } from "./analysis-progress";
 import { FilmingTips } from "./filming-tips";
-import type { AnalysisJob } from "../lib/types";
+import { ModelSelector } from "./model-selector";
+import type { ModelChoice, ModelCatalog, AnalysisJob } from "../lib/types";
 export function Analyze({
   file,
   url,
@@ -10,6 +11,12 @@ export function Analyze({
   onFile,
   onStart,
   onCancel,
+  model,
+  onModel,
+  models,
+  modelsLoading,
+  modelsError,
+  retryModels,
 }: {
   file: File | null;
   url: string | null;
@@ -18,6 +25,12 @@ export function Analyze({
   onFile: (file: File | null) => void;
   onStart: () => void;
   onCancel: () => void;
+  model: ModelChoice;
+  onModel: (model: ModelChoice) => void;
+  models?: ModelCatalog;
+  modelsLoading: boolean;
+  modelsError: boolean;
+  retryModels: () => void;
 }) {
   return (
     <div className="animate-enter space-y-7">
@@ -31,12 +44,26 @@ export function Analyze({
           estimated effort.
         </p>
       </div>
+      <ModelSelector
+        value={model}
+        onChange={onModel}
+        catalog={models}
+        loading={modelsLoading}
+        error={modelsError}
+        busy={busy}
+        onRetry={retryModels}
+      />
       <VideoInput
         file={file}
         url={url}
         busy={busy}
         onFile={onFile}
         onStart={onStart}
+        canStart={
+          !modelsLoading &&
+          !modelsError &&
+          !!models?.models.find((item) => item.id === model && item.available)
+        }
       />
       <AnalysisProgress busy={busy} job={job} onCancel={onCancel} />
       <FilmingTips />
