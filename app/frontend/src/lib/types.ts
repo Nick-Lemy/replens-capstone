@@ -1,3 +1,14 @@
+export type ModelChoice = "speed_only" | "speed_shaking";
+export type ModelCatalog = {
+  default: ModelChoice | "legacy" | null;
+  models: {
+    id: ModelChoice;
+    display_name: string;
+    family: string;
+    experimental: boolean;
+    available: boolean;
+  }[];
+};
 export type Rep = {
   rep: number;
   start_s: number;
@@ -18,6 +29,7 @@ export type ModelInfo = {
   evaluated_refit?: boolean;
 };
 export type AnalysisResult = {
+  model_choice?: ModelChoice | "legacy" | null;
   exercise: string;
   reps: Rep[];
   rep_count: number;
@@ -28,6 +40,7 @@ export type AnalysisResult = {
   model: ModelInfo | null;
 };
 export type AnalysisJob = {
+  model_choice?: ModelChoice | "legacy" | null;
   id: string;
   state: "queued" | "processing" | "completed" | "failed" | "cancelled";
   progress: number;

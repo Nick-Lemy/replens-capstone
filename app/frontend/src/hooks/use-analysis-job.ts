@@ -1,8 +1,10 @@
 import { useRef, useState } from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "../lib/api";
+import type { ModelChoice } from "../lib/types";
 
 export function useAnalysisJob() {
+  const [model, setModel] = useState<ModelChoice>("speed_shaking");
   const [file, setFile] = useState<File | null>(null);
   const [jobId, setJobId] = useState<string | null>(null);
   const generation = useRef(0);
@@ -19,8 +21,14 @@ export function useAnalysisJob() {
         : 1000,
   });
   const upload = useMutation({
-    mutationFn: ({ file }: { file: File; generation: number }) =>
-      api.analyze(file),
+    mutationFn: ({
+      file,
+      model,
+    }: {
+      file: File;
+      model: ModelChoice;
+      generation: number;
+    }) => api.analyze(file, model),
     onSuccess: (data, request) => {
       if (request.generation === generation.current) setJobId(data.id);
     },
@@ -53,7 +61,7 @@ export function useAnalysisJob() {
     if (file) {
       generation.current++;
       setJobId(null);
-      upload.mutate({ file, generation: generation.current });
+      upload.mutate({ file, model, generation: generation.current });
     }
   }
   function cancelJob() {
@@ -61,6 +69,8 @@ export function useAnalysisJob() {
   }
   return {
     file,
+    model,
+    setModel,
     jobId,
     job,
     busy,

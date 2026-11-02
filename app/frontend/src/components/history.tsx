@@ -67,6 +67,17 @@ export function History({
                       · {s.result.rep_count} reps ·{" "}
                       {seconds(s.result.duration_s)}
                     </p>
+                    {(s.result.model_choice || s.result.model) && (
+                      <p className="mt-1 truncate text-xs text-muted">
+                        {s.result.model_choice === "speed_only"
+                          ? "Speed only"
+                          : s.result.model_choice === "speed_shaking"
+                            ? "Speed + shaking"
+                            : (s.result.model?.display_name ??
+                              s.result.model?.family ??
+                              "Legacy model")}
+                      </p>
+                    )}
                   </div>
                 </button>
                 <button
