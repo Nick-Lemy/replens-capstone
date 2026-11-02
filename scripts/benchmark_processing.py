@@ -32,7 +32,7 @@ def main():
     parser.add_argument(
         "--model", type=Path, default=ROOT / "app/backend/assets/rir_model.json"
     )
-    parser.add_argument("--baseline-ref", default="a0f903d")
+    parser.add_argument("--baseline-ref", default="motion-baseline")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     baseline_ref = subprocess.check_output(
