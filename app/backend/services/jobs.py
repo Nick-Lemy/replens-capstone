@@ -27,6 +27,7 @@ class AnalysisJobManager:
         if suffix not in {".mp4", ".mov", ".m4v", ".webm"}:
             video.file.close()
             raise HTTPException(422, "Choose an MP4, MOV, M4V or WebM video.")
+
         try:
             with self.lock:
                 now = monotonic()
@@ -36,10 +37,12 @@ class AnalysisJobManager:
                         and now - self.jobs[key].get("finished_at", now) > 7200
                     ):
                         del self.jobs[key]
+
                 if len(self.inflight) >= 3:
                     raise HTTPException(
                         429, "The analyzer is busy. Please try again shortly."
                     )
+
                 job_id = uuid4().hex
                 self.jobs[job_id] = {
                     "id": job_id,
@@ -49,6 +52,7 @@ class AnalysisJobManager:
                     "model_choice": model_choice,
                 }
                 self.inflight.add(job_id)
+
             path = Path(self.storage.name) / (job_id + suffix)
             try:
                 size = 0
@@ -60,6 +64,7 @@ class AnalysisJobManager:
                                 413, "Choose a video smaller than 250 MB."
                             )
                         dest.write(chunk)
+
                 if not size:
                     raise HTTPException(422, "This video is empty.")
                 self.worker.submit(self.execute, job_id, path, model_choice)
@@ -69,6 +74,7 @@ class AnalysisJobManager:
                     self.jobs.pop(job_id, None)
                     self.inflight.discard(job_id)
                 raise
+
             return {"id": job_id}
         finally:
             video.file.close()
@@ -88,10 +94,12 @@ class AnalysisJobManager:
         try:
             if self.cancelled(job_id):
                 return
+
             progress(1, "Removing audio")
             if self.cancelled(job_id):
                 return
             discard_audio(path)
+
             if self.cancelled(job_id):
                 return
             result = analyze(
@@ -100,6 +108,7 @@ class AnalysisJobManager:
                 lambda: self.cancelled(job_id),
                 model_choice=model_choice,
             )
+
             with self.lock:
                 if not self.jobs[job_id].get("cancelled"):
                     self.jobs[job_id].update(

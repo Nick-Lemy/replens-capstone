@@ -16,6 +16,7 @@ CHOICES = {
 def resolve_model(choice=None):
     if choice is not None and choice not in CHOICES:
         raise ValueError("Unsupported model selection.")
+
     override = os.environ.get("REPLENS_MODEL_PATH")
     if not override:
         return choice or "speed_shaking"
@@ -23,10 +24,12 @@ def resolve_model(choice=None):
         raise RuntimeError("The configured prediction model is missing.")
     if BUNDLE.suffix != ".json":
         raise RuntimeError("Unsupported model bundle format.")
+
     try:
         family = json.loads(BUNDLE.read_text())["metadata"]["family"]
     except (OSError, ValueError, KeyError, TypeError) as exc:
         raise RuntimeError("The configured prediction model is invalid.") from exc
+
     selected = next((key for key, (name, _) in CHOICES.items() if name == family), None)
     if selected is None:
         raise RuntimeError("Unsupported configured prediction model family.")
@@ -41,6 +44,7 @@ def model_catalog():
         resolved = resolve_model()
     except (RuntimeError, ValueError):
         resolved = None
+
     models = []
     for key, (family, path) in CHOICES.items():
         path = BUNDLE if override else path
@@ -52,6 +56,7 @@ def model_catalog():
                 available = LinearPredictor(path).metadata.get("family") == family
             except (OSError, ValueError, RuntimeError, KeyError, TypeError):
                 available = False
+
         models.append(
             {
                 "id": key,
@@ -65,6 +70,7 @@ def model_catalog():
                 "available": available,
             }
         )
+
     return {"default": resolved, "models": models}
 
 
@@ -76,6 +82,7 @@ class Predictor:
 
     def load(self, model_choice=None):
         choice = resolve_model(model_choice)
+
         with self.load_lock:
             if choice not in self.delegates:
                 path = (
@@ -95,6 +102,7 @@ class Predictor:
                         "The configured model does not match the requested model."
                     )
                 self.delegates[choice] = delegate
+
             delegate = self.delegates[choice]
             if model_choice is None:
                 self.metadata = delegate.metadata

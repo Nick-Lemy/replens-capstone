@@ -35,6 +35,7 @@ def track_pose(path: Path, progress, cancelled):
     if total > 10800 or total / fps > 180:
         capture.release()
         raise ValueError("Choose a single set lasting no more than 3 minutes.")
+
     rows, index, last_timestamp = [], 0, -1
 
     try:
@@ -43,6 +44,7 @@ def track_pose(path: Path, progress, cancelled):
                 ok, frame = capture.read()
                 if not ok:
                     break
+
                 timestamp = round(capture.get(cv2.CAP_PROP_POS_MSEC))
                 if timestamp <= last_timestamp:
                     raise ValueError(
@@ -51,11 +53,13 @@ def track_pose(path: Path, progress, cancelled):
                 last_timestamp = timestamp
                 if timestamp > 180000 or index >= 10800:
                     raise ValueError("Choose a shorter video, up to 3 minutes.")
+
                 h, w = frame.shape[:2]
                 if h * w > 17000000:
                     raise ValueError("Video resolution is too large. Export at 1080p.")
                 if w > 960:
                     frame = cv2.resize(frame, (960, round(h * 960 / w)))
+
                 rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                 pose = detector.detect_for_video(
                     mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb), timestamp
@@ -64,6 +68,7 @@ def track_pose(path: Path, progress, cancelled):
                 row["time_s"] = timestamp / 1000
                 rows.append(row)
                 index += 1
+
                 if index % 30 == 0:
                     progress(
                         5 + min(45, int(index / max(1, total) * 45)),

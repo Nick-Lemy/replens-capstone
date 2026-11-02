@@ -70,6 +70,7 @@ def result_folder(root, run):
 def load_predictions(root, run, condition=None, direction=None):
     folder = result_folder(root, run)
     table = pd.read_csv(folder / "predictions.csv")
+
     if direction is not None:
         table = table.loc[table.direction.eq(direction)].copy()
         if "model" not in table:
@@ -78,6 +79,7 @@ def load_predictions(root, run, condition=None, direction=None):
         table["seed"] = 42
     table["condition"] = condition or run
     table["source_run"] = folder.name
+
     if table.empty or not np.isfinite(table.reps_left).all():
         raise ValueError(f"Missing/invalid predictions: {folder.name}")
     return table.reset_index(drop=True)
@@ -94,12 +96,14 @@ def assert_matched_examples(table):
             expected = values
         else:
             pd.testing.assert_frame_equal(expected, values, check_dtype=False)
+
     return len(expected)
 
 
 def regression_report(table):
     if not np.isfinite(table.prediction).all():
         raise ValueError("Nonfinite regression predictions.")
+
     rows = []
     for (condition, model, seed, person), group in table.groupby(
         ["condition", "model", "seed", "participant_id"]
@@ -127,6 +131,7 @@ def regression_report(table):
             }
         )
     people = pd.DataFrame(rows)
+
     metrics = ["mae", "rmse", "within_1", "within_2", "bias", "r2"]
     seeds = people.groupby(["condition", "model", "seed"])[metrics].mean().reset_index()
     summary = seeds.groupby(["condition", "model"])[metrics].mean()
@@ -134,11 +139,13 @@ def regression_report(table):
         seeds.groupby(["condition", "model"]).mae.std(ddof=1).fillna(0)
     )
     summary["seeds"] = seeds.groupby(["condition", "model"]).size()
+
     counts = people.groupby(["condition", "model", "seed"]).agg(
         examples=("examples", "sum"),
         people=("participant_id", "nunique"),
         r2_people=("r2", "count"),
     )
+
     if (
         counts.groupby(["condition", "model"])[["examples", "people"]]
         .nunique()
@@ -203,6 +210,7 @@ def classification_report(table):
             }
         )
     people = pd.DataFrame(rows)
+
     metrics = [
         "balanced_accuracy",
         "precision",
@@ -221,6 +229,7 @@ def classification_report(table):
         seeds.groupby(["condition", "model"]).balanced_accuracy.std().fillna(0)
     )
     summary["seeds"] = seeds.groupby(["condition", "model"]).size()
+
     counts = people.groupby(["condition", "model", "seed"]).agg(
         examples=("examples", "sum"), people=("participant_id", "nunique")
     )
