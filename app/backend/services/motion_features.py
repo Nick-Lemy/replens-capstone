@@ -31,13 +31,9 @@ def flow_vectors(previous, current, points):
     return p[valid], q[valid]
 
 def pixel_motion(video, pose_path, output=None, persistent=False, progress=None, cancelled=None):
-    if persistent:
-        cv2.setRNGSeed(42)
     pose_is_table = isinstance(pose_path, pd.DataFrame)
     pose = pose_path.copy() if pose_is_table else pd.read_csv(pose_path)
     pose.attrs.clear()
-    metadata = None
-    contract = None
     if output is not None:
         output = Path(output)
         if pose_is_table:
@@ -47,7 +43,23 @@ def pixel_motion(video, pose_path, output=None, persistent=False, progress=None,
         metadata = output.with_suffix('.json')
         if output.exists() and metadata.exists() and json.loads(metadata.read_text()) == contract:
             return pd.read_csv(output)
-    # Review caches store wrist/elbow coordinates relative to each shoulder.
+    table = _pixel_motion_modes(video, pose, (persistent,), progress, cancelled)[persistent]
+    if output is not None:
+        table.to_csv(output, index=False)
+        metadata.write_text(json.dumps(contract, indent=2))
+    return table
+
+
+def pixel_motion_dual(video, pose_path, progress=None, cancelled=None):
+    pose = pose_path.copy() if isinstance(pose_path, pd.DataFrame) else pd.read_csv(pose_path)
+    pose.attrs.clear()
+    tables = _pixel_motion_modes(video, pose, (False, True), progress, cancelled)
+    return tables[False], tables[True]
+
+
+def _pixel_motion_modes(video, pose, modes, progress, cancelled):
+    if True in modes:
+        cv2.setRNGSeed(42)
     for side in ('left','right'):
         for joint in ('wrist','elbow'):
             for axis in ('x','y'):
@@ -57,8 +69,11 @@ def pixel_motion(video, pose_path, output=None, persistent=False, progress=None,
     if fps < 25:
         capture.release()
         raise ValueError('Small-movement analysis needs at least 25 frames per second. Try a 30 fps video.')
-    rows = []; previous = None; previous_time = None; previous_pose = None
-    tracked = {s: None for s in ('left','right')}; anchors = {}
+    rows = {mode: [] for mode in modes}; previous = None; previous_time = None; previous_pose = None
+    tracked = {mode: {side: None for side in ('left', 'right')} for mode in modes}
+    columns = [f'{side}_{joint}_{axis}' for side in ('left', 'right') for joint in ('shoulder', 'elbow', 'wrist') for axis in ('x', 'y')]
+    pose_times = pose.time_s.to_numpy()
+    pose_values = pose[columns].to_numpy(float)
     try:
         while True:
             if cancelled is not None and cancelled():
@@ -74,15 +89,16 @@ def pixel_motion(video, pose_path, output=None, persistent=False, progress=None,
                 frame = cv2.resize(frame, None, fx=scale, fy=scale, interpolation=cv2.INTER_AREA)
             gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             h,w = gray.shape
-            index = int(np.searchsorted(pose.time_s.to_numpy(), time))
+            index = int(np.searchsorted(pose_times, time))
             options = [i for i in (index-1,index) if 0 <= i < len(pose)]
-            index = min(options, key=lambda i: abs(pose.time_s.iloc[i]-time))
-            current_pose = pose.iloc[index] if abs(pose.time_s.iloc[index]-time) <= 1.5/fps else None
+            index = min(options, key=lambda i: abs(pose_times[i]-time))
+            current_pose = pose_values[index] if abs(pose_times[index]-time) <= 1.5/fps else None
             if previous is not None and previous_pose is not None and 0 < time-previous_time < 1.5/fps:
                 points = []
-                for side in ('left','right'):
-                    for joint in ('shoulder','elbow','wrist'):
-                        xy = previous_pose[[f'{side}_{joint}_x',f'{side}_{joint}_y']].to_numpy(float)*[w,h]
+                for side_index in range(2):
+                    for joint_index in range(3):
+                        offset = side_index * 6 + joint_index * 2
+                        xy = previous_pose[offset:offset+2]*[w,h]
                         if np.isfinite(xy).all():
                             points.append(xy)
                 mask = np.full(gray.shape,255,np.uint8)
@@ -100,48 +116,42 @@ def pixel_motion(video, pose_path, output=None, persistent=False, progress=None,
                     if affine is not None:
                         inlier_fraction = float(inliers.mean())
                         noise = float(np.median(np.linalg.norm(q-(p@affine[:,:2].T+affine[:,2]),axis=1)))
-                shoulder = np.array([previous_pose.left_shoulder_x-previous_pose.right_shoulder_x,
-                                     previous_pose.left_shoulder_y-previous_pose.right_shoulder_y])*[w,h]
+                shoulder = (previous_pose[0:2] - previous_pose[6:8])*[w,h]
                 width = float(np.linalg.norm(shoulder))
-                item = {'time_s':time,'dt':time-previous_time,'shoulder_px':width,
-                        'camera_inliers':inlier_fraction,'background_error_px':noise}
-                for side in ('left','right'):
-                    item[f'{side}_dx'] = item[f'{side}_dy'] = np.nan
-                    xy = previous_pose[[f'{side}_wrist_x',f'{side}_wrist_y']].to_numpy(float)*[w,h]
-                    if affine is None or inlier_fraction < .5 or not np.isfinite(width) or width < 20 or not np.isfinite(xy).all():
-                        tracked[side] = None
-                        continue
-                    if not (0 <= xy[0] < w and 0 <= xy[1] < h):
-                        tracked[side] = None
-                        continue
-                    region = np.zeros(gray.shape,np.uint8)
-                    cv2.circle(region,tuple(xy.astype(int)),max(12,int(.25*width)),255,-1)
-                    target = tracked[side] if persistent else None
-                    if target is not None:
-                        distance = np.linalg.norm(target.reshape(-1,2)-xy,axis=1)
-                        target = target[distance < max(25,.6*width)]
-                    if target is None or len(target)<8:
-                        target = cv2.goodFeaturesToTrack(previous,maxCorners=(60 if persistent else 40),qualityLevel=.01,minDistance=3,mask=region)
+                for persistent in modes:
+                    item = {'time_s':time,'dt':time-previous_time,'shoulder_px':width,
+                            'camera_inliers':inlier_fraction,'background_error_px':noise}
+                    for side_index, side in enumerate(('left','right')):
+                        item[f'{side}_dx'] = item[f'{side}_dy'] = np.nan
+                        xy = previous_pose[side_index*6+4:side_index*6+6]*[w,h]
+                        if affine is None or inlier_fraction < .5 or not np.isfinite(width) or width < 20 or not np.isfinite(xy).all():
+                            tracked[persistent][side] = None
+                            continue
+                        if not (0 <= xy[0] < w and 0 <= xy[1] < h):
+                            tracked[persistent][side] = None
+                            continue
+                        region = np.zeros(gray.shape,np.uint8)
+                        cv2.circle(region,tuple(xy.astype(int)),max(12,int(.25*width)),255,-1)
+                        target = tracked[persistent][side] if persistent else None
                         if target is not None:
-                            anchors[side] = target.reshape(-1,2).mean(0)
-                    p,q = flow_vectors(previous,gray,target)
-                    if persistent:
-                        tracked[side] = q.reshape(-1,1,2).astype(np.float32) if len(q)>=5 else None
-                    if len(p) >= 5:
-                        residual = q-(p@affine[:,:2].T+affine[:,2])
-                        displacement = np.median(residual,axis=0)
-                        item[f'{side}_dx'],item[f'{side}_dy'] = displacement
-                rows.append(item)
-            elif persistent:
-                tracked = {s: None for s in ('left','right')}
+                            distance = np.linalg.norm(target.reshape(-1,2)-xy,axis=1)
+                            target = target[distance < max(25,.6*width)]
+                        if target is None or len(target)<8:
+                            target = cv2.goodFeaturesToTrack(previous,maxCorners=(60 if persistent else 40),qualityLevel=.01,minDistance=3,mask=region)
+                        p,q = flow_vectors(previous,gray,target)
+                        if persistent:
+                            tracked[persistent][side] = q.reshape(-1,1,2).astype(np.float32) if len(q)>=5 else None
+                        if len(p) >= 5:
+                            residual = q-(p@affine[:,:2].T+affine[:,2])
+                            displacement = np.median(residual,axis=0)
+                            item[f'{side}_dx'],item[f'{side}_dy'] = displacement
+                    rows[persistent].append(item)
+            else:
+                tracked = {mode: {side: None for side in ('left', 'right')} for mode in modes}
             previous,previous_time,previous_pose = gray,time,current_pose
     finally:
         capture.release()
-    table = pd.DataFrame(rows)
-    if output is not None:
-        table.to_csv(output,index=False)
-        metadata.write_text(json.dumps(contract,indent=2))
-    return table
+    return {mode: pd.DataFrame(rows[mode]) for mode in modes}
 
 def candidate_features(flow, start, end, rep_start):
     if flow.empty or 'time_s' not in flow:

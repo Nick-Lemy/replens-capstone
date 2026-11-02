@@ -5,8 +5,8 @@ import mediapipe as mp
 import numpy as np
 import pandas as pd
 
+from ..config.settings import POSE_MODEL, ROOT
 from .predictor import Predictor
-from ..config.settings import ROOT, POSE_MODEL
 from .rep_signals import _landmarks, detect_reps
 
 predictor = Predictor()
@@ -21,14 +21,17 @@ def analyze(path: Path, progress, cancelled):
                 "Pose annotation model is missing. Run the video review setup first."
             )
         model_path = matches[0]
+
     options = mp.tasks.vision.PoseLandmarkerOptions(
         base_options=mp.tasks.BaseOptions(model_asset_path=str(model_path)),
         running_mode=mp.tasks.vision.RunningMode.VIDEO,
         num_poses=1,
     )
+
     capture = cv2.VideoCapture(str(path))
     fps = capture.get(cv2.CAP_PROP_FPS)
     total = int(capture.get(cv2.CAP_PROP_FRAME_COUNT))
+
     if not capture.isOpened() or not np.isfinite(fps) or not 5 <= fps <= 120:
         capture.release()
         raise ValueError("This video could not be decoded. Try a different MP4 or MOV.")
@@ -36,6 +39,7 @@ def analyze(path: Path, progress, cancelled):
         capture.release()
         raise ValueError("Choose a single set lasting no more than 3 minutes.")
     rows, index, last_timestamp = [], 0, -1
+
     try:
         with mp.tasks.vision.PoseLandmarker.create_from_options(options) as detector:
             while not cancelled():
@@ -70,10 +74,12 @@ def analyze(path: Path, progress, cancelled):
                     )
     finally:
         capture.release()
+
     if cancelled():
         raise ValueError("Analysis cancelled.")
     if not rows:
         raise ValueError("The video contains no readable frames.")
+
     frames = pd.DataFrame(rows)
     proposed = detect_reps(frames, fps)
     frames.attrs.clear()
@@ -91,12 +97,15 @@ def analyze(path: Path, progress, cancelled):
             "Both arms were visible for less than 60% of the clip. Reps may be missed."
         )
     predictions, metadata = [None] * len(reps), None
+
     unavailable = None
     if reps and coverage < 0.35:
         unavailable = "Arm visibility was too low for a usable estimate. Keep both arms in the frame and try again."
     elif reps:
         try:
-            predictions, metadata = predictor.predict(path, reps, progress, cancelled, pose_frames=frames)
+            predictions, metadata = predictor.predict(
+                path, reps, progress, cancelled, pose_frames=frames
+            )
         except (RuntimeError, ValueError, OSError) as exc:
             unavailable = str(exc)
     else:
@@ -105,9 +114,14 @@ def analyze(path: Path, progress, cancelled):
         unavailable = "The first estimate is available after 4 completed reps. This set does not contain enough detected reps."
     elif metadata is not None and not any(value is not None for value in predictions):
         unavailable = "Small movement could not be measured reliably. Use a steady camera, good light and a clear view of both arms."
-    quality = {item["rep"]: item["reason"] for item in (metadata or {}).get("rep_quality", [])}
+    quality = {
+        item["rep"]: item["reason"] for item in (metadata or {}).get("rep_quality", [])
+    }
     if metadata is not None and metadata.get("family") == "ridge_speed_transverse":
-        warnings.append("This model was evaluated on only 33 quality-filtered examples from four people. Its error does not describe every uploaded video.")
+        warnings.append(
+            "This model was evaluated on only 33 quality-filtered examples from four people. Its error does not describe every uploaded video."
+        )
+
     finite_predictions = [p for p in predictions if p is not None]
     if len(finite_predictions) >= 3 and np.std(finite_predictions) < 0.1:
         warnings.append(
@@ -115,7 +129,11 @@ def analyze(path: Path, progress, cancelled):
         )
     for rep, value in zip(reps, predictions):
         rep["rir"] = value
-        rep["prediction_status"] = "building_history" if metadata is not None and rep["rep"] < 4 else ("available" if value is not None else "unavailable")
+        rep["prediction_status"] = (
+            "building_history"
+            if metadata is not None and rep["rep"] < 4
+            else ("available" if value is not None else "unavailable")
+        )
         rep["prediction_reason"] = quality.get(rep["rep"])
     progress(98, "Preparing your results")
     return {
