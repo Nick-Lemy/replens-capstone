@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import type { AnalysisResult, SavedSession, SetReview } from "../lib/types";
 import { initialReview } from "./use-set-review";
 import { useHistory } from "./use-history";
@@ -10,29 +10,36 @@ export function useActiveSession() {
   const [viewId, setViewId] = useState<string | null>(null);
   const viewRef = useRef<string | null>(null);
   const reviewRef = useRef<SetReview | null>(null);
-  function open(next: SavedSession, isSaved = true) {
-    const id = crypto.randomUUID();
-    viewRef.current = id;
-    setViewId(id);
-    const draft = next.review ?? initialReview(next.result);
-    reviewRef.current = draft;
-    setReview(draft);
-    setSession(next);
-    setSaved(isSaved);
-    history.save.reset();
-  }
-  function complete(result: AnalysisResult, video: Blob) {
-    open(
-      {
-        id: crypto.randomUUID(),
-        title: "Dumbbell curl",
-        createdAt: new Date().toISOString(),
-        result,
-        video,
-      },
-      false,
-    );
-  }
+  const resetSave = history.save.reset;
+  const open = useCallback(
+    (next: SavedSession, isSaved = true) => {
+      const id = crypto.randomUUID();
+      viewRef.current = id;
+      setViewId(id);
+      const draft = next.review ?? initialReview(next.result);
+      reviewRef.current = draft;
+      setReview(draft);
+      setSession(next);
+      setSaved(isSaved);
+      resetSave();
+    },
+    [resetSave],
+  );
+  const complete = useCallback(
+    (result: AnalysisResult, video: Blob) => {
+      open(
+        {
+          id: crypto.randomUUID(),
+          title: "Dumbbell curl",
+          createdAt: new Date().toISOString(),
+          result,
+          video,
+        },
+        false,
+      );
+    },
+    [open],
+  );
   function reset() {
     viewRef.current = null;
     reviewRef.current = null;
