@@ -34,7 +34,12 @@ def analyze(path: Path, progress, cancelled, model_choice="speed_shaking"):
     elif reps:
         try:
             predictions, metadata = predictor.predict(
-                path, reps, progress, cancelled, pose_frames=frames, model_choice=model_choice
+                path,
+                reps,
+                progress,
+                cancelled,
+                pose_frames=frames,
+                model_choice=model_choice,
             )
         except (RuntimeError, ValueError, OSError) as exc:
             unavailable = str(exc)
@@ -50,7 +55,10 @@ def analyze(path: Path, progress, cancelled, model_choice="speed_shaking"):
     quality = {
         item["rep"]: item["reason"] for item in (metadata or {}).get("rep_quality", [])
     }
-    if metadata is not None and metadata.get("family") in {"ridge_speed_transverse", "ridge_speed_only"}:
+    if metadata is not None and metadata.get("family") in {
+        "ridge_speed_transverse",
+        "ridge_speed_only",
+    }:
         warnings.append(
             "This model was evaluated on only 33 quality-filtered examples from four people. Its error does not describe every uploaded video."
         )

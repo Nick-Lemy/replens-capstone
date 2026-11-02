@@ -94,7 +94,12 @@ class AnalysisJobManager:
             discard_audio(path)
             if self.cancelled(job_id):
                 return
-            result = analyze(path, progress, lambda: self.cancelled(job_id), model_choice=model_choice)
+            result = analyze(
+                path,
+                progress,
+                lambda: self.cancelled(job_id),
+                model_choice=model_choice,
+            )
             with self.lock:
                 if not self.jobs[job_id].get("cancelled"):
                     self.jobs[job_id].update(
