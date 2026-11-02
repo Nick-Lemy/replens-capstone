@@ -1,5 +1,5 @@
 import type { ModelCatalog, ModelChoice } from "../lib/types";
-import { Notice } from "./ui";
+import { Notice } from "./UI";
 
 export function ModelSelector({
   value,

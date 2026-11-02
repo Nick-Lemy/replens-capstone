@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { Film, Plus, ScanLine, X } from "lucide-react";
-import { Button, Notice, seconds } from "./ui";
+import { Button, Notice, seconds } from "./UI";
 export function VideoInput({
   file,
   url,

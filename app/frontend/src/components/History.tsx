@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Film, Trash2, Clock3 } from "lucide-react";
 import type { SavedSession } from "../lib/types";
-import { Button, seconds } from "./ui";
+import { Button, seconds } from "./UI";
 export function History({
   sessions,
   loading,

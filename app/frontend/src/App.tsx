@@ -2,19 +2,19 @@ import {
   ApplicationStatusNotices,
   InstallAppPrompt,
   PwaUpdateNotice,
-} from "./components/application-status";
-import { AppHeader, AppNavigation } from "./components/app-navigation";
+} from "./components/ApplicationStatus";
+import { AppHeader, AppNavigation } from "./components/AppNavigation";
 import { useEffect, useRef, useState } from "react";
 import type { SavedSession } from "./lib/types";
-import { Analyze } from "./components/analyze";
-import { Results } from "./components/results";
-import { History } from "./components/history";
-import { useAnalysisJob } from "./hooks/use-analysis-job";
-import { useActiveSession } from "./hooks/use-active-session";
-import { useBrowserStatus } from "./hooks/use-browser-status";
-import { useObjectUrl } from "./hooks/use-object-url";
-import { useModels } from "./hooks/use-models";
-import { useHealth } from "./hooks/use-health";
+import { Analyze } from "./components/Analyze";
+import { Results } from "./components/Results";
+import { History } from "./components/History";
+import { useAnalysisJob } from "./hooks/useAnalysisJob";
+import { useActiveSession } from "./hooks/useActiveSession";
+import { useBrowserStatus } from "./hooks/useBrowserStatus";
+import { useObjectUrl } from "./hooks/useObjectUrl";
+import { useModels } from "./hooks/useModels";
+import { useHealth } from "./hooks/useHealth";
 
 export default function App() {
   const [tab, setTab] = useState<"analyze" | "history">("analyze");
