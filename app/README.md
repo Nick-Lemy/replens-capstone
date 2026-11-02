@@ -114,3 +114,7 @@ For the first deployment, run **Deploy VPS backend** manually with `first_setup`
 Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. No database migrations or authentication secrets are needed by this version. Deployment finishes by checking the public API and selected model.
 
 The frontend is live at `https://replens.lemy.dev` and uses the Azure backend at `https://api.replens.lemy.dev`. GitHub Actions deployment, HTTPS, CORS and a complete 19.4-second upload were verified: nine reps and six available predictions. This is a deployment check, not an accuracy evaluation; processing still takes several minutes on the current CPU. The temporary Render service is no longer used by the frontend.
+
+### Frontend structure
+
+The React app composes focused hooks in `frontend/src/hooks` for analysis jobs, active sessions, local history, reviews, browser status, health, and video URLs. `frontend/src/lib` contains the API transport, endpoint definitions, types, and IndexedDB storage. Components separate video input and progress, results and prediction charts, and completed-set review editing and comparison.

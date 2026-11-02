@@ -22,6 +22,7 @@ export function Button({
     </button>
   );
 }
+
 export function ThemeSwitch() {
   const [dark, setDark] = useState(
     document.documentElement.classList.contains("dark"),
@@ -70,6 +71,7 @@ export function Notice({
     </div>
   );
 }
+
 export const seconds = (value: number) =>
   `${Math.floor(value / 60)}:${Math.floor(value % 60)
     .toString()
