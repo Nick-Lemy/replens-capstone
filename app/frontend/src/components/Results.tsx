@@ -1,12 +1,12 @@
 import { useRef, useState } from "react";
 import { Bookmark, Check, RotateCcw, ChevronLeft } from "lucide-react";
-import { ResultVideo } from "./result-video";
-import { PredictionChart } from "./prediction-chart";
-import { RepSelector } from "./rep-selector";
-import { ModelMetadata } from "./model-metadata";
+import { ResultVideo } from "./ResultVideo";
+import { PredictionChart } from "./PredictionChart";
+import { RepSelector } from "./RepSelector";
+import { ModelMetadata } from "./ModelMetadata";
 import type { AnalysisResult, SetReview } from "../lib/types";
-import { SetReviewCard } from "./set-review";
-import { Button, Notice, seconds } from "./ui";
+import { SetReviewCard } from "./SetReview";
+import { Button, Notice, seconds } from "./UI";
 export function Results({
   result,
   url,

@@ -1,6 +1,6 @@
 import { Play } from "lucide-react";
 import type { AnalysisResult } from "../lib/types";
-import { seconds } from "./ui";
+import { seconds } from "./UI";
 export function RepSelector({
   result,
   selected,

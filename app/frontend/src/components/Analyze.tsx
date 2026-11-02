@@ -1,7 +1,7 @@
-import { VideoInput } from "./video-input";
-import { AnalysisProgress } from "./analysis-progress";
-import { FilmingTips } from "./filming-tips";
-import { ModelSelector } from "./model-selector";
+import { VideoInput } from "./VideoInput";
+import { AnalysisProgress } from "./AnalysisProgress";
+import { FilmingTips } from "./FilmingTips";
+import { ModelSelector } from "./ModelSelector";
 import type { ModelChoice, ModelCatalog, AnalysisJob } from "../lib/types";
 export function Analyze({
   file,
