@@ -13,6 +13,8 @@ For presentation, open **[07_results.ipynb](notebooks/07_results.ipynb)**. Its t
 | [05_near_failure](notebooks/05_near_failure.ipynb) | Can a classifier distinguish 0–2 RIR from more than 2? |
 | [06_speed_and_shaking](notebooks/06_speed_and_shaking.ipynb) | Does candidate shaking help beyond speed? |
 | [07_results](notebooks/07_results.ipynb) | What do the matched comparisons show? |
+| [08_relative_speed](notebooks/08_relative_speed.ipynb) | Do relative speed or different regularization fix flat predictions? |
+| [09_set_progression](notebooks/09_set_progression.ipynb) | Do rep context, timing, geometry or a different target help? |
 
 Experiment sections use **why → change → result → lesson**. Notebooks 03–06 show saved results first, followed by optional training/extraction code. Their run/export flags default to false. Open each independently; do not rerun review or preparation just to view results.
 
