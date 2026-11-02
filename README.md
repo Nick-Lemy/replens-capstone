@@ -42,12 +42,16 @@ The selected signal model is bundled as portable JSON. Its pose locator download
 5. [Near-failure classification](training/notebooks/05_near_failure.ipynb)
 6. [Speed and candidate shaking](training/notebooks/06_speed_and_shaking.ipynb)
 7. [Results and conclusions](training/notebooks/07_results.ipynb)
+8. [Relative-speed follow-up](training/notebooks/08_relative_speed.ipynb)
+9. [Set progression and error analysis](training/notebooks/09_set_progression.ipynb)
 
-Notebooks 03–07 can recompute results from [included numeric artifacts](training/results/README.md), without private videos or retraining. Install `training/requirements.txt` and follow [notebook setup](training/README.md) to execute them. Optional experiment/export flags default to false.
+Notebooks 03–09 can recompute results from [included numeric artifacts](training/results/README.md), without private videos or retraining. Install `training/requirements.txt` and follow [notebook setup](training/README.md) to execute them. Optional experiment/export flags default to false.
 
 ## Findings and limits
 
 The selected speed + transverse-shaking model scored about **2.22 reps MAE on 33 quality-filtered examples from four people**. Its 1.32% improvement over speed alone is small, depends heavily on one person with one example, and does not meet the proposed 15% target. Population video-model results use a different 124-rep/six-person cohort and are reported separately. The app uses an all-accepted-data refit, not an independently evaluated deployment model.
+
+A matched relative-speed/regularization follow-up did not improve held-out MAE. The existing model has about **4.59 reps error on final reps**; its overall average conceals poor near-failure predictions. See notebook 08 for per-set curves.
 
 This is experimental RIR estimation, not a validated physiological fatigue measurement or injury-prevention tool. Predictions can be wrong and do not establish that another rep is safe. Raw recordings, private review outputs, caches and older backups are excluded from Git. Video training/review needs the approved private recordings; packaged results support metric reproduction and the signal-model refit.
 

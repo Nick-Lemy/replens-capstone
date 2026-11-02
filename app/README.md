@@ -81,11 +81,11 @@ pnpm preview
 
 Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `/api`) for separate hosting. Set `FRONTEND_ORIGINS` on the backend to the exact frontend origin. Local environment examples describe both; uvicorn does not automatically load `.env`. Mobile PWA installation requires HTTPS or localhost. The app shell/history can work offline after caching, but new analysis needs the backend. Mobile installation after hosting still requires a real-device check.
 
-## Model reproduction / legacy model
+## Model reproduction
 
 Install `training/requirements.txt` for notebook/model development. Run `python -m training.model_export` for the shaking bundle or `python -m training.model_export --speed-only` for the speed-only bundle, using packaged derived features; notebook 06 exposes the same optional export. No private video is needed for that refit. The original held-out results are preserved separately.
 
-The previous R3D bundle remains locally at `training/models/demo/model.pt`. It is retained for optional legacy/research use, is not a Ridge selector choice, and is not redistributed. To use it, install training dependencies and set `REPLENS_MODEL_PATH` to that `.pt` file before starting the backend. It also needs its matching encoder weights. When a `.pt` override is configured, omit `model` to use the legacy model; explicit Ridge selections are rejected. JSON overrides must match an explicit choice. Missing or incompatible bundles do not silently fall back.
+`REPLENS_MODEL_PATH` can point to a compatible Ridge JSON bundle. Explicit model selections must match the configured bundle; unsupported or incompatible overrides do not silently fall back. Historical training notebooks and results are retained for research.
 
 ## Azure VM deployment
 
