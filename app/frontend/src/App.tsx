@@ -13,6 +13,7 @@ import { useAnalysisJob } from "./hooks/use-analysis-job";
 import { useActiveSession } from "./hooks/use-active-session";
 import { useBrowserStatus } from "./hooks/use-browser-status";
 import { useObjectUrl } from "./hooks/use-object-url";
+import { useModels } from "./hooks/use-models";
 import { useHealth } from "./hooks/use-health";
 
 export default function App() {
@@ -21,6 +22,7 @@ export default function App() {
   const analysis = useAnalysisJob();
   const active = useActiveSession();
   const health = useHealth();
+  const models = useModels();
   const { online, install, dismissInstall } = useBrowserStatus();
   const { file, job, busy } = analysis;
   const { session, review, saved, viewId, complete } = active;
@@ -119,7 +121,22 @@ export default function App() {
             busy={busy}
             job={job.data}
             onFile={analysis.choose}
+            model={analysis.model}
+            onModel={analysis.setModel}
+            models={models.data}
+            modelsLoading={models.isPending}
+            modelsError={models.isError}
+            retryModels={() => {
+              void models.refetch();
+            }}
             onStart={() => {
+              if (
+                models.isError ||
+                !models.data?.models.some(
+                  (item) => item.id === analysis.model && item.available,
+                )
+              )
+                return;
               setMessage("");
               analysis.start();
             }}

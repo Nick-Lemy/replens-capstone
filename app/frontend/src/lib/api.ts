@@ -1,4 +1,10 @@
-import type { AnalysisJob, ReviewInterval, SetReviewResponse } from "./types";
+import type {
+  AnalysisJob,
+  ModelCatalog,
+  ModelChoice,
+  ReviewInterval,
+  SetReviewResponse,
+} from "./types";
 
 import { request } from "./transport";
 
@@ -17,9 +23,12 @@ export const api = {
   health: () =>
     request<{ status: string; model_available: boolean }>("/health"),
 
-  analyze: (file: File) => {
+  models: () => request<ModelCatalog>("/models"),
+
+  analyze: (file: File, model: ModelChoice) => {
     const body = new FormData();
     body.append("video", file);
+    body.append("model", model);
     return request<{ id: string }>("/analyses", { method: "POST", body });
   },
 
