@@ -1,0 +1,90 @@
+{
+  "scope": "Backend processing optimization and frontend/backend modularity refactor",
+  "model_changed": false,
+  "model_sha256": "4128674aa56810f7d0f7d28433630d66860c812fcf159f7b7e057898aa7a0f20",
+  "cloud_benchmark": {
+    "environment": "Azure Standard_B2as_v2; x86_64; 2 vCPUs; approximately 8 GiB RAM",
+    "input_video_seconds": 19.4333333333,
+    "input_sha256": "925b6251c4e1ff46775485b80a6c31b524b5e1bb4e070aeb26210420cef74752",
+    "measurement": "Single before/after run; accepted upload to completed polling response. Includes polling/network delay and excludes upload time. Not a percentile benchmark.",
+    "baseline_seconds": 195.94217116595246,
+    "optimized_seconds": 141.7567281658994,
+    "relative_reduction_percent": 27.653793299126463,
+    "rep_count_before": 9,
+    "rep_count_after": 9,
+    "available_predictions": 6,
+    "maximum_raw_rir_difference": 0.0,
+    "rep_boundaries_and_quality_status_identical": true,
+    "resource_snapshot": "During processing: 152% CPU (about 1.5 cores) and 369 MiB container RAM; snapshot, not peak memory."
+  },
+  "independent_local_motion_check": {
+    "baseline_commit": "a0f903da033f70aaf9a81adaae01fd65e76f0eb0",
+    "measurement": "single local run; motion only; OpenCV threads=2",
+    "model": "same unchanged bundle for both implementations",
+    "boundary_source": "automatic detection",
+    "rep_count": 9,
+    "quality_decisions_compared": 6,
+    "feature_vectors_and_predictions_compared": 6,
+    "absolute_tolerance": 1e-09,
+    "flows": {
+      "original": {
+        "rows": 582,
+        "columns": 9,
+        "nan_masks_match": true,
+        "max_finite_difference": 0.0
+      },
+      "persistent": {
+        "rows": 582,
+        "columns": 9,
+        "nan_masks_match": true,
+        "max_finite_difference": 0.0
+      }
+    },
+    "seconds": {
+      "baseline": 19.831061250064522,
+      "optimized": 13.255983457900584
+    }
+  },
+  "frontend_real_upload": {
+    "real_video": "collector video 1, H264-compatible copy",
+    "video_playback": true,
+    "rep_count": 9,
+    "predicted_reps": 6,
+    "model_family": "ridge_speed_transverse",
+    "upload_and_polling": true,
+    "save_reload_reopen_delete": true,
+    "theme_switch": true,
+    "mobile_viewport": "390x844",
+    "page_errors": []
+  },
+  "frontend_error_cases": {
+    "invalid_extension": true,
+    "empty_upload": true,
+    "corrupt_upload": true,
+    "real_active_cancellation": true,
+    "failed_cancellation_does_not_hide_completed_result": true,
+    "page_errors": []
+  },
+  "review_and_history": [
+    "Real API review calculation",
+    "Required confirmations",
+    "Corrected counts and edited-interval handling",
+    "Saved/reloaded/reopened without duplicate sessions",
+    "Raw model predictions retained",
+    "Stale review response rejected"
+  ],
+  "backend_checks": [
+    "Invalid and empty uploads",
+    "Bounded admission returns 429",
+    "Active and queued cancellation",
+    "Late progress cannot revive cancelled jobs",
+    "Temporary-file and worker shutdown cleanup",
+    "Review validation and OpenAPI contracts"
+  ],
+  "limitations": [
+    "Inference remains CPU-intensive and is not live prediction.",
+    "Model accuracy is unchanged.",
+    "Mobile viewport tests are not physical-device tests.",
+    "No load/stress percentile benchmark or peak-resource study was performed."
+  ]
+}
