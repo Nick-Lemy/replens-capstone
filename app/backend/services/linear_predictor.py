@@ -29,6 +29,7 @@ class LinearPredictor:
         bundle = json.loads(Path(path).read_text())
         self.metadata = bundle["metadata"]
         family = self.metadata.get("family")
+
         expected = {
             "ridge_speed_only": (SPEED_FEATURES, "wrist_pixels_speed_v1"),
             "ridge_speed_transverse": (
@@ -36,6 +37,7 @@ class LinearPredictor:
                 "wrist_pixels_speed_v1_persistent_transverse_v3",
             ),
         }.get(family)
+
         if expected is None or self.metadata.get("feature_names") != expected[0]:
             raise RuntimeError("Unsupported signal model or feature order.")
         if self.metadata.get("preprocessing") != expected[1]:
@@ -43,10 +45,12 @@ class LinearPredictor:
                 "The signal preprocessing does not match the trained model."
             )
         self.features = expected[0]
+
         self.mean = np.asarray(bundle["mean"], float)
         self.scale = np.asarray(bundle["scale"], float)
         self.coefficients = np.asarray(bundle["coefficients"], float)
         self.intercept = float(bundle["intercept"])
+
         arrays = [self.mean, self.scale, self.coefficients]
         if any(
             value.shape != (len(self.features),) or not np.isfinite(value).all()
@@ -67,8 +71,10 @@ class LinearPredictor:
     def predict(self, path, reps, progress, cancelled, pose_frames):
         metadata = {**self.metadata, "rep_quality": []}
         predictions = [None] * len(reps)
+
         if len(reps) < 4:
             return predictions, metadata
+
         if self.metadata["family"] == "ridge_speed_only":
             original = pixel_motion(
                 path,
@@ -86,6 +92,7 @@ class LinearPredictor:
                 progress=lambda p: progress(50 + int(43 * p), "Measuring movement"),
                 cancelled=cancelled,
             )
+
         for index in range(3, len(reps)):
             if cancelled():
                 raise ValueError("Analysis cancelled.")
@@ -98,6 +105,7 @@ class LinearPredictor:
                     {"rep": reps[index]["rep"], "reason": reason}
                 )
                 continue
+
             if persistent is not None:
                 shaking, shaking_reason = transverse_shaking(
                     persistent, start, end, reps[index]["start_s"]
@@ -108,5 +116,6 @@ class LinearPredictor:
                     )
                     continue
                 speed = {**speed, **shaking}
+
             predictions[index] = self.estimate(speed)
         return predictions, metadata

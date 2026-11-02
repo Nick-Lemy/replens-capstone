@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Clock3 } from "lucide-react";
 import type { SavedSession } from "../lib/types";
 import { Button } from "../components/shared/UI";
+
 export function HistoryPage({
   sessions,
   loading,
@@ -17,6 +18,7 @@ export function HistoryPage({
   onAnalyze: () => void;
 }) {
   const [confirm, setConfirm] = useState<string | null>(null);
+
   return (
     <div className="animate-enter space-y-6">
       <div>

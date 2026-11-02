@@ -7,6 +7,7 @@ import type {
   ReviewInterval,
   SetReview,
 } from "../lib/types";
+
 export function initialReview(result: AnalysisResult): SetReview {
   return {
     draft: result.reps.map((r) => ({
@@ -29,6 +30,7 @@ export function useSetReview(
   onChange: (review: SetReview) => void,
 ) {
   const revision = useRef(0);
+
   useEffect(
     () => () => {
       revision.current++;
@@ -36,13 +38,16 @@ export function useSetReview(
     [],
   );
   const [validation, setValidation] = useState("");
+
   const mutation = useMutation({ mutationFn: api.reviewSet });
+
   function edit(next: SetReview) {
     revision.current++;
     mutation.reset();
     setValidation("");
     onChange({ ...next, result: null });
   }
+
   function updateRow(id: string, changes: Partial<ReviewDraftRow>) {
     edit({
       ...review,
@@ -51,9 +56,11 @@ export function useSetReview(
       ),
     });
   }
+
   async function submit() {
     if (!review.failureConfirmed || !review.allRemainingVisible) {
       setValidation("Confirm both statements before reviewing the set.");
+
       return;
     }
     const rows = review.draft.filter((row) => row.included);
@@ -80,6 +87,7 @@ export function useSetReview(
       setValidation(
         "Include 1–200 reps in chronological order, without overlap. Each needs finite start, top and end times within the video, with start before top and top before end.",
       );
+
       return;
     }
     setValidation("");
@@ -92,5 +100,6 @@ export function useSetReview(
       /* Mutation displays the server error. */
     }
   }
+
   return { edit, updateRow, submit, validation, mutation };
 }

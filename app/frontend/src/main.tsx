@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "@fontsource-variable/inter";
 import "./styles.css";
 import App from "./App";
+
 const client = new QueryClient({
   defaultOptions: {
     queries: { staleTime: 10000, refetchOnWindowFocus: false },

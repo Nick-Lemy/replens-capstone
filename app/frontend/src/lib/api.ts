@@ -29,6 +29,7 @@ export const api = {
     const body = new FormData();
     body.append("video", file);
     body.append("model", model);
+
     return request<{ id: string }>("/analyses", { method: "POST", body });
   },
 

@@ -7,6 +7,7 @@ import { ModelMetadata } from "../components/results/ModelMetadata";
 import type { AnalysisResult, SetReview } from "../lib/types";
 import { SetReviewCard } from "../components/results/review/SetReviewCard";
 import { Button, Notice, seconds } from "../components/shared/UI";
+
 export function ResultsPage({
   result,
   url,
@@ -27,8 +28,11 @@ export function ResultsPage({
   onReviewChange: (review: SetReview) => void;
 }) {
   const [selected, setSelected] = useState(Math.max(0, result.reps.length - 1));
+
   const player = useRef<HTMLVideoElement>(null);
+
   const rep = result.reps[selected];
+
   function seek(i: number) {
     setSelected(i);
     if (player.current) {
@@ -36,6 +40,7 @@ export function ResultsPage({
       void player.current.play().catch(() => {});
     }
   }
+
   return (
     <div className="animate-enter space-y-6">
       <button

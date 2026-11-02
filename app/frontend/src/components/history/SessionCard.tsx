@@ -1,6 +1,7 @@
 import { Film, Trash2 } from "lucide-react";
 import type { SavedSession } from "../../lib/types";
 import { Button, seconds } from "../shared/UI";
+
 export function SessionCard({
   session,
   confirming,

@@ -39,9 +39,11 @@ async def validation_error(request, exc):
     if request.url.path == "/api/set-reviews":
         return JSONResponse(
             status_code=422,
-            content={"detail": [
-                {key: error[key] for key in ("type", "loc", "msg")}
-                for error in exc.errors()
-            ]},
+            content={
+                "detail": [
+                    {key: error[key] for key in ("type", "loc", "msg")}
+                    for error in exc.errors()
+                ]
+            },
         )
     return await request_validation_exception_handler(request, exc)

@@ -8,7 +8,9 @@ def review_set(request: SetReviewRequest) -> SetReviewResponse:
         is_prediction=False,
         rep_count=count,
         reps=[
-            ReviewedRep(**rep.model_dump(), rep=index + 1, observed_rir=count - index - 1)
+            ReviewedRep(
+                **rep.model_dump(), rep=index + 1, observed_rir=count - index - 1
+            )
             for index, rep in enumerate(request.reps)
         ],
         notice=(
