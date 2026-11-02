@@ -7,6 +7,7 @@ import { ModelMetadata } from "../components/results/ModelMetadata";
 import type { AnalysisResult, SetReview } from "../lib/types";
 import { SetReviewCard } from "../components/results/review/SetReviewCard";
 import { Button, Notice, seconds } from "../components/shared/UI";
+
 export function ResultsPage({
   result,
   url,
