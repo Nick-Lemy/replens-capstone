@@ -1,0 +1,37 @@
+cohort,test_person,model,alpha,inner_mae
+recent_history,P001,speed_original_search,100.0,2.12070855780239
+recent_history,P001,shaking_original_search,100.0,2.17855375145346
+recent_history,P001,speed_wider_search,100.0,2.12070855780239
+recent_history,P001,shaking_wider_search,100.0,2.17855375145346
+recent_history,P001,relative_speed,100.0,1.8868901169486136
+recent_history,P001,relative_speed_shaking,100.0,1.9345974727146371
+recent_history,P001,nonlinear_speed,"('svr', 0.1)",2.361940490678334
+recent_history,P001,nonlinear_speed_shaking,"('svr', 0.1)",2.347483783207853
+recent_history,P001,nonlinear_relative_speed,"('svr', 0.1)",2.264581203832014
+recent_history,P002,speed_original_search,100.0,4.661561368254474
+recent_history,P002,shaking_original_search,100.0,4.7367553422239235
+recent_history,P002,speed_wider_search,1000.0,3.00448779168024
+recent_history,P002,shaking_wider_search,1000.0,3.011598375692843
+recent_history,P002,relative_speed,1000.0,3.0287085997679366
+recent_history,P002,relative_speed_shaking,1000.0,3.0353964124348565
+recent_history,P002,nonlinear_speed,"('svr', 0.1)",3.209607319361298
+recent_history,P002,nonlinear_speed_shaking,"('svr', 0.1)",3.2124871143947615
+recent_history,P002,nonlinear_relative_speed,"('svr', 1.0)",3.189363590097979
+recent_history,P003,speed_original_search,100.0,1.7218888276109297
+recent_history,P003,shaking_original_search,100.0,1.8024007079352928
+recent_history,P003,speed_wider_search,1000.0,1.701072009042069
+recent_history,P003,shaking_wider_search,1000.0,1.7079012391714599
+recent_history,P003,relative_speed,1000.0,1.7259590707928911
+recent_history,P003,relative_speed_shaking,1000.0,1.7328556462646951
+recent_history,P003,nonlinear_speed,"('svr', 1.0)",1.4832667582343466
+recent_history,P003,nonlinear_speed_shaking,"('svr', 1.0)",1.5593676520437845
+recent_history,P003,nonlinear_relative_speed,"('svr', 1.0)",1.6054699251756677
+recent_history,P005,speed_original_search,100.0,3.6082119816230502
+recent_history,P005,shaking_original_search,100.0,3.7843017664125216
+recent_history,P005,speed_wider_search,1000.0,2.6053676692714975
+recent_history,P005,shaking_wider_search,1000.0,2.564093130792156
+recent_history,P005,relative_speed,1000.0,2.6256666893940612
+recent_history,P005,relative_speed_shaking,1000.0,2.5844541762743725
+recent_history,P005,nonlinear_speed,"('svr', 0.1)",2.813061597557963
+recent_history,P005,nonlinear_speed_shaking,"('svr', 0.1)",2.8446007038895402
+recent_history,P005,nonlinear_relative_speed,"('svr', 1.0)",2.772466741217034
