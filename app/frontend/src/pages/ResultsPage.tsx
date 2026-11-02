@@ -1,13 +1,13 @@
 import { useRef, useState } from "react";
 import { Bookmark, Check, RotateCcw, ChevronLeft } from "lucide-react";
-import { ResultVideo } from "./ResultVideo";
-import { PredictionChart } from "./PredictionChart";
-import { RepSelector } from "./RepSelector";
-import { ModelMetadata } from "./ModelMetadata";
+import { ResultVideo } from "../components/results/ResultVideo";
+import { PredictionChart } from "../components/results/PredictionChart";
+import { RepSelector } from "../components/results/RepSelector";
+import { ModelMetadata } from "../components/results/ModelMetadata";
 import type { AnalysisResult, SetReview } from "../lib/types";
-import { SetReviewCard } from "./SetReview";
-import { Button, Notice, seconds } from "./UI";
-export function Results({
+import { SetReviewCard } from "../components/results/review/SetReviewCard";
+import { Button, Notice, seconds } from "../components/shared/UI";
+export function ResultsPage({
   result,
   url,
   onBack,
