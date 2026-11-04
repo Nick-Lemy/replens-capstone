@@ -1,36 +1,30 @@
 # RepLens
 
-A research prototype that estimates repetitions remaining from uploaded simultaneous two-arm dumbbell-curl videos. Includes a mobile-first React PWA, FastAPI inference and Jupyter experiment notebooks.
+RepLens is a mobile-friendly research app that estimates proximity to muscle fatigue during simultaneous dumbbell curls. It predicts repetitions in reserve (RIR) from an uploaded video and lets users review the completed set. This repository contains the app and its machine learning experiments.
 
-## Submission links
+**Live app:** https://replens.lemy.dev
+
+## Submission
 
 - [Walkthrough video](https://youtu.be/-ybq-vpknGs)
-- [Technical report (PDF, 5 pages)](https://docs.google.com/document/d/1Rh4gr-WbmZ6Vy0pwLF2HmcjopIbazBuQhyZO31RoJY0/export?format=pdf) — scope alignment, functionality, testing, performance and code quality
-- [Technical report in Google Docs](https://docs.google.com/document/d/1Rh4gr-WbmZ6Vy0pwLF2HmcjopIbazBuQhyZO31RoJY0/edit?usp=sharing)
+- [Technical report (PDF, 5 pages)](https://docs.google.com/document/d/1Rh4gr-WbmZ6Vy0pwLF2HmcjopIbazBuQhyZO31RoJY0/export?format=pdf)
 
 ## Technical requirements
 
-- **Application:** Python 3.12, Node.js 24, pnpm 11.25.0 and FFmpeg with `ffprobe`. The backend uses FastAPI 0.162, OpenCV 5.0, MediaPipe 1.1 and NumPy; the frontend uses React 19, TypeScript 7, Vite 8, Tailwind CSS 4 and TanStack Query 5. The deployed Ridge models are stored as JSON and do not require scikit-learn at runtime.
-- **Research notebooks:** JupyterLab and the packages pinned in `training/requirements.txt`, including PyTorch, scikit-learn and Weights & Biases. The default application does not need these additional training packages.
-- **Video:** a complete simultaneous dumbbell-curl set, up to 250 MB and three minutes, at 25 fps or higher; 30 fps or higher is recommended. A steady camera and visible arms improve tracking.
-- **Hardware:** a phone or camera that can record the video above, and a computer capable of running FFmpeg and MediaPipe. The current backend deployment uses an x64 Ubuntu 24.04 VM with two vCPUs and 8 GiB RAM; video processing remains CPU intensive.
-- **Hosting:** the PWA needs HTTPS for installation on a device. Video analysis needs a reachable backend; local development uses ports 5173 (frontend) and 8000 (API).
+| Area | Requirements |
+| --- | --- |
+| Local development | Python 3.12, Node.js 24, pnpm 11.25.0, FFmpeg and `ffprobe` |
+| Backend | FastAPI 0.162, OpenCV 5.0, MediaPipe 1.1, NumPy 2.5 |
+| Frontend | React 19, TypeScript 7, Vite 8, Tailwind CSS 4, TanStack Query 5 |
+| ML notebooks | JupyterLab and the packages in `training/requirements.txt`, including PyTorch, scikit-learn and Weights & Biases |
+| Video | Complete curl set, at most 250 MB and 3 minutes, at least 25 fps; 30 fps or higher recommended |
+| Hardware | Phone or camera with a steady view of both arms. The hosted backend runs on an x64 Ubuntu 24.04 VM with 2 vCPUs and 8 GiB RAM. |
 
-## Repository structure
-
-```text
-app/backend/          FastAPI routes, video processing, prediction and model assets
-app/frontend/         React PWA pages, components, hooks and API client
-training/notebooks/   Data preparation, model experiments and result summaries
-training/results/     Packaged numerical results and validation records
-scripts/              Submission and benchmark checks
-config/               Backend deployment configuration
-.github/workflows/     Automated checks and backend deployment
-```
+The application models are bundled as JSON. The app does not require the notebook dependencies or private training videos. Installing the PWA requires HTTPS or localhost.
 
 ## Installation and local run
 
-Install FFmpeg first. On macOS: `brew install ffmpeg`. On Ubuntu: `sudo apt-get install ffmpeg libgl1`.
+Install FFmpeg first: `brew install ffmpeg` on macOS or `sudo apt-get install ffmpeg libgl1` on Ubuntu.
 
 From the repository root:
 
@@ -40,14 +34,14 @@ training/.venv/bin/python -m pip install -r app/backend/requirements.txt
 training/.venv/bin/python app/backend/setup_models.py
 ```
 
-Start the backend in one terminal:
+Start the backend:
 
 ```sh
 cd app/backend
 pnpm start:dev
 ```
 
-Start the frontend in another:
+In another terminal, start the frontend:
 
 ```sh
 cd app/frontend
@@ -55,31 +49,25 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-App: **http://localhost:5173**. API docs: **http://127.0.0.1:8000/docs**. See [app setup and scope](app/README.md) for hosting and privacy details.
+Open the app at **http://localhost:5173**. API documentation is at **http://127.0.0.1:8000/docs**. See [app/README.md](app/README.md) for deployment and configuration.
 
-The selected signal model is bundled as portable JSON. Its pose locator downloads during setup; PyTorch and private research videos are not needed for the default app. Use a clear, steady video of a full simultaneous curl set, ideally 30+ fps. The first three completed reps build history. Poor tracking produces an unavailable estimate.
+## Repository structure
 
-## Research notebooks
+```text
+app/backend/          FastAPI routes, video processing and model assets
+app/frontend/         React pages, components, hooks and API client
+training/notebooks/   Data preparation, experiments and results
+training/results/     Packaged metrics and validation records
+scripts/              Submission and benchmark checks
+config/               Deployment configuration
+.github/workflows/     CI checks and backend deployment
+```
 
-1. [Review videos](training/notebooks/01_data_review.ipynb)
-2. [Prepare data](training/notebooks/02_dataset_preparation.ipynb)
-3. [Video baselines](training/notebooks/03_video_baselines.ipynb)
-4. [Motion adaptation and calibration](training/notebooks/04_video_adaptation.ipynb)
-5. [Near-failure classification](training/notebooks/05_near_failure.ipynb)
-6. [Speed and candidate shaking](training/notebooks/06_speed_and_shaking.ipynb)
-7. [Results and conclusions](training/notebooks/07_results.ipynb)
-8. [Relative-speed follow-up](training/notebooks/08_relative_speed.ipynb)
-9. [Set progression and error analysis](training/notebooks/09_set_progression.ipynb)
+See [training/README.md](training/README.md) for the nine notebooks and their setup. Notebooks 03 to 09 can reproduce saved metrics from packaged numeric results without private videos or retraining.
 
-Notebooks 03–09 can recompute results from [included numeric artifacts](training/results/README.md), without private videos or retraining. Install `training/requirements.txt` and follow [notebook setup](training/README.md) to execute them. Optional experiment/export flags default to false.
+## Results and limitations
 
-## Findings and limits
-
-The selected speed + transverse-shaking model scored about **2.22 reps MAE on 33 quality-filtered examples from four people**. Its 1.32% improvement over speed alone is small, depends heavily on one person with one example, and does not meet the proposed 15% target. Population video-model results use a different 124-rep/six-person cohort and are reported separately. The app uses an all-accepted-data refit, not an independently evaluated deployment model.
-
-A matched relative-speed/regularization follow-up did not improve held-out MAE. The existing model has about **4.59 reps error on final reps**; its overall average conceals poor near-failure predictions. See notebook 08 for per-set curves.
-
-This is experimental RIR estimation, not a validated physiological fatigue measurement or injury-prevention tool. Predictions can be wrong and do not establish that another rep is safe. Raw recordings, private review outputs, caches and older backups are excluded from Git. Video training/review needs the approved private recordings; packaged results support metric reproduction and the signal-model refit.
+On 33 quality-filtered examples from four people, speed plus candidate shaking reached **2.22 reps MAE**, compared with **2.25** for speed alone. This 1.32% difference is fragile and below the proposed 15% target. The app uses a refit on all accepted examples, which has no separate test score. Predictions remain experimental and can be inaccurate, especially near failure. See [notebook 07](training/notebooks/07_results.ipynb) for the full comparisons.
 
 ## Checks
 
@@ -89,4 +77,4 @@ cd app/frontend
 pnpm build
 ```
 
-The submission check verifies code syntax, private-output exclusion and model/metric provenance without private data. GitHub Actions runs it and the frontend build. Local end-to-end checks use real video uploads and browser session history; see the validation record in `training/results/submission_validation.json`.
+The checks run in GitHub Actions. [Validation records](training/results/refactor_validation.json) include real video upload, browser history, error handling and performance checks.
