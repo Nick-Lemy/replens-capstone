@@ -2,9 +2,35 @@
 
 A research prototype that estimates repetitions remaining from uploaded simultaneous two-arm dumbbell-curl videos. Includes a mobile-first React PWA, FastAPI inference and Jupyter experiment notebooks.
 
-## Try the app
+## Submission links
 
-Prerequisites: Python 3.12, Node, pnpm 11.25.0 and FFmpeg/ffprobe. On macOS: `brew install ffmpeg`. Ubuntu: `sudo apt-get install ffmpeg libgl1`.
+- [Walkthrough video](https://youtu.be/-ybq-vpknGs)
+- [Technical report (PDF, 5 pages)](https://docs.google.com/document/d/1Rh4gr-WbmZ6Vy0pwLF2HmcjopIbazBuQhyZO31RoJY0/export?format=pdf) — scope alignment, functionality, testing, performance and code quality
+- [Technical report in Google Docs](https://docs.google.com/document/d/1Rh4gr-WbmZ6Vy0pwLF2HmcjopIbazBuQhyZO31RoJY0/edit?usp=sharing)
+
+## Technical requirements
+
+- **Application:** Python 3.12, Node.js 24, pnpm 11.25.0 and FFmpeg with `ffprobe`. The backend uses FastAPI 0.162, OpenCV 5.0, MediaPipe 1.1 and NumPy; the frontend uses React 19, TypeScript 7, Vite 8, Tailwind CSS 4 and TanStack Query 5. The deployed Ridge models are stored as JSON and do not require scikit-learn at runtime.
+- **Research notebooks:** JupyterLab and the packages pinned in `training/requirements.txt`, including PyTorch, scikit-learn and Weights & Biases. The default application does not need these additional training packages.
+- **Video:** a complete simultaneous dumbbell-curl set, up to 250 MB and three minutes, at 25 fps or higher; 30 fps or higher is recommended. A steady camera and visible arms improve tracking.
+- **Hardware:** a phone or camera that can record the video above, and a computer capable of running FFmpeg and MediaPipe. The current backend deployment uses an x64 Ubuntu 24.04 VM with two vCPUs and 8 GiB RAM; video processing remains CPU intensive.
+- **Hosting:** the PWA needs HTTPS for installation on a device. Video analysis needs a reachable backend; local development uses ports 5173 (frontend) and 8000 (API).
+
+## Repository structure
+
+```text
+app/backend/          FastAPI routes, video processing, prediction and model assets
+app/frontend/         React PWA pages, components, hooks and API client
+training/notebooks/   Data preparation, model experiments and result summaries
+training/results/     Packaged numerical results and validation records
+scripts/              Submission and benchmark checks
+config/               Backend deployment configuration
+.github/workflows/     Automated checks and backend deployment
+```
+
+## Installation and local run
+
+Install FFmpeg first. On macOS: `brew install ffmpeg`. On Ubuntu: `sudo apt-get install ffmpeg libgl1`.
 
 From the repository root:
 
