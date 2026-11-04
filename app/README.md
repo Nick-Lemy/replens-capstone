@@ -10,8 +10,9 @@ Then, from the repository root:
 
 ```sh
 python3.12 -m venv training/.venv
-training/.venv/bin/python -m pip install -r app/backend/requirements.txt
-training/.venv/bin/python app/backend/setup_models.py
+source training/.venv/bin/activate
+python -m pip install -r app/backend/requirements.txt
+python app/backend/setup_models.py
 ```
 
 The speed + shaking and speed-only Ridge models are bundled as `app/backend/assets/rir_model.json` and `app/backend/assets/rir_speed_only.json`. Setup downloads and verifies only the public MediaPipe Heavy pose locator. The default app does not require PyTorch, ResNet/R3D weights, raw research videos or a database.
@@ -35,7 +36,8 @@ backend/
 Backend:
 
 ```sh
-training/.venv/bin/python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
+source training/.venv/bin/activate
+python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 Frontend, in another terminal:

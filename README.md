@@ -30,14 +30,16 @@ From the repository root:
 
 ```sh
 python3.12 -m venv training/.venv
-training/.venv/bin/python -m pip install -r app/backend/requirements.txt
-training/.venv/bin/python app/backend/setup_models.py
+source training/.venv/bin/activate
+python -m pip install -r app/backend/requirements.txt
+python app/backend/setup_models.py
 ```
 
 Start the backend:
 
 ```sh
-training/.venv/bin/python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
+source training/.venv/bin/activate
+python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 In another terminal, start the frontend:
