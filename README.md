@@ -37,8 +37,7 @@ training/.venv/bin/python app/backend/setup_models.py
 Start the backend:
 
 ```sh
-cd app/backend
-pnpm start:dev
+training/.venv/bin/python -m uvicorn app.backend.main:app --host 127.0.0.1 --port 8000
 ```
 
 In another terminal, start the frontend:
