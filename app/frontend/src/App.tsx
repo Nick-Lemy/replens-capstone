@@ -21,6 +21,7 @@ import { useHealth } from "./hooks/useHealth";
 export default function App() {
   const [tab, setTab] = useState<"analyze" | "history">("analyze");
   const [message, setMessage] = useState("");
+  const [liveActive, setLiveActive] = useState(false);
   const [authOpen, setAuthOpen] = useState(() =>
     new URLSearchParams(window.location.search).has("auth"),
   );
@@ -44,7 +45,8 @@ export default function App() {
 
   const { online, install, dismissInstall } = useBrowserStatus();
 
-  const { file, job, busy } = analysis;
+  const { file, job } = analysis;
+  const busy = analysis.busy || liveActive;
   const { session, review, saved, viewId, complete } = active;
   const result = session?.result ?? null;
 
@@ -104,6 +106,12 @@ export default function App() {
   ].filter(Boolean);
 
   function openAuth() {
+    if (
+      liveActive &&
+      !window.confirm("Leave the live camera and discard this recording?")
+    ) {
+      return;
+    }
     window.history.pushState({}, "", "/?auth=login");
     setAuthOpen(true);
   }
@@ -111,6 +119,17 @@ export default function App() {
   function closeAuth() {
     window.history.pushState({}, "", "/");
     setAuthOpen(false);
+  }
+
+  function navigate(next: "analyze" | "history") {
+    if (
+      liveActive &&
+      next !== "analyze" &&
+      !window.confirm("Leave the live camera and discard this recording?")
+    ) {
+      return;
+    }
+    setTab(next);
   }
 
   if (authOpen && auth.enabled) {
@@ -130,7 +149,7 @@ export default function App() {
     <div className="min-h-dvh bg-page text-ink">
       <AppHeader
         tab={tab}
-        setTab={setTab}
+        setTab={navigate}
         accountName={auth.account?.name}
         onAccount={auth.enabled ? openAuth : undefined}
       />
@@ -144,7 +163,7 @@ export default function App() {
           healthError={health.isError}
           busy={busy}
           tab={tab}
-          setTab={setTab}
+          setTab={navigate}
           message={message}
           clearMessage={() => setMessage("")}
           errors={errors}
@@ -191,6 +210,7 @@ export default function App() {
             retryModels={() => {
               void models.refetch();
             }}
+            onLiveActivityChange={setLiveActive}
             onStart={() => {
               if (
                 models.isError ||
@@ -214,7 +234,7 @@ export default function App() {
           RepLens · A closer look at your effort.
         </footer>
       </main>
-      <AppNavigation tab={tab} setTab={setTab} />
+      <AppNavigation tab={tab} setTab={navigate} />
     </div>
   );
 }

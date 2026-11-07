@@ -3,6 +3,8 @@ import { AnalysisProgress } from "../components/analyze/AnalysisProgress";
 import { FilmingTips } from "../components/analyze/FilmingTips";
 import { ModelSelector } from "../components/analyze/ModelSelector";
 import { Notice } from "../components/shared/UI";
+import { LiveCamera } from "../components/analyze/LiveCamera";
+import { useState } from "react";
 import type { ModelChoice, ModelCatalog, AnalysisJob } from "../lib/types";
 
 export function AnalyzePage({
@@ -19,6 +21,7 @@ export function AnalyzePage({
   modelsLoading,
   modelsError,
   retryModels,
+  onLiveActivityChange,
 }: {
   file: File | null;
   url: string | null;
@@ -33,7 +36,10 @@ export function AnalyzePage({
   modelsLoading: boolean;
   modelsError: boolean;
   retryModels: () => void;
+  onLiveActivityChange: (active: boolean) => void;
 }) {
+  const [liveOpen, setLiveOpen] = useState(false);
+
   return (
     <div className="animate-enter space-y-7">
       <div className="space-y-2">
@@ -64,18 +70,40 @@ export function AnalyzePage({
           </button>
         </Notice>
       )}
-      <VideoInput
-        file={file}
-        url={url}
-        busy={busy}
-        onFile={onFile}
-        onStart={onStart}
-        canStart={
-          !modelsLoading &&
-          !modelsError &&
-          !!models?.models.find((item) => item.id === model && item.available)
-        }
-      />
+      {!file && !busy && !liveOpen && (
+        <button
+          type="button"
+          className="w-full rounded-2xl border border-line bg-panel px-5 py-4 text-left transition hover:bg-soft"
+          onClick={() => setLiveOpen(true)}
+        >
+          <span className="block text-sm font-semibold">Use live camera</span>
+          <span className="mt-1 block text-xs leading-5 text-muted">
+            Watch a provisional rep count while you record, then analyze the
+            completed set.
+          </span>
+        </button>
+      )}
+      {liveOpen && (
+        <LiveCamera
+          onRecorded={onFile}
+          onClose={() => setLiveOpen(false)}
+          onActivityChange={onLiveActivityChange}
+        />
+      )}
+      {!liveOpen && (
+        <VideoInput
+          file={file}
+          url={url}
+          busy={busy}
+          onFile={onFile}
+          onStart={onStart}
+          canStart={
+            !modelsLoading &&
+            !modelsError &&
+            !!models?.models.find((item) => item.id === model && item.available)
+          }
+        />
+      )}
       <AnalysisProgress busy={busy} job={job} onCancel={onCancel} />
       {!modelsLoading && !modelsError && (
         <details className="rounded-2xl border border-line bg-panel p-4">
@@ -99,11 +127,12 @@ export function AnalyzePage({
           </div>
         </details>
       )}
-      {!modelsLoading && !modelsError &&
+      {!modelsLoading &&
+        !modelsError &&
         !models?.models.some((item) => item.id === model && item.available) && (
           <Notice>
-            The selected prediction method is unavailable. Open advanced
-            options to choose an available method.
+            The selected prediction method is unavailable. Open advanced options
+            to choose an available method.
           </Notice>
         )}
       <FilmingTips />
