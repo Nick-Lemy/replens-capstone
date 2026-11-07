@@ -5,6 +5,9 @@ import "@fontsource-variable/inter";
 import "./styles.css";
 import App from "./App";
 
+// Force dark mode for the sport theme
+document.documentElement.classList.add("dark");
+
 const client = new QueryClient({
   defaultOptions: {
     queries: { staleTime: 10000, refetchOnWindowFocus: false },
