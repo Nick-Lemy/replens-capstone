@@ -21,22 +21,32 @@ export function ResultVideo({
   return (
     <div className="overflow-hidden rounded-3xl border border-line bg-panel p-2">
       <div className="relative overflow-hidden rounded-[18px] bg-stage">
-        <video
-          ref={player}
-          src={url ?? undefined}
-          controls
-          playsInline
-          muted
-          className={previewError ? "hidden" : "mx-auto max-h-95 w-full"}
-          onError={() => setPreviewError(true)}
-          onTimeUpdate={(e) => {
-            const t = e.currentTarget.currentTime;
-            const index = result.reps.findIndex(
-              (r) => t >= r.start_s && t <= r.end_s,
-            );
-            if (index >= 0) setSelected(index);
-          }}
-        />
+        {!url ? (
+          <p
+            role="status"
+            className="px-5 py-10 text-center text-sm leading-6 text-white"
+          >
+            This video is available only on the device where the session was
+            saved. Your results are still shown below.
+          </p>
+        ) : (
+          <video
+            ref={player}
+            src={url ?? undefined}
+            controls
+            playsInline
+            muted
+            className={previewError ? "hidden" : "mx-auto max-h-95 w-full"}
+            onError={() => setPreviewError(true)}
+            onTimeUpdate={(e) => {
+              const t = e.currentTarget.currentTime;
+              const index = result.reps.findIndex(
+                (r) => t >= r.start_s && t <= r.end_s,
+              );
+              if (index >= 0) setSelected(index);
+            }}
+          />
+        )}
         {previewError && (
           <p
             role="status"

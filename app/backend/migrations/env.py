@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 
 from app.backend.auth.config import get_settings
 from app.backend.auth.models import Base
+from app.backend.sessions import models as session_models
 
 config = context.config
 target_metadata = Base.metadata

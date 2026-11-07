@@ -4,6 +4,7 @@ import { Button, seconds } from "../shared/UI";
 
 export function SessionCard({
   session,
+  synced,
   confirming,
   onOpen,
   onToggleConfirm,
@@ -11,6 +12,7 @@ export function SessionCard({
   onConfirmRemove,
 }: {
   session: SavedSession;
+  synced: boolean;
   confirming: boolean;
   onOpen: (session: SavedSession) => void;
   onToggleConfirm: () => void;
@@ -34,7 +36,8 @@ export function SessionCard({
                 month: "short",
                 day: "numeric",
               })}{" "}
-              · {session.result.rep_count} reps · {seconds(session.result.duration_s)}
+              · {session.result.rep_count} reps ·{" "}
+              {seconds(session.result.duration_s)}
             </p>
             {(session.result.model_choice || session.result.model) && (
               <p className="mt-1 truncate text-xs text-muted">
@@ -60,7 +63,9 @@ export function SessionCard({
       {confirming && (
         <div className="border-t border-line bg-soft p-4">
           <p className="mb-3 text-sm">
-            Delete this saved video and result from this browser?
+            {synced
+              ? "Delete this result from your account and its video from this device?"
+              : "Delete this saved video and result from this browser?"}
           </p>
           <div className="flex gap-2">
             <Button secondary onClick={onCancelConfirm}>

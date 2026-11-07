@@ -4,7 +4,10 @@ import { authApi } from "./api";
 
 export function useAuth() {
   const client = useQueryClient();
-  const status = useQuery({ queryKey: ["auth", "status"], queryFn: authApi.status });
+  const status = useQuery({
+    queryKey: ["auth", "status"],
+    queryFn: authApi.status,
+  });
   const account = useQuery({
     queryKey: ["auth", "me"],
     queryFn: async () => {
@@ -19,7 +22,23 @@ export function useAuth() {
   const refresh = useCallback(async () => {
     await client.invalidateQueries({ queryKey: ["auth", "me"] });
   }, [client]);
-  const logout = useMutation({ mutationFn: authApi.logout, onSuccess: refresh });
+  const logout = useMutation({
+    mutationFn: authApi.logout,
+    onSuccess: async () => {
+      await refresh();
+      if (account.data) {
+        client.removeQueries({ queryKey: ["history", account.data.id], exact: true });
+      }
+    },
+  });
 
-  return { enabled: status.data?.enabled === true, account: account.data, refresh, logout };
+  return {
+    enabled: status.data?.enabled === true,
+    ready:
+      !status.isPending &&
+      (status.data?.enabled !== true || !account.isPending),
+    account: account.data,
+    refresh,
+    logout,
+  };
 }

@@ -36,7 +36,7 @@ export default function App() {
 
   const analysis = useAnalysisJob();
 
-  const active = useActiveSession();
+  const active = useActiveSession(auth.account?.id ?? null, auth.ready);
 
   const health = useHealth();
 
@@ -154,6 +154,11 @@ export default function App() {
           <HistoryPage
             sessions={active.sessions.data ?? []}
             loading={active.sessions.isPending}
+            error={active.sessions.isError}
+            onRetry={() => {
+              void active.sessions.refetch();
+            }}
+            synced={Boolean(auth.account)}
             onOpen={open}
             onRemove={(id) => active.remove.mutate(id)}
             onAnalyze={() => (busy ? setTab("analyze") : reset())}
@@ -169,6 +174,7 @@ export default function App() {
             review={review}
             onReviewChange={active.changeReview}
             onSave={active.saveSession}
+            synced={Boolean(auth.account)}
           />
         ) : (
           <AnalyzePage

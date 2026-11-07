@@ -7,12 +7,18 @@ import { Button } from "../components/shared/UI";
 export function HistoryPage({
   sessions,
   loading,
+  error,
+  onRetry,
+  synced,
   onOpen,
   onRemove,
   onAnalyze,
 }: {
   sessions: SavedSession[];
   loading: boolean;
+  error: boolean;
+  onRetry: () => void;
+  synced: boolean;
   onOpen: (session: SavedSession) => void;
   onRemove: (id: string) => void;
   onAnalyze: () => void;
@@ -27,13 +33,24 @@ export function HistoryPage({
           Your sessions
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">
-          Saved on this device, ready to revisit.
+          {synced
+            ? "Your results are saved to your account. Videos stay on this device."
+            : "Saved on this device, ready to revisit."}
         </p>
       </div>
       {loading ? (
         <p role="status" className="py-16 text-center text-sm text-muted">
           Loading sessions…
         </p>
+      ) : error ? (
+        <section className="rounded-2xl border border-line bg-panel p-6 text-center">
+          <p className="mb-4 text-sm text-muted">
+            Could not load your saved sessions.
+          </p>
+          <Button secondary onClick={onRetry}>
+            Try again
+          </Button>
+        </section>
       ) : !sessions.length ? (
         <section className="flex min-h-72 flex-col items-center justify-center rounded-3xl border border-line bg-panel p-7 text-center">
           <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-soft">
@@ -51,9 +68,12 @@ export function HistoryPage({
             <SessionCard
               key={session.id}
               session={session}
+              synced={synced}
               confirming={confirm === session.id}
               onOpen={onOpen}
-              onToggleConfirm={() => setConfirm(confirm === session.id ? null : session.id)}
+              onToggleConfirm={() =>
+                setConfirm(confirm === session.id ? null : session.id)
+              }
               onCancelConfirm={() => setConfirm(null)}
               onConfirmRemove={() => {
                 onRemove(session.id);
@@ -64,8 +84,9 @@ export function HistoryPage({
         </div>
       )}
       <p className="text-xs leading-5 text-muted">
-        History is stored locally. Clearing browser data removes saved sessions.
-        Other devices will have their own history.
+        {synced
+          ? "Your saved results follow your account. Videos can be replayed only on the device where you saved them."
+          : "Guest history is stored locally. Clearing browser data removes saved sessions."}
       </p>
     </div>
   );
