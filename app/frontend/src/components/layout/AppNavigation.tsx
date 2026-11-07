@@ -30,7 +30,7 @@ export function AppHeader({ tab, setTab }: Props) {
               aria-current={tab === t ? "page" : undefined}
               className={`rounded-full px-4 py-2 text-xs font-medium transition ${tab === t ? "bg-panel text-ink shadow-sm" : "text-muted hover:text-ink"}`}
             >
-              {t === "analyze" ? "Analyze" : "History"}
+              {t === "analyze" ? "Predict" : "History"}
             </button>
           ))}
         </div>
@@ -49,7 +49,7 @@ export function AppNavigation({ tab, setTab }: Props) {
       <div className="mx-auto grid h-17 max-w-md grid-cols-2">
         {(
           [
-            { id: "analyze", label: "Analyze", Icon: ScanLine },
+            { id: "analyze", label: "Predict", Icon: ScanLine },
             { id: "history", label: "History", Icon: Clock3 },
           ] as const
         ).map(({ id, label, Icon }) => (

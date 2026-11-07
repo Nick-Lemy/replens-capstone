@@ -4,6 +4,7 @@ import { ResultVideo } from "../components/results/ResultVideo";
 import { PredictionChart } from "../components/results/PredictionChart";
 import { RepSelector } from "../components/results/RepSelector";
 import { ModelMetadata } from "../components/results/ModelMetadata";
+import { FatigueEstimate } from "../components/results/FatigueEstimate";
 import type { AnalysisResult, SetReview } from "../lib/types";
 import { SetReviewCard } from "../components/results/review/SetReviewCard";
 import { Button, Notice, seconds } from "../components/shared/UI";
@@ -48,13 +49,13 @@ export function ResultsPage({
         className="flex min-h-10 items-center gap-1 text-sm text-muted hover:text-ink"
       >
         <ChevronLeft size={16} />
-        Analyze
+        Predict
       </button>
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="mb-2 text-sm text-muted">Your set, in focus</p>
           <h1 className="text-3xl font-semibold tracking-[-.04em]">
-            Set review
+            Your fatigue outlook
           </h1>
         </div>
         <span className="pb-1 text-xs text-muted">
@@ -68,6 +69,7 @@ export function ResultsPage({
         setSelected={setSelected}
         player={player}
       />
+      <FatigueEstimate rep={rep} />
       <p className="text-xs leading-5 text-muted">
         Estimates can start after rep 4 when movement is clear enough to
         measure. The first three reps build history.
@@ -83,17 +85,24 @@ export function ResultsPage({
       )}
       <PredictionChart result={result} selected={selected} />
       <RepSelector result={result} selected={selected} seek={seek} />
-      <SetReviewCard
-        analysis={result}
-        review={review}
-        onChange={onReviewChange}
-        onSeek={(time) => {
-          if (player.current) {
-            player.current.currentTime = time;
-            void player.current.play().catch(() => {});
-          }
-        }}
-      />
+      <details className="rounded-2xl border border-line bg-panel p-4">
+        <summary className="cursor-pointer text-sm font-medium">
+          Check your rep count (optional)
+        </summary>
+        <div className="mt-4">
+          <SetReviewCard
+            analysis={result}
+            review={review}
+            onChange={onReviewChange}
+            onSeek={(time) => {
+              if (player.current) {
+                player.current.currentTime = time;
+                void player.current.play().catch(() => {});
+              }
+            }}
+          />
+        </div>
+      </details>
       <ModelMetadata result={result} />
       <div className="grid grid-cols-2 gap-3">
         <Button secondary onClick={onBack}>
