@@ -36,11 +36,9 @@ env:
   clear:
     PORT: "8000"
     FRONTEND_ORIGINS: <%= ENV.fetch("REPLENS_FRONTEND_ORIGIN") %>
-<% if ENV.fetch("REPLENS_AUTH_ENABLED", "false") == "true" %>
     AUTH_FRONTEND_URL: <%= ENV.fetch("REPLENS_FRONTEND_ORIGIN") %>
     EMAIL_FROM: <%= ENV.fetch("REPLENS_EMAIL_FROM").inspect %>
   secret:
     - DATABASE_URL
     - JWT_SECRET
     - RESEND_API_KEY
-<% end %>

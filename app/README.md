@@ -76,7 +76,7 @@ This scope has upload-based retrospective prediction, not live streaming. Accoun
 
 Accounts support sign-up, email verification, sign-in, sign-out, current user, password reset by email and password change. Access uses an HTTP-only JWT cookie. Guest analysis remains available when accounts are not configured. To enable accounts locally, set `DATABASE_URL`, a random `JWT_SECRET` of at least 32 characters, `AUTH_FRONTEND_URL`, `RESEND_API_KEY` and `EMAIL_FROM`. The sending address must use a verified Resend domain. Copy `app/backend/.env.example` to a private env file and load it into the backend shell; uvicorn does not read that file automatically. Run `python -m alembic -c app/backend/alembic.ini upgrade head` from the repository root before starting the API. The Docker image runs this migration on startup when `DATABASE_URL` is set.
 
-For VPS deployment, set GitHub secrets `DATABASE_URL`, `JWT_SECRET` and `RESEND_API_KEY`, variable `REPLENS_EMAIL_FROM`, then variable `REPLENS_AUTH_ENABLED=true`. Add the frontend origin to `REPLENS_FRONTEND_ORIGIN`. The account button appears when the API reports complete configuration. The database must be reachable from the VPS. Recovery email cannot be used until Resend credentials and a verified sender are supplied.
+For VPS deployment, set GitHub secrets `DATABASE_URL`, `JWT_SECRET` and `RESEND_API_KEY`, plus the `REPLENS_EMAIL_FROM` and `REPLENS_FRONTEND_ORIGIN` variables. Deployment requires these settings and runs the database migration before starting the API. The database must be reachable from the VPS, and the sender must use a verified Resend domain.
 
 ## Build / host
 
