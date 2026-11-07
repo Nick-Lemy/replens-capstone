@@ -28,7 +28,7 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
           <p className="mt-1 text-lg font-semibold">
             {nearLimit
               ? "Estimated near your lifting limit"
-              : "Estimated more than 2 reps from your limit"}
+              : "Reps remaining estimated"}
           </p>
           <p className="mt-2 text-xs leading-5 text-muted">
             Based on predicted repetitions in reserve after rep {rep.rep}.
