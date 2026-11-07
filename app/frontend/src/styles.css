@@ -9,7 +9,6 @@
     --color-line: var(--line);
     --color-soft: var(--soft);
     --color-stage: var(--stage);
-    --color-accent: var(--accent);
     --animate-enter: enter 0.26s cubic-bezier(0.2, 0, 0, 1) both;
     @keyframes enter {
         from {
@@ -25,26 +24,24 @@
 }
 
 :root {
-    --page: #0D1821;
-    --panel: #131F2E;
-    --ink: #EEF2F7;
-    --muted: #7A91AA;
-    --line: #1E2D3F;
-    --soft: #162030;
-    --stage: #080F17;
-    --accent: #F26B1D;
-    color-scheme: dark;
+    --page: #fafafa;
+    --panel: #ffffff;
+    --ink: #202226;
+    --muted: #73767c;
+    --line: #e7e7e9;
+    --soft: #f2f2f3;
+    --stage: #171819;
+    color-scheme: light;
 }
 
 .dark {
-    --page: #0D1821;
-    --panel: #131F2E;
-    --ink: #EEF2F7;
-    --muted: #7A91AA;
-    --line: #1E2D3F;
-    --soft: #162030;
-    --stage: #080F17;
-    --accent: #F26B1D;
+    --page: #161719;
+    --panel: #1b1c1f;
+    --ink: #eeeeef;
+    --muted: #a0a2a8;
+    --line: #2c2d31;
+    --soft: #232428;
+    --stage: #101113;
     color-scheme: dark;
 }
 

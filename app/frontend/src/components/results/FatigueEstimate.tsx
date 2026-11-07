@@ -20,7 +20,7 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
   return (
     <section className="rounded-2xl border border-line bg-panel p-5" role="status">
       <div className="flex items-start gap-3">
-        <span className={`grid size-9 shrink-0 place-items-center rounded-xl ${nearLimit ? "bg-accent/15 text-accent" : "bg-soft text-ink"}`}>
+        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-soft">
           {nearLimit ? <CircleAlert size={18} /> : <Activity size={18} />}
         </span>
         <div>

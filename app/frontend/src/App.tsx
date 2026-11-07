@@ -11,7 +11,6 @@ import type { SavedSession } from "./lib/types";
 import { AnalyzePage } from "./pages/AnalyzePage";
 import { ResultsPage } from "./pages/ResultsPage";
 import { HistoryPage } from "./pages/HistoryPage";
-import { InfoPage } from "./pages/InfoPage";
 import { useAnalysisJob } from "./hooks/useAnalysisJob";
 import { useActiveSession } from "./hooks/useActiveSession";
 import { useBrowserStatus } from "./hooks/useBrowserStatus";
@@ -20,7 +19,7 @@ import { useModels } from "./hooks/useModels";
 import { useHealth } from "./hooks/useHealth";
 
 export default function App() {
-  const [tab, setTab] = useState<"analyze" | "history" | "info">("analyze");
+  const [tab, setTab] = useState<"analyze" | "history">("analyze");
   const [message, setMessage] = useState("");
   const [liveActive, setLiveActive] = useState(false);
   const [authOpen, setAuthOpen] = useState(() =>
@@ -122,7 +121,7 @@ export default function App() {
     setAuthOpen(false);
   }
 
-  function navigate(next: "analyze" | "history" | "info") {
+  function navigate(next: "analyze" | "history") {
     if (
       liveActive &&
       next !== "analyze" &&
@@ -170,9 +169,7 @@ export default function App() {
           errors={errors}
           job={job.data}
         />
-        {tab === "info" ? (
-          <InfoPage />
-        ) : tab === "history" ? (
+        {tab === "history" ? (
           <HistoryPage
             sessions={active.sessions.data ?? []}
             loading={active.sessions.isPending}
@@ -233,6 +230,9 @@ export default function App() {
           busy={busy}
           dismissInstall={dismissInstall}
         />
+        <footer className="pt-3 text-center text-[11px] text-muted">
+          RepLens · A closer look at your effort.
+        </footer>
       </main>
       <AppNavigation tab={tab} setTab={navigate} />
     </div>

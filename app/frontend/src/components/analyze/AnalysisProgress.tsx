@@ -40,7 +40,7 @@ export function AnalysisProgress({
             className="mt-4 h-1.5 overflow-hidden rounded-full bg-soft"
           >
             <div
-              className={`h-full rounded-full bg-accent transition-[width] duration-300 ${!job ? "w-1/3 animate-pulse" : ""}`}
+              className={`h-full rounded-full bg-ink transition-[width] duration-300 ${!job ? "w-1/3 animate-pulse" : ""}`}
               style={job ? { width: `${job.progress}%` } : undefined}
             />
           </div>
