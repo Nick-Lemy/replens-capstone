@@ -152,4 +152,6 @@ frontend/src/
 
 Speed and persistent-shaking tracking now share video decoding and background-motion estimation, retaining separate wrist-tracking state and the existing feature definitions. On one 19.43-second H.264 clip on the current Azure VM, accepted-upload-to-completed-poll time fell from 195.94 to 141.76 seconds (27.65%). Both runs detected nine reps and returned six estimates, with zero observed raw-prediction difference. This is a single paired measurement, not a latency percentile or accuracy improvement.
 
+The next motion-stage optimization groups background and wrist points into one forward/backward optical-flow call per frame. On a 19.43-second local clip, this cut the motion stage from 12.75 to 9.25 seconds compared with the deployed implementation. Both motion tables and all six available predictions matched exactly. This local result does not establish VPS or live-camera latency.
+
 See `training/results/processing_optimization.json` for local numerical-parity benchmarks and `training/results/refactor_validation.json` for integration evidence. To reproduce motion-only comparisons with local approved data, use `training/.venv/bin/python scripts/benchmark_processing.py --video VIDEO_PATH --pose MATCHING_POSE_CSV`; the default baseline is the `motion-baseline` tag. The API still uses one background worker and in-memory jobs.
