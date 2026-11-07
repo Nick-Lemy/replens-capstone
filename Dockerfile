@@ -20,4 +20,4 @@ RUN python app/backend/setup_models.py
 
 USER 10001
 EXPOSE 8000
-CMD ["sh", "-c", "exec python -m uvicorn app.backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
+CMD ["sh", "-c", "if [ -n \"${DATABASE_URL:-}\" ]; then python -m alembic -c app/backend/alembic.ini upgrade head || exit 1; fi; exec python -m uvicorn app.backend.main:app --host 0.0.0.0 --port ${PORT:-8000}"]
