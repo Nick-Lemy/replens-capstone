@@ -24,3 +24,4 @@ models/
 
 dist/
 *.tsbuildinfo
+*.sqlite3

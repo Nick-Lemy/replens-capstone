@@ -2,9 +2,9 @@ import { ScanLine, Clock3 } from "lucide-react";
 import { ThemeSwitch } from "../shared/UI";
 
 type Tab = "analyze" | "history";
-type Props = { tab: Tab; setTab: (tab: Tab) => void };
+type Props = { tab: Tab; setTab: (tab: Tab) => void; accountName?: string; onAccount?: () => void };
 
-export function AppHeader({ tab, setTab }: Props) {
+export function AppHeader({ tab, setTab, accountName, onAccount }: Props) {
   return (
     <header className="border-b border-line">
       <div className="mx-auto flex h-18 max-w-5xl items-center justify-between px-5 sm:px-8">
@@ -34,7 +34,10 @@ export function AppHeader({ tab, setTab }: Props) {
             </button>
           ))}
         </div>
-        <ThemeSwitch />
+        <div className="flex items-center gap-2">
+          {onAccount && <button onClick={onAccount} className="rounded-full border border-line px-3 py-2 text-xs font-medium hover:bg-soft">{accountName ?? "Sign in"}</button>}
+          <ThemeSwitch />
+        </div>
       </div>
     </header>
   );

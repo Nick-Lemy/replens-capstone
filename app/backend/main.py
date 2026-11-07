@@ -9,6 +9,7 @@ from fastapi.responses import JSONResponse
 
 from .config.settings import FRONTEND_ORIGINS, OPENCV_THREADS
 from .routes import analyses, health, set_reviews
+from .auth.routes import router as auth_router
 from .services.jobs import AnalysisJobManager
 
 
@@ -28,7 +29,9 @@ app.add_middleware(
     allow_origins=FRONTEND_ORIGINS,
     allow_methods=["GET", "POST", "DELETE"],
     allow_headers=["Content-Type"],
+    allow_credentials=True,
 )
+app.include_router(auth_router)
 app.include_router(health.router)
 app.include_router(analyses.router)
 app.include_router(set_reviews.router)

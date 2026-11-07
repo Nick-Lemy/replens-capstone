@@ -1,7 +1,7 @@
 const base = (import.meta.env.VITE_API_URL ?? "").replace(/\/$/, "");
 
 export async function request<T>(path: string, init?: RequestInit): Promise<T> {
-  const response = await fetch(`${base}/api${path}`, init);
+  const response = await fetch(`${base}/api${path}`, { credentials: "include", ...init });
 
   if (!response.ok) {
     const body = await response.json().catch(() => null);

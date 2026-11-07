@@ -27,6 +27,7 @@ jobs:
       REPLENS_FRONTEND_ORIGIN: ${{ vars.REPLENS_FRONTEND_ORIGIN }}
       REPLENS_SSH_USER: ${{ vars.REPLENS_SSH_USER }}
       REPLENS_VPS_ARCH: ${{ vars.REPLENS_VPS_ARCH }}
+      REPLENS_EMAIL_FROM: ${{ vars.REPLENS_EMAIL_FROM }}
     steps:
       - uses: actions/checkout@v6
       - name: Prepare SSH
@@ -41,6 +42,18 @@ jobs:
           printf 'REPLENS_SSH_KEY=%s\n' "$key_path" >> "$GITHUB_ENV"
           touch .kamal/secrets
           ssh -o BatchMode=yes -o ConnectTimeout=15 -o StrictHostKeyChecking=accept-new -i "$key_path" "$REPLENS_SSH_USER@$REPLENS_VPS_IP" 'set -e; uname -m; free -m; if command -v docker >/dev/null; then docker version --format "{{.Server.Version}}"; else sudo -n true; fi'
+      - name: Prepare account secrets
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$DATABASE_URL"
+          test -n "$JWT_SECRET"
+          test -n "$RESEND_API_KEY"
+          test -n "$REPLENS_EMAIL_FROM"
+          printf 'DATABASE_URL=%s\nJWT_SECRET=%s\nRESEND_API_KEY=%s\n' "$DATABASE_URL" "$JWT_SECRET" "$RESEND_API_KEY" > .kamal/secrets
       - name: Set up build cache
         run: docker buildx create --use --name replens-builder
       - uses: ./.github/actions/expose-buildkit-runtime

@@ -6,3 +6,9 @@ pandas==3.0.6
 scipy==1.18.1
 opencv-contrib-python==5.0.0.93
 mediapipe==1.1.0
+SQLAlchemy>=2.0,<2.1
+alembic>=1.15,<2
+PyJWT>=2.10,<3
+pwdlib[argon2]>=0.2,<1
+psycopg[binary]>=3.2,<4
+httpx>=0.28,<1
