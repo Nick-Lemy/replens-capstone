@@ -6,7 +6,7 @@ type Props = { tab: Tab; setTab: (tab: Tab) => void; accountName?: string; onAcc
 
 export function AppHeader({ tab, setTab, accountName, onAccount }: Props) {
   return (
-    <header className="border-b border-line">
+    <header className="sticky top-0 z-30 border-b border-line bg-page/95 backdrop-blur-xl">
       <div className="mx-auto flex h-18 max-w-5xl items-center justify-between px-5 sm:px-8">
         <button
           aria-label="RepLens home"
