@@ -5,7 +5,7 @@ import {
 } from "./components/layout/ApplicationStatus";
 import { AppHeader, AppNavigation } from "./components/layout/AppNavigation";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { AuthDialog } from "./features/auth/AuthDialog";
+import { AuthPage } from "./features/auth/AuthPage";
 import { useAuth } from "./features/auth/useAuth";
 import type { SavedSession } from "./lib/types";
 import { AnalyzePage } from "./pages/AnalyzePage";
@@ -21,9 +21,18 @@ import { useHealth } from "./hooks/useHealth";
 export default function App() {
   const [tab, setTab] = useState<"analyze" | "history">("analyze");
   const [message, setMessage] = useState("");
-  const [authOpen, setAuthOpen] = useState(() => new URLSearchParams(window.location.search).has("auth"));
+  const [authOpen, setAuthOpen] = useState(() =>
+    new URLSearchParams(window.location.search).has("auth"),
+  );
   const auth = useAuth();
   const refreshAuth = useCallback(() => auth.refresh(), [auth.refresh]);
+
+  useEffect(() => {
+    const onPopState = () =>
+      setAuthOpen(new URLSearchParams(window.location.search).has("auth"));
+    window.addEventListener("popstate", onPopState);
+    return () => window.removeEventListener("popstate", onPopState);
+  }, []);
 
   const analysis = useAnalysisJob();
 
@@ -94,9 +103,37 @@ export default function App() {
     active.sessions.error,
   ].filter(Boolean);
 
+  function openAuth() {
+    window.history.pushState({}, "", "/?auth=login");
+    setAuthOpen(true);
+  }
+
+  function closeAuth() {
+    window.history.pushState({}, "", "/");
+    setAuthOpen(false);
+  }
+
+  if (authOpen && auth.enabled) {
+    return (
+      <AuthPage
+        account={auth.account}
+        onExit={closeAuth}
+        onAuthenticated={refreshAuth}
+        onLogout={async () => {
+          await auth.logout.mutateAsync();
+        }}
+      />
+    );
+  }
+
   return (
     <div className="min-h-dvh bg-page text-ink">
-      <AppHeader tab={tab} setTab={setTab} accountName={auth.account?.name} onAccount={auth.enabled ? () => setAuthOpen(true) : undefined} />
+      <AppHeader
+        tab={tab}
+        setTab={setTab}
+        accountName={auth.account?.name}
+        onAccount={auth.enabled ? openAuth : undefined}
+      />
       <main
         className="mx-auto max-w-155 space-y-5 px-5 pb-32 pt-9 sm:px-8 sm:pt-12"
         id="main"
@@ -172,7 +209,6 @@ export default function App() {
         </footer>
       </main>
       <AppNavigation tab={tab} setTab={setTab} />
-      {authOpen && auth.enabled && <AuthDialog account={auth.account} onClose={() => setAuthOpen(false)} onAuthenticated={refreshAuth} onLogout={async () => { await auth.logout.mutateAsync(); }} />}
     </div>
   );
 }
