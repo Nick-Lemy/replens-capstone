@@ -36,6 +36,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
   const startedAt = useRef(0);
   const lastSample = useRef(0);
   const chunks = useRef<Blob[]>([]);
+  const recordingFailed = useRef(false);
   const counter = useRef(new LiveRepCounter());
   const mounted = useRef(true);
 
@@ -83,6 +84,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
     setRepState({ count: 0, tracking: false, phase: "seeking_start" });
     counter.current = new LiveRepCounter();
     chunks.current = [];
+    recordingFailed.current = false;
 
     try {
       if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
@@ -127,12 +129,15 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
         if (event.data.size) chunks.current.push(event.data);
       };
       mediaRecorder.onerror = () => {
+        recordingFailed.current = true;
         if (mounted.current) setError("The recording stopped unexpectedly.");
         release();
         if (mounted.current) setState("idle");
       };
       mediaRecorder.onstop = () => {
+        release();
         if (!mounted.current) return;
+        if (recordingFailed.current) return;
         const blob = new Blob(chunks.current, { type: format });
         chunks.current = [];
         setState("idle");
