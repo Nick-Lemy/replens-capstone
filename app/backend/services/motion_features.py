@@ -18,26 +18,42 @@ def tremor_hash(path):
     return digest.hexdigest()
 
 
-def flow_vectors(previous, current, points):
-    if points is None or len(points) < 5:
-        return np.empty((0, 2)), np.empty((0, 2))
+def _grouped_flow_vectors(previous, current, groups):
+    empty = (np.empty((0, 2)), np.empty((0, 2)))
+    outputs = {key: empty for key in groups}
+    active = []
+    boundaries = []
+    total = 0
+    for key, points in groups.items():
+        if points is None or len(points) < 5:
+            continue
+        active.append(points.reshape(-1, 2))
+        boundaries.append((key, total, total + len(points)))
+        total += len(points)
+    if not active:
+        return outputs
+
+    points = np.concatenate(active).reshape(-1, 1, 2).astype(np.float32)
     q, ok, _ = cv2.calcOpticalFlowPyrLK(
         previous, current, points, None, winSize=(21, 21), maxLevel=3
     )
     if q is None:
-        return np.empty((0, 2)), np.empty((0, 2))
+        return outputs
     back, back_ok, _ = cv2.calcOpticalFlowPyrLK(
         current, previous, q, None, winSize=(21, 21), maxLevel=3
     )
     if back is None:
-        return np.empty((0, 2)), np.empty((0, 2))
+        return outputs
+
     p = points.reshape(-1, 2)
     q = q.reshape(-1, 2)
     valid = ok.ravel().astype(bool) & back_ok.ravel().astype(bool)
     valid &= np.isfinite(q).all(1) & (
         np.linalg.norm(back.reshape(-1, 2) - p, axis=1) < 1.0
     )
-    return p[valid], q[valid]
+    for key, start, end in boundaries:
+        outputs[key] = p[start:end][valid[start:end]], q[start:end][valid[start:end]]
+    return outputs
 
 
 SIDES = ("left", "right")
@@ -56,24 +72,27 @@ POSE_PAIR = {
 }
 
 
-def _background_camera(previous, gray, previous_pose):
-    h, w = gray.shape
+def _background_points(previous, previous_pose):
+    h, w = previous.shape
     points = []
     for side in SIDES:
         for joint in ("shoulder", "elbow", "wrist"):
             xy = previous_pose[POSE_PAIR[side, joint]] * [w, h]
             if np.isfinite(xy).all():
                 points.append(xy)
-    mask = np.full(gray.shape, 255, np.uint8)
+    mask = np.full(previous.shape, 255, np.uint8)
     if len(points) >= 3:
         p = np.asarray(points)
         lo = np.maximum(p.min(0) - 0.12 * np.array([w, h]), 0).astype(int)
         hi = np.minimum(p.max(0) + 0.12 * np.array([w, h]), [w - 1, h - 1]).astype(int)
         cv2.rectangle(mask, tuple(lo), tuple(hi), 0, -1)
-    background = cv2.goodFeaturesToTrack(
+    return cv2.goodFeaturesToTrack(
         previous, maxCorners=160, qualityLevel=0.02, minDistance=12, mask=mask
     )
-    p, q = flow_vectors(previous, gray, background)
+
+
+def _background_camera(previous_pose, shape, p, q):
+    h, w = shape
     affine = None
     inlier_fraction = 0.0
     noise = np.nan
@@ -95,48 +114,40 @@ def _background_camera(previous, gray, previous_pose):
     return affine, inlier_fraction, noise, float(np.linalg.norm(shoulder))
 
 
-def _track_wrists(
-    previous,
-    gray,
-    previous_pose,
-    affine,
-    inlier_fraction,
-    width,
-    persistent,
-    tracked,
-    item,
-):
-    h, w = gray.shape
+def _wrist_points(previous, previous_pose, width, side, persistent, tracked):
+    h, w = previous.shape
+    xy = previous_pose[POSE_PAIR[side, "wrist"]] * [w, h]
+    if (
+        not np.isfinite(width)
+        or width < 20
+        or not np.isfinite(xy).all()
+        or not (0 <= xy[0] < w and 0 <= xy[1] < h)
+    ):
+        return None
+    region = np.zeros(previous.shape, np.uint8)
+    cv2.circle(region, tuple(xy.astype(int)), max(12, int(0.25 * width)), 255, -1)
+    target = tracked if persistent else None
+    if target is not None:
+        distance = np.linalg.norm(target.reshape(-1, 2) - xy, axis=1)
+        target = target[distance < max(25, 0.6 * width)]
+    if target is None or len(target) < 8:
+        target = cv2.goodFeaturesToTrack(
+            previous,
+            maxCorners=(60 if persistent else 40),
+            qualityLevel=0.01,
+            minDistance=3,
+            mask=region,
+        )
+    return target
+
+
+def _track_wrists(affine, inlier_fraction, persistent, tracked, item, flows):
     for side in SIDES:
         item[f"{side}_dx"] = item[f"{side}_dy"] = np.nan
-        xy = previous_pose[POSE_PAIR[side, "wrist"]] * [w, h]
-        if (
-            affine is None
-            or inlier_fraction < 0.5
-            or not np.isfinite(width)
-            or width < 20
-            or not np.isfinite(xy).all()
-        ):
+        if affine is None or inlier_fraction < 0.5:
             tracked[side] = None
             continue
-        if not (0 <= xy[0] < w and 0 <= xy[1] < h):
-            tracked[side] = None
-            continue
-        region = np.zeros(gray.shape, np.uint8)
-        cv2.circle(region, tuple(xy.astype(int)), max(12, int(0.25 * width)), 255, -1)
-        target = tracked[side] if persistent else None
-        if target is not None:
-            distance = np.linalg.norm(target.reshape(-1, 2) - xy, axis=1)
-            target = target[distance < max(25, 0.6 * width)]
-        if target is None or len(target) < 8:
-            target = cv2.goodFeaturesToTrack(
-                previous,
-                maxCorners=(60 if persistent else 40),
-                qualityLevel=0.01,
-                minDistance=3,
-                mask=region,
-            )
-        p, q = flow_vectors(previous, gray, target)
+        p, q = flows[persistent, side]
         if persistent:
             tracked[side] = (
                 q.reshape(-1, 1, 2).astype(np.float32) if len(q) >= 5 else None
@@ -254,8 +265,26 @@ def _pixel_motion_modes(video, pose, modes, progress, cancelled):
                 and previous_pose is not None
                 and 0 < time - previous_time < 1.5 / fps
             ):
+                h, w = gray.shape
+                shoulders = (
+                    previous_pose[POSE_PAIR["left", "shoulder"]]
+                    - previous_pose[POSE_PAIR["right", "shoulder"]]
+                ) * [w, h]
+                width = float(np.linalg.norm(shoulders))
+                groups = {"background": _background_points(previous, previous_pose)}
+                for persistent in modes:
+                    for side in SIDES:
+                        groups[persistent, side] = _wrist_points(
+                            previous,
+                            previous_pose,
+                            width,
+                            side,
+                            persistent,
+                            tracked[persistent][side],
+                        )
+                flows = _grouped_flow_vectors(previous, gray, groups)
                 affine, inlier_fraction, noise, width = _background_camera(
-                    previous, gray, previous_pose
+                    previous_pose, gray.shape, *flows["background"]
                 )
                 for persistent in modes:
                     item = {
@@ -266,15 +295,12 @@ def _pixel_motion_modes(video, pose, modes, progress, cancelled):
                         "background_error_px": noise,
                     }
                     _track_wrists(
-                        previous,
-                        gray,
-                        previous_pose,
                         affine,
                         inlier_fraction,
-                        width,
                         persistent,
                         tracked[persistent],
                         item,
+                        flows,
                     )
                     rows[persistent].append(item)
             else:
