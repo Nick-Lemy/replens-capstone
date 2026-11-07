@@ -77,6 +77,7 @@ def current_user(
 
 
 def set_cookie(response: Response, user: User, settings: AuthSettings):
+    response.delete_cookie(COOKIE_NAME, path="/api/auth")
     response.set_cookie(
         COOKIE_NAME,
         access_token(user, settings),
@@ -84,7 +85,7 @@ def set_cookie(response: Response, user: User, settings: AuthSettings):
         httponly=True,
         secure=settings.cookie_secure,
         samesite="lax",
-        path="/api/auth",
+        path="/api",
     )
 
 
@@ -142,7 +143,8 @@ def login(data: Credentials, request: Request, response: Response, session: Sess
 
 
 @router.get("/me")
-def me(user: User = Depends(current_user)):
+def me(response: Response, user: User = Depends(current_user), settings: AuthSettings = Depends(require_enabled)):
+    set_cookie(response, user, settings)
     return {"user": public_user(user)}
 
 
@@ -150,6 +152,7 @@ def me(user: User = Depends(current_user)):
 def logout(response: Response, user: User = Depends(current_user), session: Session = Depends(get_session)):
     user.token_version += 1
     session.commit()
+    response.delete_cookie(COOKIE_NAME, path="/api")
     response.delete_cookie(COOKIE_NAME, path="/api/auth")
     return {"message": "Signed out"}
 
@@ -190,6 +193,7 @@ def reset_password(data: PasswordReset, response: Response, session: Session = D
     user.password_hash = passwords.hash(data.password)
     user.token_version += 1
     session.commit()
+    response.delete_cookie(COOKIE_NAME, path="/api")
     response.delete_cookie(COOKIE_NAME, path="/api/auth")
     return {"message": "Password changed. Sign in with your new password"}
 

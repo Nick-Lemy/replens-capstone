@@ -1,6 +1,6 @@
 # RepLens PWA
 
-React + TypeScript + Tailwind frontend, with TanStack Query and a FastAPI video analyzer. The PWA supports light/dark themes, uploaded-video analysis and device-local session history.
+React + TypeScript + Tailwind frontend, with TanStack Query and a FastAPI video analyzer. The PWA supports light/dark themes, uploaded-video analysis and saved session history.
 
 ## First-time setup
 
@@ -68,15 +68,17 @@ The API accepts multipart `POST /api/analyses` with `video` and an optional `mod
 
 ## Privacy and history
 
-The backend strips audio and deletes its temporary upload after analysis. Jobs/results are held in memory. Saving a session stores the video and result in IndexedDB on that browser; reload, reopen and deletion are supported. History is not synced between devices. Raw research recordings and review images are excluded from Git.
+The backend strips audio and deletes its temporary upload after analysis. Analysis jobs are held in memory. Guest sessions, including their videos, are saved in IndexedDB on that browser. For signed-in users, the API stores results and reviews in PostgreSQL so history follows the account. Videos remain on the device where they were saved and are not uploaded to PostgreSQL. Signed-in users can view results from another device without the video. Raw research recordings and review images are excluded from Git.
 
-This scope has upload-based retrospective prediction, not live streaming. Account authentication is separate from local session history; saved analysis sessions are still stored only in the browser.
+This scope has upload-based retrospective prediction, not live streaming. Guest history is separate from account history; signing in does not automatically move guest sessions into an account.
 
 ## Accounts
 
 Accounts support sign-up, email verification, sign-in, sign-out, current user, password reset by email and password change. Access uses an HTTP-only JWT cookie. Guest analysis remains available when accounts are not configured. To enable accounts locally, set `DATABASE_URL`, a random `JWT_SECRET` of at least 32 characters, `AUTH_FRONTEND_URL`, `RESEND_API_KEY` and `EMAIL_FROM`. The sending address must use a verified Resend domain. Copy `app/backend/.env.example` to a private env file and load it into the backend shell; uvicorn does not read that file automatically. Run `python -m alembic -c app/backend/alembic.ini upgrade head` from the repository root before starting the API. The Docker image runs this migration on startup when `DATABASE_URL` is set.
 
 For VPS deployment, set GitHub secrets `DATABASE_URL`, `JWT_SECRET` and `RESEND_API_KEY`, plus the `REPLENS_EMAIL_FROM` and `REPLENS_FRONTEND_ORIGIN` variables. Deployment requires these settings and runs the database migration before starting the API. The database must be reachable from the VPS, and the sender must use a verified Resend domain.
+
+Signed-in session history uses `GET /api/sessions`, `GET /api/sessions/{id}`, `PUT /api/sessions/{id}` and `DELETE /api/sessions/{id}`. Every route requires the account cookie and returns only that account's records.
 
 ## Build / host
 
@@ -86,7 +88,7 @@ pnpm build
 pnpm preview
 ```
 
-Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `/api`) for separate hosting. Set `FRONTEND_ORIGINS` on the backend to the exact frontend origin. Local environment examples describe both; uvicorn does not automatically load `.env`. Mobile PWA installation requires HTTPS or localhost. The app shell/history can work offline after caching, but new analysis needs the backend. Mobile installation after hosting still requires a real-device check.
+Set `VITE_API_URL` at frontend build time to the HTTPS backend origin (without `/api`) for separate hosting. Set `FRONTEND_ORIGINS` on the backend to the exact frontend origin. Local environment examples describe both; uvicorn does not automatically load `.env`. Mobile PWA installation requires HTTPS or localhost. The app shell and guest history can work offline after caching; account history and new analysis need the backend. Mobile installation after hosting still requires a real-device check.
 
 ## Model reproduction
 
@@ -120,13 +122,13 @@ gh secret set DEPLOY_SSH_PRIVATE_KEY < /path/to/private-key
 
 For the first deployment, run **Deploy VPS backend** manually with `first_setup` checked. Kamal installs Docker and starts the HTTPS proxy and backend. If deploying through a push instead, temporarily set `REPLENS_FIRST_SETUP=true`, then remove that variable after successful setup. Subsequent pushes to `main` use `kamal deploy`. An optional `REPLENS_APPROVED_DEPLOY_SHA` permits a specific approved `dev` commit to deploy before its PR is merged.
 
-Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. Account secrets and migrations apply only when accounts are enabled. Deployment finishes by checking the public API and selected model.
+Configuration: `config/deploy.yml`, `Dockerfile` and `.github/workflows/deploy.yml`. Builds use a runner matching the VM architecture. Deployment requires account secrets and applies pending migrations before starting the API. It finishes by checking the public API and selected model.
 
 The frontend is live at `https://replens.lemy.dev` and uses the Azure backend at `https://api.replens.lemy.dev`. GitHub Actions deployment, HTTPS, CORS and a complete 19.4-second upload were verified: nine reps and six available predictions. This is a deployment check, not an accuracy evaluation; processing still takes several minutes on the current CPU. The temporary Render service is no longer used by the frontend.
 
 ### Frontend structure
 
-The React app composes its screens in `frontend/src/pages` and keeps focused hooks for analysis jobs, history, reviews, browser status, health, and video URLs in `frontend/src/hooks`. API transport, types, and IndexedDB storage remain in `frontend/src/lib`.
+The React app composes its screens in `frontend/src/pages` and keeps focused hooks for analysis jobs, history, reviews, browser status, health, and video URLs in `frontend/src/hooks`. Account and session API clients live in `frontend/src/features`; shared transport, types, and device storage live in `frontend/src/lib`.
 
 ```text
 frontend/src/
@@ -137,6 +139,8 @@ frontend/src/
   components/history/       Saved-session card
   components/layout/         Navigation and status
   components/shared/         Shared UI controls
+  features/auth/             Account page and API
+  features/history/          Saved-session API
   hooks/                    State and workflow hooks
   lib/                      API and local storage
 ```

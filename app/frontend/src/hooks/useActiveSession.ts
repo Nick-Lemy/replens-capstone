@@ -1,10 +1,10 @@
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { AnalysisResult, SavedSession, SetReview } from "../lib/types";
 import { initialReview } from "./useSetReview";
 import { useHistory } from "./useHistory";
 
-export function useActiveSession() {
-  const history = useHistory();
+export function useActiveSession(accountId: number | null, ready: boolean) {
+  const history = useHistory(accountId, ready);
   const [session, setSession] = useState<SavedSession | null>(null);
   const [review, setReview] = useState<SetReview | null>(null);
   const [saved, setSaved] = useState(false);
@@ -13,8 +13,20 @@ export function useActiveSession() {
   const viewRef = useRef<string | null>(null);
 
   const reviewRef = useRef<SetReview | null>(null);
+  const previousAccount = useRef(accountId);
 
   const resetSave = history.save.reset;
+
+  useEffect(() => {
+    if (previousAccount.current === accountId) return;
+    previousAccount.current = accountId;
+    viewRef.current = null;
+    reviewRef.current = null;
+    setViewId(null);
+    setSession(null);
+    setReview(null);
+    setSaved(false);
+  }, [accountId]);
 
   const open = useCallback(
     (next: SavedSession, isSaved = true) => {

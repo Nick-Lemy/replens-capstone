@@ -18,6 +18,7 @@ export function ResultsPage({
   saving,
   review,
   onReviewChange,
+  synced,
 }: {
   result: AnalysisResult;
   url: string | null;
@@ -27,6 +28,7 @@ export function ResultsPage({
   saving: boolean;
   review: SetReview;
   onReviewChange: (review: SetReview) => void;
+  synced: boolean;
 }) {
   const [selected, setSelected] = useState(Math.max(0, result.reps.length - 1));
 
@@ -115,7 +117,9 @@ export function ResultsPage({
         </Button>
       </div>
       <p className="text-center text-xs text-muted">
-        Saved sessions and their videos stay in this browser.
+        {synced
+          ? "Saved results follow your account. This video stays on your device."
+          : "Saved sessions and their videos stay in this browser."}
       </p>
     </div>
   );

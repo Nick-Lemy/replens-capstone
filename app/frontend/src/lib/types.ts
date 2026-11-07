@@ -52,7 +52,7 @@ export type SavedSession = {
   title: string;
   createdAt: string;
   result: AnalysisResult;
-  video: Blob;
+  video: Blob | null;
   review?: SetReview;
 };
 
