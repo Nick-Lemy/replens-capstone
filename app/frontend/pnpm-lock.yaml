@@ -10,6 +10,9 @@ importers:
       "@fontsource-variable/inter":
         specifier: ^5.3.0
         version: 5.3.0
+      "@mediapipe/tasks-vision":
+        specifier: 1.2.2
+        version: 1.2.2
       "@tanstack/react-query":
         specifier: ^5.105.0
         version: 5.105.0(@types/react@19.3.0)(react@19.3.1)
@@ -886,6 +889,12 @@ packages:
     resolution:
       {
         integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==,
+      }
+
+  "@mediapipe/tasks-vision@1.2.2":
+    resolution:
+      {
+        integrity: sha512-Z7BikxnTvlKgc3d/Nw+LV6B0xyAACxYeAHHUu/xUhm1SV7jlExa9M37beiF/wZFoy0H+cs1PlIT2Z4km02UEHQ==,
       }
 
   "@napi-rs/lzma-linux-x64-gnu@1.5.1":
@@ -4326,6 +4335,8 @@ snapshots:
     dependencies:
       "@jridgewell/resolve-uri": 3.1.2
       "@jridgewell/sourcemap-codec": 1.6.0
+
+  "@mediapipe/tasks-vision@1.2.2": {}
 
   "@napi-rs/lzma-linux-x64-gnu@1.5.1":
     optional: true

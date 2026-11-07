@@ -1,6 +1,6 @@
 # RepLens PWA
 
-React + TypeScript + Tailwind frontend, with TanStack Query and a FastAPI video analyzer. The PWA supports light/dark themes, uploaded-video analysis and saved session history.
+React + TypeScript + Tailwind frontend, with TanStack Query and a FastAPI video analyzer. The PWA supports light/dark themes, live camera rep counting, completed-video analysis and saved session history.
 
 ## First-time setup
 
@@ -54,6 +54,8 @@ Open **http://localhost:5173**. API documentation: **http://127.0.0.1:8000/docs*
 
 Upload a complete simultaneous two-arm dumbbell-curl set, at least 25 fps (30+ recommended), up to three minutes and 250 MB. Keep the camera steady, both arms visible and the wrists large enough to measure. MediaPipe proposes rep boundaries and locates image regions. Actual pixel movement supplies speed and candidate shaking features. Estimates can start at rep 4, using that rep and the previous three. Interrupted or poor tracking produces **Unavailable**, not invented estimates. Check the automatic count against the video.
 
+The live camera option uses the browser camera and a MediaPipe Lite pose model to show a provisional count of complete two-arm curls during recording. Both arms must be visible and the movement must extend, curl and return. The count can miss repetitions, so the completed recording goes through the normal server analysis and review. Live RIR or a live fatigue warning is not available: the deployed model requires a separate full-video pixel-motion pass, which took 141.76 seconds for one 19.43-second clip on the current VPS. Camera access requires HTTPS or localhost, browser support for MediaRecorder, and an initial download of the MediaPipe model and WebAssembly runtime.
+
 The default model is speed + persistent transverse shaking, a regularized Ridge model. The backend also offers a speed-only Ridge model. On a selected 33-example/four-person test subset it had participant-mean MAE 2.22 reps versus 2.25 for speed alone. The small 1.32% gain is fragile and does not meet the proposed 15% benefit. Both bundles are refits on all 33 accepted examples using inner-selected regularization; these refits have no independent test scores. The matched evaluation included shaking-quality filtering even for speed alone, while speed-only runtime availability can differ. Candidate shaking is not sensor-validated physiological tremor, and estimates are not safety advice. The UI displays this limited evaluation scope.
 
 Some phone MOV files use HEVC, which not every browser can play. Analysis can still finish; the player shows a compatibility message. H.264 MP4 is the recommended preview format. With FFmpeg installed, create a compatible copy without changing the original:
@@ -70,7 +72,7 @@ The API accepts multipart `POST /api/analyses` with `video` and an optional `mod
 
 The backend strips audio and deletes its temporary upload after analysis. Analysis jobs are held in memory. Guest sessions, including their videos, are saved in IndexedDB on that browser. For signed-in users, the API stores results and reviews in PostgreSQL so history follows the account. Videos remain on the device where they were saved and are not uploaded to PostgreSQL. Signed-in users can view results from another device without the video. Raw research recordings and review images are excluded from Git.
 
-This scope has upload-based retrospective prediction, not live streaming. Guest history is separate from account history; signing in does not automatically move guest sessions into an account.
+Prediction remains retrospective. Guest history is separate from account history; signing in does not automatically move guest sessions into an account.
 
 ## Accounts
 
@@ -133,7 +135,7 @@ The React app composes its screens in `frontend/src/pages` and keeps focused hoo
 ```text
 frontend/src/
   pages/                    Analyze, history, and results screens
-  components/analyze/       Video input, progress, tips, model selector
+  components/analyze/       Video input, live camera, progress, tips, model selector
   components/results/       Video, chart, rep selector, model metadata
   components/results/review/ Completed-set review controls
   components/history/       Saved-session card
@@ -141,6 +143,7 @@ frontend/src/
   components/shared/         Shared UI controls
   features/auth/             Account page and API
   features/history/          Saved-session API
+  features/live/             Browser camera, pose tracking, rep counter
   hooks/                    State and workflow hooks
   lib/                      API and local storage
 ```
