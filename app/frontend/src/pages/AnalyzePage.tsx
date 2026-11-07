@@ -1,5 +1,6 @@
 import { VideoInput } from "../components/analyze/VideoInput";
 import { AnalysisProgress } from "../components/analyze/AnalysisProgress";
+import { FilmingTips } from "../components/analyze/FilmingTips";
 import { ModelSelector } from "../components/analyze/ModelSelector";
 import { Notice } from "../components/shared/UI";
 import { LiveCamera } from "../components/analyze/LiveCamera";
@@ -41,14 +42,16 @@ export function AnalyzePage({
 
   return (
     <div className="animate-enter space-y-7">
-      <div className="space-y-3">
-        <p className="text-sm font-medium tracking-widest text-accent uppercase">One set. A clearer picture.</p>
-        <h1 className="text-[36px] font-bold leading-tight tracking-[-.045em] sm:text-[48px]">
-          Predict muscle{" "}
-          <span className="relative">
-            <span className="text-accent">fatigue.</span>
-          </span>
+      <div className="space-y-2">
+        <p className="text-sm text-muted">One set. A clearer picture.</p>
+        <h1 className="text-[32px] font-semibold leading-tight tracking-[-.045em] sm:text-[40px]">
+          Predict muscle fatigue.
         </h1>
+        <p className="max-w-md text-[15px] leading-6 text-muted">
+          Record or upload a set of simultaneous dumbbell curls. RepLens
+          estimates how many complete reps you may have left, a measure of how
+          close you are to your lifting limit.
+        </p>
       </div>
       {modelsLoading && (
         <p role="status" className="text-sm text-muted">
@@ -132,6 +135,13 @@ export function AnalyzePage({
             to choose an available method.
           </Notice>
         )}
+      <FilmingTips />
+      <p className="border-t border-line pt-5 text-xs leading-5 text-muted">
+        This is an experimental estimate, not a direct measurement of muscle
+        fatigue. Analysis needs an internet connection when the server is
+        hosted. Video is sent to the analyzer and its temporary copy is removed
+        after processing.
+      </p>
     </div>
   );
 }

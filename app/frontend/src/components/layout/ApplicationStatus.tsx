@@ -45,8 +45,8 @@ export function ApplicationStatusNotices({
   online: boolean;
   healthError: boolean;
   busy: boolean;
-  tab: "analyze" | "history" | "info";
-  setTab: (tab: "analyze" | "history" | "info") => void;
+  tab: "analyze" | "history";
+  setTab: (tab: "analyze" | "history") => void;
   message: string;
   clearMessage: () => void;
   errors: unknown[];

@@ -57,7 +57,7 @@ export function PredictionChart({
                     y1={y(result.reps[i].rir!)}
                     x2={x(i + 1)}
                     y2={y(r.rir)}
-                    className="stroke-accent"
+                    className="stroke-ink"
                     strokeWidth="1.5"
                   />
                 ) : null,
@@ -70,7 +70,7 @@ export function PredictionChart({
                     cx={x(i)}
                     cy={y(r.rir)}
                     r={i === selected ? 4.5 : 3}
-                    className={`fill-accent transition-all`}
+                    className="fill-ink"
                   />
                 ),
             )}
