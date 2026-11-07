@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Film, Plus, ScanLine, X } from "lucide-react";
+import { Camera, Film, Plus, ScanLine, X } from "lucide-react";
 import { Button, Notice, seconds } from "../shared/UI";
 
 export function VideoInput({
@@ -18,6 +18,7 @@ export function VideoInput({
   canStart: boolean;
 }) {
   const picker = useRef<HTMLInputElement>(null);
+  const cameraPicker = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [duration, setDuration] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -53,6 +54,19 @@ export function VideoInput({
           e.target.value = "";
         }}
       />
+      <input
+        ref={cameraPicker}
+        type="file"
+        accept="video/*"
+        capture="environment"
+        className="sr-only"
+        aria-label="Record a curl video"
+        disabled={busy}
+        onChange={(e) => {
+          choose(e.target.files?.[0]);
+          e.target.value = "";
+        }}
+      />
       {!file ? (
         <div
           className={`rounded-3xl border bg-panel p-2 transition-colors ${dragging ? "border-ink" : "border-line"}`}
@@ -67,21 +81,35 @@ export function VideoInput({
             choose(e.dataTransfer.files[0]);
           }}
         >
-          <button
-            onClick={() => picker.current?.click()}
-            className="group flex min-h-64 w-full flex-col items-center justify-center rounded-[18px] bg-soft p-6 text-center sm:min-h-72"
-          >
-            <span className="mb-6 grid size-14 place-items-center rounded-2xl border border-line bg-panel shadow-sm transition-transform group-hover:-translate-y-1">
+          <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-[18px] bg-soft p-6 text-center sm:min-h-72">
+            <span className="mb-6 grid size-14 place-items-center rounded-2xl border border-line bg-panel shadow-sm">
               <Plus size={24} strokeWidth={1.5} />
             </span>
-            <span className="text-base font-medium">Choose your video</span>
+            <span className="text-base font-medium">Add your curl set</span>
             <span className="mt-2 text-sm text-muted">
-              From your camera roll or files
+              Keep both arms visible from the first rep to the last.
             </span>
-            <span className="mt-5 text-xs text-muted">
+            <div className="mt-6 flex w-full max-w-xs flex-col gap-2 sm:flex-row">
+              <Button
+                className="w-full"
+                onClick={() => cameraPicker.current?.click()}
+              >
+                <Camera size={17} />
+                Record video
+              </Button>
+              <Button
+                secondary
+                className="w-full"
+                onClick={() => picker.current?.click()}
+              >
+                <Plus size={17} />
+                Choose video
+              </Button>
+            </div>
+            <span className="mt-4 text-xs text-muted">
               MP4, MOV or WebM · Up to 3 minutes
             </span>
-          </button>
+          </div>
           <div className="flex items-center gap-2 px-3 py-3 text-xs text-muted">
             <Film size={14} />
             <span>One complete set works best.</span>
