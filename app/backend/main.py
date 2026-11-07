@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from .config.settings import FRONTEND_ORIGINS, OPENCV_THREADS
-from .routes import analyses, health, set_reviews
+from .routes import analyses, health, live_estimates, set_reviews
 from .sessions import routes as session_routes
 from .auth.routes import router as auth_router
 from .services.jobs import AnalysisJobManager
@@ -36,6 +36,7 @@ app.include_router(auth_router)
 app.include_router(session_routes.router)
 app.include_router(health.router)
 app.include_router(analyses.router)
+app.include_router(live_estimates.router)
 app.include_router(set_reviews.router)
 
 
