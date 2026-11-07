@@ -68,6 +68,24 @@ class LinearPredictor:
             ((values - self.mean) / self.scale) @ self.coefficients + self.intercept
         )
 
+    def estimate_window(self, speed_flow, persistent_flow, start, end, rep_start):
+        speed, reason = candidate_features(speed_flow, start, end, rep_start)
+        if speed is None:
+            return None, reason
+
+        if persistent_flow is not None:
+            shaking, reason = transverse_shaking(
+                persistent_flow, start, end, rep_start
+            )
+            if shaking is None:
+                return None, reason
+            speed = {**speed, **shaking}
+
+        try:
+            return self.estimate(speed), None
+        except ValueError as exc:
+            return None, str(exc)
+
     def predict(self, path, reps, progress, cancelled, pose_frames):
         metadata = {**self.metadata, "rep_quality": []}
         predictions = [None] * len(reps)
@@ -97,25 +115,13 @@ class LinearPredictor:
             if cancelled():
                 raise ValueError("Analysis cancelled.")
             start, end = reps[index - 3]["start_s"], reps[index]["end_s"]
-            speed, reason = candidate_features(
-                original, start, end, reps[index]["start_s"]
+            estimate, reason = self.estimate_window(
+                original, persistent, start, end, reps[index]["start_s"]
             )
-            if speed is None:
+            if estimate is None:
                 metadata["rep_quality"].append(
                     {"rep": reps[index]["rep"], "reason": reason}
                 )
                 continue
-
-            if persistent is not None:
-                shaking, shaking_reason = transverse_shaking(
-                    persistent, start, end, reps[index]["start_s"]
-                )
-                if shaking is None:
-                    metadata["rep_quality"].append(
-                        {"rep": reps[index]["rep"], "reason": shaking_reason}
-                    )
-                    continue
-                speed = {**speed, **shaking}
-
-            predictions[index] = self.estimate(speed)
+            predictions[index] = estimate
         return predictions, metadata
