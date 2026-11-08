@@ -1,6 +1,6 @@
 # RepLens
 
-RepLens is a mobile-friendly research app that estimates proximity to muscle fatigue during simultaneous dumbbell curls. It predicts repetitions in reserve (RIR) from an uploaded video and lets users review the completed set. This repository contains the app and its machine learning experiments.
+RepLens is a mobile-friendly app for recreational lifters. It estimates proximity to muscle fatigue during simultaneous dumbbell curls by predicting repetitions in reserve (RIR) from a recorded or uploaded set. Users can review and save their results. This repository also contains the machine learning experiments.
 
 **Live app:** https://replens.lemy.dev
 
@@ -65,6 +65,10 @@ config/               Deployment configuration
 ```
 
 See [training/README.md](training/README.md) for the nine notebooks and their setup. Notebooks 03 to 09 can reproduce saved metrics from packaged numeric results without private videos or retraining.
+
+## Study scope
+
+The proposal planned back squats and bench presses using tracked barbell velocity. The study moved to simultaneous dumbbell curls because this exercise and filming setup were accessible at the gym where volunteers were available. The implemented models use video-derived wrist motion and candidate shaking. The deployed predictor is Ridge regression, while TCNs were evaluated in the research notebooks. Current results apply to the recorded curl sets; they do not validate predictions for squats or bench presses.
 
 ## Results and limitations
 
