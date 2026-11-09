@@ -21,6 +21,7 @@ function recordingFormat() {
 
 export function useLiveCamera(onRecorded: (file: File) => void) {
   const [state, setState] = useState<CameraState>("idle");
+  const [facing, setFacing] = useState<"environment" | "user">("environment");
   const [error, setError] = useState("");
   const [repState, setRepState] = useState<LiveRepState>({
     count: 0,
@@ -97,7 +98,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
       const media = await navigator.mediaDevices.getUserMedia({
         audio: false,
         video: {
-          facingMode: { ideal: "environment" },
+          facingMode: { ideal: facing },
           width: { ideal: 960 },
           height: { ideal: 720 },
           frameRate: { ideal: 30 },
@@ -200,7 +201,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
         setState("idle");
       }
     }
-  }, [onRecorded, release, state, stop]);
+  }, [facing, onRecorded, release, state, stop]);
 
-  return { video, state, error, repState, elapsed, start, stop, setError };
+  return { video, state, facing, setFacing, error, repState, elapsed, start, stop, setError };
 }

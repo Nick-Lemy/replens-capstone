@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Camera, Film, ScanLine, Upload, X } from "lucide-react";
+import { Film, ScanLine, Upload, X } from "lucide-react";
 import { Button, Notice, seconds } from "../shared/UI";
 
 export function VideoInput({
@@ -18,7 +18,6 @@ export function VideoInput({
   canStart: boolean;
 }) {
   const picker = useRef<HTMLInputElement>(null);
-  const cameraPicker = useRef<HTMLInputElement>(null);
   const [error, setError] = useState("");
   const [duration, setDuration] = useState<number | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -45,22 +44,9 @@ export function VideoInput({
       <input
         ref={picker}
         type="file"
-        accept="video/mp4,video/quicktime,video/webm,.m4v"
+        accept="video/*,.mov,.m4v"
         className="sr-only"
         aria-label="Choose a curl video"
-        disabled={busy}
-        onChange={(e) => {
-          choose(e.target.files?.[0]);
-          e.target.value = "";
-        }}
-      />
-      <input
-        ref={cameraPicker}
-        type="file"
-        accept="video/*"
-        capture="environment"
-        className="sr-only"
-        aria-label="Record a curl video"
         disabled={busy}
         onChange={(e) => {
           choose(e.target.files?.[0]);
@@ -86,23 +72,10 @@ export function VideoInput({
             <Upload size={30} strokeWidth={1.7} className="mb-5 text-accent" />
             <span className="text-base font-semibold">Upload your curl set</span>
             <span className="mt-2 text-sm text-muted">Keep both arms visible.</span>
-            <div className="mt-6 flex w-full max-w-sm flex-col gap-2 sm:flex-row">
-              <Button
-                className="w-full"
-                onClick={() => cameraPicker.current?.click()}
-              >
-                <Camera size={17} />
-                Record video
-              </Button>
-              <Button
-                secondary
-                className="w-full"
-                onClick={() => picker.current?.click()}
-              >
-                <Upload size={17} />
-                Choose video
-              </Button>
-            </div>
+            <Button className="mt-6 w-full max-w-sm" onClick={() => picker.current?.click()}>
+              <Upload size={17} />
+              Choose video
+            </Button>
             <span className="mt-4 text-xs text-muted">
               MP4, MOV or WebM · Up to 3 minutes
             </span>

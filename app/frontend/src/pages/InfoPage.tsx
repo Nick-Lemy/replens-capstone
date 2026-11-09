@@ -76,6 +76,10 @@ export function InfoPage({
           unclear, RepLens shows that an estimate is unavailable.
         </p>
         <p className="text-sm leading-6 text-muted">
+          The live camera shows a provisional rep count. Fatigue estimates appear
+          after the recorded set is analyzed.
+        </p>
+        <p className="text-sm leading-6 text-muted">
           This is an indirect estimate based on movement, not a physiological
           measurement or a guarantee that another rep is safe.
         </p>
