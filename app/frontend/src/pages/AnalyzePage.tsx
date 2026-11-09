@@ -5,7 +5,7 @@ import { ModelSelector } from "../components/analyze/ModelSelector";
 import { Notice } from "../components/shared/UI";
 import { LiveCamera } from "../components/analyze/LiveCamera";
 import { useState } from "react";
-import { ArrowUpRight, Camera, Dumbbell, ScanLine, Sparkles } from "lucide-react";
+import { ArrowUpRight, Camera, ScanLine, Sparkles } from "lucide-react";
 import type { ModelChoice, ModelCatalog, AnalysisJob } from "../lib/types";
 
 export function AnalyzePage({
@@ -53,15 +53,17 @@ export function AnalyzePage({
           be to your lifting limit, rep by rep.
         </p>
       </div>
-      <section className="relative overflow-hidden rounded-[28px] border border-line bg-stage p-6 text-white sm:p-8">
-        <div className="pointer-events-none absolute -right-16 -top-16 size-64 rounded-full border border-white/10" />
-        <div className="pointer-events-none absolute -right-6 -top-6 size-48 rounded-full border border-white/10" />
-        <div className="pointer-events-none absolute bottom-0 right-0 h-40 w-2/3 bg-[radial-gradient(ellipse_at_bottom_right,rgba(248,198,37,.27),transparent_70%)]" />
+      <section className="relative min-h-[280px] overflow-hidden rounded-[28px] border border-line bg-stage p-6 text-white sm:min-h-[300px] sm:p-8">
+        <img
+          src="/curl-hero.webp"
+          alt="Athlete lifting dumbbells in a gym"
+          className="absolute inset-0 size-full object-cover object-[65%_center]"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,14,.93)_0%,rgba(10,11,14,.79)_38%,rgba(10,11,14,.15)_100%)]" />
         <div className="relative flex items-start justify-between gap-4">
           <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white/80"><Sparkles size={13} className="text-accent" /> Featured workout</span>
-          <Dumbbell size={72} strokeWidth={1.1} className="rotate-[-22deg] text-white/30 sm:size-24" aria-hidden="true" />
         </div>
-        <div className="relative mt-5">
+        <div className="relative mt-11">
           <p className="text-xs font-semibold uppercase tracking-[.14em] text-accent">Curl analysis</p>
           <h2 className="mt-2 text-2xl font-bold tracking-[-.04em] sm:text-3xl">Your effort, in focus.</h2>
           <p className="mt-2 max-w-sm text-sm leading-6 text-white/65">Capture one complete set. Review your reps, pace, and fatigue-related estimate.</p>
