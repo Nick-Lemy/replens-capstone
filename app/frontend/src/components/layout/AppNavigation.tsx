@@ -10,7 +10,7 @@ type Props = {
 
 export function AppHeader({ tab, setTab, onAccount }: Props) {
   return (
-    <header className="sticky top-0 z-30 bg-page/90 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
+    <header className="sticky top-0 z-30 bg-page pt-[env(safe-area-inset-top)]">
       <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:h-20 sm:px-8">
         <button
           aria-label="RepLens home"
