@@ -1,4 +1,4 @@
-import { Film, Trash2 } from "lucide-react";
+import { ArrowUpRight, Dumbbell, Trash2 } from "lucide-react";
 import type { SavedSession } from "../../lib/types";
 import { Button, seconds } from "../shared/UI";
 
@@ -20,17 +20,17 @@ export function SessionCard({
   onConfirmRemove: () => void;
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-line bg-panel">
+    <div className="surface-card overflow-hidden transition hover:border-accent/50">
       <div className="flex items-center gap-3 p-4">
         <button
           onClick={() => onOpen(session)}
           className="flex min-w-0 flex-1 items-center gap-4 text-left"
         >
-          <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-soft">
-            <Film size={20} strokeWidth={1.5} />
+          <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-[radial-gradient(circle_at_top_right,rgba(168,170,247,.25),transparent_75%)] text-accent">
+            <Dumbbell size={23} strokeWidth={1.6} />
           </span>
           <div className="min-w-0">
-            <p className="truncate text-sm font-medium">{session.title}</p>
+            <p className="truncate text-sm font-semibold">{session.title}</p>
             <p className="mt-1 text-xs text-muted">
               {new Date(session.createdAt).toLocaleDateString(undefined, {
                 month: "short",
@@ -52,6 +52,7 @@ export function SessionCard({
             )}
           </div>
         </button>
+        <ArrowUpRight size={17} className="shrink-0 text-muted" aria-hidden="true" />
         <button
           aria-label={`Delete ${session.title}`}
           onClick={onToggleConfirm}

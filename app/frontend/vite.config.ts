@@ -9,13 +9,12 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "prompt",
-      includeAssets: ["icon.svg"],
       manifest: {
         name: "RepLens",
         short_name: "RepLens",
         description: "Explore your curl set",
-        theme_color: "#fafafa",
-        background_color: "#fafafa",
+        theme_color: "#17191e",
+        background_color: "#17191e",
         display: "standalone",
         start_url: "/",
         icons: [

@@ -21,7 +21,7 @@ export function ModelSelector({
   return (
     <fieldset
       disabled={busy}
-      className="space-y-3 rounded-2xl border border-line bg-panel p-5"
+      className="space-y-3"
     >
       <legend className="px-1 text-sm font-medium">Prediction model</legend>
       <p className="text-xs leading-5 text-muted">

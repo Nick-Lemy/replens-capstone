@@ -16,7 +16,7 @@ export function PredictionChart({
   return (
     <>
       {!!valid.length && (
-        <section className="rounded-2xl border border-line bg-panel p-5">
+        <section className="surface-card p-5">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-medium">Estimated reps remaining</h2>
             <span className="text-xs text-muted">Tap a rep</span>
@@ -57,8 +57,8 @@ export function PredictionChart({
                     y1={y(result.reps[i].rir!)}
                     x2={x(i + 1)}
                     y2={y(r.rir)}
-                    className="stroke-ink"
-                    strokeWidth="1.5"
+                    className="stroke-accent"
+                    strokeWidth="2.5"
                   />
                 ) : null,
               )}
@@ -70,7 +70,7 @@ export function PredictionChart({
                     cx={x(i)}
                     cy={y(r.rir)}
                     r={i === selected ? 4.5 : 3}
-                    className="fill-ink"
+                    className="fill-accent"
                   />
                 ),
             )}

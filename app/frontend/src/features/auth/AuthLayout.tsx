@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowUpRight, ScanLine } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { ThemeSwitch } from "../../components/shared/UI";
 
@@ -10,7 +10,7 @@ type Props = {
 export function AuthLayout({ children, onExit }: Props) {
   return (
     <div className="min-h-dvh bg-page text-ink">
-      <header className="sticky top-0 z-30 border-b border-line bg-page/95 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 bg-page/90 backdrop-blur-xl">
         <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-5 sm:px-8">
           <button
             type="button"
@@ -18,11 +18,9 @@ export function AuthLayout({ children, onExit }: Props) {
             className="flex items-center gap-2.5"
             aria-label="Return to RepLens"
           >
-            <span className="grid size-8 place-items-center rounded-[10px] bg-ink text-page">
-              <ScanLine size={19} strokeWidth={1.6} />
-            </span>
+            <img src="/icon-192.png" alt="" className="size-9 rounded-[11px]" />
             <span className="text-lg font-semibold tracking-[-.055em]">
-              RepLens<span className="text-muted">.</span>
+              RepLens<span className="text-accent">.</span>
             </span>
           </button>
           <div className="flex items-center gap-2">
@@ -40,12 +38,12 @@ export function AuthLayout({ children, onExit }: Props) {
       </header>
 
       <main className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-10 sm:px-8 lg:min-h-[calc(100dvh-4.5rem)] lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-20 lg:py-12">
-        <aside className="relative hidden min-h-[600px] overflow-hidden rounded-[2rem] bg-stage p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <aside className="relative hidden min-h-[600px] overflow-hidden rounded-2xl border border-line bg-stage p-10 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="absolute -right-30 -top-30 size-100 rounded-full border border-white/12" />
           <div className="absolute -right-18 -top-18 size-76 rounded-full border border-white/12" />
           <div className="absolute right-3 top-3 size-44 rounded-full border border-white/12" />
           <div className="relative flex items-center gap-2 text-xs font-medium uppercase tracking-[.2em] text-white/60">
-            <span className="size-2 rounded-full bg-lime-300" />
+            <span className="size-2 rounded-full bg-accent" />
             Make each rep count
           </div>
           <div className="relative max-w-sm space-y-6">
@@ -57,7 +55,7 @@ export function AuthLayout({ children, onExit }: Props) {
                 (height, index) => (
                   <span
                     key={index}
-                    className={`w-4 rounded-full ${index > 8 ? "bg-lime-300" : "bg-white/35"}`}
+                    className={`w-4 rounded-full ${index > 8 ? "bg-accent" : "bg-white/35"}`}
                     style={{ height }}
                   />
                 ),

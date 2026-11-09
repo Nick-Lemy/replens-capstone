@@ -24,7 +24,7 @@ export function RepSelector({
                 key={r.rep}
                 onClick={() => seek(i)}
                 aria-pressed={i === selected}
-                className={`min-h-12 min-w-14 shrink-0 rounded-xl border px-3 text-sm tabular-nums transition ${i === selected ? "border-ink bg-ink text-page" : "border-line bg-panel text-muted hover:text-ink"}`}
+                className={`min-h-12 min-w-14 shrink-0 rounded-xl border px-3 text-sm tabular-nums transition ${i === selected ? "border-accent bg-accent text-accent-ink" : "border-line bg-panel text-muted hover:border-accent/50 hover:text-ink"}`}
               >
                 {r.rep}
               </button>

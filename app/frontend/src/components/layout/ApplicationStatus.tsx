@@ -3,6 +3,7 @@ import { useRegisterSW } from "virtual:pwa-register/react";
 import type { AnalysisJob } from "../../lib/types";
 import type { InstallPrompt } from "../../hooks/useBrowserStatus";
 import { Button, Notice } from "../shared/UI";
+import type { AppTab } from "../../lib/navigation";
 
 export function PwaUpdateNotice({ busy }: { busy: boolean }) {
   const {
@@ -45,8 +46,8 @@ export function ApplicationStatusNotices({
   online: boolean;
   healthError: boolean;
   busy: boolean;
-  tab: "analyze" | "history";
-  setTab: (tab: "analyze" | "history") => void;
+  tab: AppTab;
+  setTab: (tab: AppTab) => void;
   message: string;
   clearMessage: () => void;
   errors: unknown[];
@@ -54,19 +55,19 @@ export function ApplicationStatusNotices({
 }) {
   return (
     <>
-      {!online && (
+      {!online && tab === "analyze" && (
         <Notice>
           You’re offline. Saved sessions still work. Connect to analyze a new
           video.
         </Notice>
       )}
-      {healthError && online && (
+      {healthError && online && tab === "analyze" && (
         <Notice>
           The analyzer is offline. Start the backend or check its URL. Your
           saved sessions are still available.
         </Notice>
       )}
-      {busy && tab === "history" && (
+      {busy && tab !== "analyze" && (
         <Notice>
           <button
             onClick={() => setTab("analyze")}
@@ -84,7 +85,9 @@ export function ApplicationStatusNotices({
             : "Something went wrong. Please try again."}
         </Notice>
       ))}
-      {job?.state === "failed" && <Notice>{job.message}</Notice>}
+      {job?.state === "failed" && tab === "analyze" && (
+        <Notice>{job.message}</Notice>
+      )}
     </>
   );
 }
@@ -101,7 +104,7 @@ export function InstallAppPrompt({
   return (
     <>
       {install && !busy && (
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-line p-4">
+        <div className="flex items-center justify-between gap-4 rounded-xl border border-line p-4">
           <div>
             <p className="text-sm font-medium">Keep RepLens close.</p>
             <p className="mt-1 text-xs text-muted">

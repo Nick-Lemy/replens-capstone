@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { Camera, Film, Plus, ScanLine, X } from "lucide-react";
+import { ArrowUpRight, Camera, Film, ScanLine, Upload, X } from "lucide-react";
 import { Button, Notice, seconds } from "../shared/UI";
 
 export function VideoInput({
@@ -69,7 +69,8 @@ export function VideoInput({
       />
       {!file ? (
         <div
-          className={`rounded-3xl border bg-panel p-2 transition-colors ${dragging ? "border-ink" : "border-line"}`}
+          id="video-input"
+          className={`surface-card overflow-hidden p-2 transition-colors ${dragging ? "!border-accent" : ""}`}
           onDragOver={(e) => {
             e.preventDefault();
             setDragging(true);
@@ -81,15 +82,15 @@ export function VideoInput({
             choose(e.dataTransfer.files[0]);
           }}
         >
-          <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-[18px] bg-soft p-6 text-center sm:min-h-72">
-            <span className="mb-6 grid size-14 place-items-center rounded-2xl border border-line bg-panel shadow-sm">
-              <Plus size={24} strokeWidth={1.5} />
+          <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-xl bg-soft p-6 text-center sm:min-h-72">
+            <span className="mb-5 grid size-14 place-items-center rounded-xl bg-panel text-accent shadow-sm">
+              <Upload size={23} strokeWidth={1.7} />
             </span>
-            <span className="text-base font-medium">Add your curl set</span>
+            <span className="text-base font-semibold">Upload your curl set</span>
             <span className="mt-2 text-sm text-muted">
               Keep both arms visible from the first rep to the last.
             </span>
-            <div className="mt-6 flex w-full max-w-xs flex-col gap-2 sm:flex-row">
+            <div className="mt-6 flex w-full max-w-sm flex-col gap-2 sm:flex-row">
               <Button
                 className="w-full"
                 onClick={() => cameraPicker.current?.click()}
@@ -102,7 +103,7 @@ export function VideoInput({
                 className="w-full"
                 onClick={() => picker.current?.click()}
               >
-                <Plus size={17} />
+                <Upload size={17} />
                 Choose video
               </Button>
             </div>
@@ -110,14 +111,17 @@ export function VideoInput({
               MP4, MOV or WebM · Up to 3 minutes
             </span>
           </div>
-          <div className="flex items-center gap-2 px-3 py-3 text-xs text-muted">
+          <div className="flex items-center justify-between gap-2 px-4 py-3 text-xs text-muted">
+            <span className="flex items-center gap-2">
             <Film size={14} />
-            <span>One complete set works best.</span>
+              One complete set works best.
+            </span>
+            <ArrowUpRight size={14} />
           </div>
         </div>
       ) : (
-        <section className="overflow-hidden rounded-3xl border border-line bg-panel p-2">
-          <div className="relative overflow-hidden rounded-[18px] bg-stage">
+        <section id="video-input" className="surface-card overflow-hidden p-2">
+          <div className="relative overflow-hidden rounded-xl bg-stage">
             <video
               src={url ?? undefined}
               controls

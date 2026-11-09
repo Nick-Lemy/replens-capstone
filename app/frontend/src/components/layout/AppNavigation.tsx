@@ -1,41 +1,60 @@
-import { ScanLine, Clock3 } from "lucide-react";
+import { ScanLine, Clock3, UserRound, CircleHelp } from "lucide-react";
 import { ThemeSwitch } from "../shared/UI";
+import type { AppTab } from "../../lib/navigation";
 
-type Tab = "analyze" | "history";
-type Props = { tab: Tab; setTab: (tab: Tab) => void; accountName?: string; onAccount?: () => void };
+type Props = {
+  tab: AppTab;
+  setTab: (tab: AppTab) => void;
+  onAccount?: () => void;
+};
 
-export function AppHeader({ tab, setTab, accountName, onAccount }: Props) {
+export function AppHeader({ tab, setTab, onAccount }: Props) {
   return (
-    <header className="sticky top-0 z-30 border-b border-line bg-page/95 backdrop-blur-xl">
-      <div className="mx-auto flex h-18 max-w-5xl items-center justify-between px-5 sm:px-8">
+    <header className="sticky top-0 z-30 bg-page/90 pt-[env(safe-area-inset-top)] backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-5xl items-center justify-between px-5 sm:h-20 sm:px-8">
         <button
           aria-label="RepLens home"
           onClick={() => {
             setTab("analyze");
           }}
-          className="flex items-center gap-2.5"
+          className="flex items-center gap-3 text-left"
         >
-          <span className="grid size-8 place-items-center rounded-[10px] bg-ink text-page">
-            <ScanLine size={19} strokeWidth={1.6} />
-          </span>
-          <span className="text-lg font-semibold tracking-[-.055em]">
-            RepLens<span className="text-muted">.</span>
+          <img
+            src="/icon-192.png"
+            alt=""
+            className="size-11 rounded-xl"
+          />
+          <span>
+            <span className="block text-lg font-semibold leading-tight tracking-[-.025em]">
+              RepLens<span className="text-accent">.</span>
+            </span>
+            <span className="block text-[10px] leading-tight text-muted">
+              Train with a clearer view
+            </span>
           </span>
         </button>
-        <div className="hidden items-center gap-1 rounded-full bg-soft p-1 sm:flex">
-          {(["analyze", "history"] as const).map((t) => (
+        <div className="hidden items-center gap-1 rounded-xl border border-line bg-panel p-1 sm:flex">
+          {(["analyze", "history", "info", "account"] as const).map((t) => (
             <button
               key={t}
               onClick={() => setTab(t)}
               aria-current={tab === t ? "page" : undefined}
-              className={`rounded-full px-4 py-2 text-xs font-medium transition ${tab === t ? "bg-panel text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+              className={`rounded-lg px-4 py-2 text-xs font-semibold transition ${tab === t ? "bg-accent text-accent-ink" : "text-muted hover:text-ink"}`}
             >
-              {t === "analyze" ? "Predict" : "History"}
+              {t === "analyze" ? "Predict" : t.charAt(0).toUpperCase() + t.slice(1)}
             </button>
           ))}
         </div>
         <div className="flex items-center gap-2">
-          {onAccount && <button onClick={onAccount} className="rounded-full border border-line px-3 py-2 text-xs font-medium hover:bg-soft">{accountName ?? "Sign in"}</button>}
+          {onAccount && (
+            <button
+              onClick={onAccount}
+              aria-label="Open account"
+              className="grid size-11 place-items-center rounded-xl border border-line bg-panel text-accent hover:border-accent/60 sm:hidden"
+            >
+              <UserRound size={18} />
+            </button>
+          )}
           <ThemeSwitch />
         </div>
       </div>
@@ -47,23 +66,26 @@ export function AppNavigation({ tab, setTab }: Props) {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-0 z-20 border-t border-line bg-page/95 pb-[env(safe-area-inset-bottom)] backdrop-blur-xl sm:hidden"
+      className="fixed inset-x-0 bottom-[calc(12px+env(safe-area-inset-bottom))] z-20 px-5 sm:hidden"
     >
-      <div className="mx-auto grid h-17 max-w-md grid-cols-2">
+      <div className="mx-auto grid h-[68px] max-w-[320px] grid-cols-4 rounded-full border border-line bg-panel/95 p-1 shadow-[0_18px_45px_rgba(0,0,0,.3)] backdrop-blur-xl">
         {(
           [
             { id: "analyze", label: "Predict", Icon: ScanLine },
             { id: "history", label: "History", Icon: Clock3 },
+            { id: "info", label: "Info", Icon: CircleHelp },
+            { id: "account", label: "Account", Icon: UserRound },
           ] as const
         ).map(({ id, label, Icon }) => (
           <button
             key={id}
             onClick={() => setTab(id)}
             aria-current={tab === id ? "page" : undefined}
-            className={`flex flex-col items-center justify-center gap-1.5 text-[10px] font-medium transition ${tab === id ? "text-ink" : "text-muted"}`}
+            aria-label={label}
+            title={label}
+            className={`flex items-center justify-center rounded-full transition ${tab === id ? "bg-accent text-accent-ink" : "text-muted hover:text-ink"}`}
           >
-            <Icon size={21} strokeWidth={tab === id ? 1.9 : 1.5} />
-            {label}
+            <Icon size={21} strokeWidth={tab === id ? 2 : 1.6} />
           </button>
         ))}
       </div>

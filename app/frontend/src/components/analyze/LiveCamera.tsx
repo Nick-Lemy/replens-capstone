@@ -24,7 +24,7 @@ export function LiveCamera({
   }, [camera.state, onActivityChange]);
 
   return (
-    <section className="space-y-4 rounded-3xl border border-line bg-panel p-3 sm:p-5">
+    <section className="space-y-4 rounded-2xl border border-line bg-panel p-3 sm:p-5">
       <div className="flex items-start justify-between gap-4 px-1">
         <div>
           <h2 className="text-lg font-semibold tracking-tight">Live camera</h2>
@@ -44,7 +44,7 @@ export function LiveCamera({
         )}
       </div>
 
-      <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-stage sm:aspect-video">
+      <div className="relative aspect-4/3 overflow-hidden rounded-xl bg-stage sm:aspect-video">
         <video
           ref={camera.video}
           muted
@@ -60,7 +60,7 @@ export function LiveCamera({
           </div>
         )}
         {active && (
-          <div className="absolute bottom-3 left-3 rounded-2xl bg-black/80 px-4 py-3 text-white">
+          <div className="absolute bottom-3 left-3 rounded-xl bg-black/80 px-4 py-3 text-white">
             <span className="block text-[11px] text-white/70">
               Provisional reps
             </span>

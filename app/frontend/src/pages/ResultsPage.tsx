@@ -48,16 +48,16 @@ export function ResultsPage({
     <div className="animate-enter space-y-6">
       <button
         onClick={onBack}
-        className="flex min-h-10 items-center gap-1 text-sm text-muted hover:text-ink"
+        className="flex min-h-10 items-center gap-1 text-sm font-medium text-muted hover:text-accent"
       >
         <ChevronLeft size={16} />
         Predict
       </button>
       <div className="flex items-end justify-between gap-3">
         <div>
-          <p className="mb-2 text-sm text-muted">Your set, in focus</p>
-          <h1 className="text-3xl font-semibold tracking-[-.04em]">
-            Your fatigue outlook
+          <p className="eyebrow mb-2">Your set, in focus</p>
+          <h1 className="text-[32px] font-semibold tracking-[-.035em] sm:text-[42px]">
+            Your set review<span className="text-accent">.</span>
           </h1>
         </div>
         <span className="pb-1 text-xs text-muted">
@@ -87,7 +87,7 @@ export function ResultsPage({
       )}
       <PredictionChart result={result} selected={selected} />
       <RepSelector result={result} selected={selected} seek={seek} />
-      <details className="rounded-2xl border border-line bg-panel p-4">
+      <details className="surface-card p-5">
         <summary className="cursor-pointer text-sm font-medium">
           Check your rep count (optional)
         </summary>
