@@ -13,6 +13,7 @@ RepLens is a mobile-friendly research app that estimates proximity to muscle fat
 
 | Area | Requirements |
 | --- | --- |
+| Docker run | Docker Engine and Docker Compose; no host Python, Node or PostgreSQL installation |
 | Local development | Python 3.12, Node.js 24, pnpm 11.25.0, FFmpeg and `ffprobe` |
 | Backend | FastAPI 0.162, OpenCV 5.0, MediaPipe 1.1, NumPy 2.5 |
 | Frontend | React 19, TypeScript 7, Vite 8, Tailwind CSS 4, TanStack Query 5 |
@@ -23,6 +24,20 @@ RepLens is a mobile-friendly research app that estimates proximity to muscle fat
 The application models are bundled as JSON. The app does not require the notebook dependencies or private training videos. Installing the PWA requires HTTPS or localhost.
 
 ## Installation and local run
+
+With Docker running, start the frontend, backend and a local PostgreSQL database from the repository root:
+
+```sh
+docker compose up --build
+```
+
+Open **http://localhost:5173**. API documentation is at **http://localhost:8000/docs**. The first build downloads the public pose model. PostgreSQL data stays in a Docker volume. Stop the stack with `docker compose down`.
+
+If either host port is taken, set `REPLENS_FRONTEND_PORT` and `REPLENS_API_PORT` in `.env` before starting Compose.
+
+Accounts also need email credentials. To enable them locally, copy `compose.env.example` to `.env`, set `JWT_SECRET`, `RESEND_API_KEY` and `EMAIL_FROM`, then restart the stack. The `.env` file is ignored by Git. Compose uses its own PostgreSQL container; production still uses Neon.
+
+### Run without Docker
 
 Install FFmpeg first: `brew install ffmpeg` on macOS or `sudo apt-get install ffmpeg libgl1` on Ubuntu.
 
