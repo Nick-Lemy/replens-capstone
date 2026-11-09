@@ -19,9 +19,11 @@ export function AppHeader({ tab, setTab, onAccount }: Props) {
           }}
           className="flex items-center gap-3 text-left"
         >
-          <span className="grid size-11 place-items-center rounded-xl bg-accent text-accent-ink shadow-[0_8px_24px_rgba(248,198,37,.18)]">
-            <ScanLine size={21} strokeWidth={2} />
-          </span>
+          <img
+            src="/icon-192.png"
+            alt=""
+            className="size-11 rounded-xl"
+          />
           <span>
             <span className="block text-lg font-semibold leading-tight tracking-[-.025em]">
               RepLens<span className="text-accent">.</span>
@@ -66,7 +68,7 @@ export function AppNavigation({ tab, setTab }: Props) {
       aria-label="Main navigation"
       className="fixed inset-x-0 bottom-[calc(12px+env(safe-area-inset-bottom))] z-20 px-5 sm:hidden"
     >
-      <div className="mx-auto grid h-[68px] max-w-[320px] grid-cols-4 rounded-2xl border border-line bg-panel/95 p-1 shadow-[0_18px_45px_rgba(0,0,0,.3)] backdrop-blur-xl">
+      <div className="mx-auto grid h-[68px] max-w-[320px] grid-cols-4 rounded-full border border-line bg-panel/95 p-1 shadow-[0_18px_45px_rgba(0,0,0,.3)] backdrop-blur-xl">
         {(
           [
             { id: "analyze", label: "Predict", Icon: ScanLine },
@@ -81,7 +83,7 @@ export function AppNavigation({ tab, setTab }: Props) {
             aria-current={tab === id ? "page" : undefined}
             aria-label={label}
             title={label}
-            className={`flex items-center justify-center rounded-xl transition ${tab === id ? "bg-accent text-accent-ink" : "text-muted hover:text-ink"}`}
+            className={`flex items-center justify-center rounded-full transition ${tab === id ? "bg-accent text-accent-ink" : "text-muted hover:text-ink"}`}
           >
             <Icon size={21} strokeWidth={tab === id ? 2 : 1.6} />
           </button>

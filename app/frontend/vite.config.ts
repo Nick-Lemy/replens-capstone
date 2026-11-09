@@ -9,7 +9,6 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "prompt",
-      includeAssets: ["icon.svg"],
       manifest: {
         name: "RepLens",
         short_name: "RepLens",

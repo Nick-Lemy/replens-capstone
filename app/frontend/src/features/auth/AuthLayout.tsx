@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowUpRight, ScanLine } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import type { ReactNode } from "react";
 import { ThemeSwitch } from "../../components/shared/UI";
 
@@ -18,9 +18,7 @@ export function AuthLayout({ children, onExit }: Props) {
             className="flex items-center gap-2.5"
             aria-label="Return to RepLens"
           >
-            <span className="grid size-9 place-items-center rounded-[11px] bg-accent text-accent-ink">
-              <ScanLine size={19} strokeWidth={1.6} />
-            </span>
+            <img src="/icon-192.png" alt="" className="size-9 rounded-[11px]" />
             <span className="text-lg font-semibold tracking-[-.055em]">
               RepLens<span className="text-accent">.</span>
             </span>

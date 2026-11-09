@@ -33,8 +33,8 @@
     --line: #e5e5e1;
     --soft: #ecece8;
     --stage: #202228;
-    --accent: #f8c625;
-    --accent-ink: #17191d;
+    --accent: #5756b3;
+    --accent-ink: #ffffff;
     color-scheme: light;
 }
 
@@ -46,8 +46,8 @@
     --line: #343840;
     --soft: #2d3038;
     --stage: #111318;
-    --accent: #f8c625;
-    --accent-ink: #17191d;
+    --accent: #a8aaf7;
+    --accent-ink: #17191e;
     color-scheme: dark;
 }
 
@@ -68,7 +68,7 @@
         inset: 0 0 auto;
         height: 26rem;
         pointer-events: none;
-        background: radial-gradient(ellipse at 75% 5%, rgb(248 198 37 / 7%), transparent 60%);
+        background: radial-gradient(ellipse at 75% 5%, rgb(168 170 247 / 9%), transparent 60%);
     }
 
     button,
