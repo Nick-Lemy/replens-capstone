@@ -159,6 +159,12 @@ export default function App() {
         account={auth.account}
         onExit={closeAuth}
         onAuthenticated={refreshAuth}
+        onVerified={() => {
+          window.history.replaceState({}, "", "/#analyze");
+          setTab("analyze");
+          setAuthOpen(false);
+          setMessage("Email verified. Your account is ready.");
+        }}
         onLogout={async () => {
           await auth.logout.mutateAsync();
         }}
