@@ -18,7 +18,8 @@ export function AuthLayout({ children, onExit }: Props) {
             className="flex items-center gap-2.5"
             aria-label="Return to RepLens"
           >
-            <img src="/icon-192.png" alt="" className="size-9 rounded-[11px]" />
+            <img src="/icon-light-192.png" alt="" className="size-9 rounded-[11px] dark:hidden" />
+            <img src="/icon-192.png" alt="" className="hidden size-9 rounded-[11px] dark:block" />
             <span className="text-lg font-semibold tracking-[-.055em]">
               RepLens<span className="text-accent">.</span>
             </span>
@@ -62,11 +63,10 @@ export function AuthLayout({ children, onExit }: Props) {
               )}
             </div>
             <h2 className="text-4xl font-semibold leading-[1.08] tracking-[-.055em]">
-              Understand your set, one rep at a time.
+              Understand muscle fatigue, one rep at a time.
             </h2>
             <p className="max-w-xs text-sm leading-6 text-white/60">
-              Record a curl set, review the movement, and explore how close you
-              may be to your lifting limit.
+              Record a curl set and see how close you may be to your lifting limit.
             </p>
           </div>
           <div className="relative flex items-center gap-2 text-xs text-white/50">

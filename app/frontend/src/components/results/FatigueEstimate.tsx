@@ -5,7 +5,7 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
   if (!rep || rep.rir === null) {
     return (
       <section className="surface-card p-5" role="status">
-        <h2 className="text-sm font-medium">Fatigue-related estimate</h2>
+        <h2 className="text-sm font-medium">Muscle fatigue estimate</h2>
         <p className="mt-2 text-sm text-muted">
           {rep?.prediction_status === "building_history"
             ? "The first three reps build movement history. An estimate can appear after rep 4."
@@ -24,16 +24,15 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
           {nearLimit ? <CircleAlert size={18} /> : <Activity size={18} />}
         </span>
         <div>
-          <h2 className="text-sm font-medium">Fatigue-related estimate</h2>
+          <h2 className="text-sm font-medium">Muscle fatigue estimate</h2>
           <p className="mt-1 text-xl font-bold tracking-[-.03em]">
             {nearLimit
               ? "Estimated near your lifting limit"
               : "Reps remaining estimated"}
           </p>
           <p className="mt-2 text-xs leading-5 text-muted">
-            Based on predicted repetitions in reserve after rep {rep.rep}.
-            This does not directly measure muscle fatigue or confirm that
-            another rep is safe.
+            Based on estimated reps remaining after rep {rep.rep}. Use this as
+            guidance, not a guarantee that another rep is safe.
           </p>
         </div>
       </div>

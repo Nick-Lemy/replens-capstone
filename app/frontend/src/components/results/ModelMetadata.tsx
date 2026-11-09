@@ -11,8 +11,8 @@ export function ModelMetadata({ result }: { result: AnalysisResult }) {
           How this estimate works
         </summary>
         <p className="mt-3">
-          RepLens estimates how many complete reps remain from visible movement.
-          It does not directly measure muscle fatigue or confirm muscle failure.
+          RepLens estimates muscle fatigue from visible movement and the number
+          of complete reps likely remaining. It cannot confirm muscle failure.
         </p>
         {result.model && (
           <p className="mt-2">
