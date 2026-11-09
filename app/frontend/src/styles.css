@@ -52,9 +52,15 @@
 }
 
 @layer base {
+    html {
+        min-height: 100%;
+        background: var(--page);
+    }
+
     body {
         margin: 0;
         min-width: 320px;
+        min-height: 100dvh;
         font-family: var(--font-sans);
         font-weight: 400;
         letter-spacing: 0;

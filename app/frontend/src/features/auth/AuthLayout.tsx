@@ -10,7 +10,7 @@ type Props = {
 export function AuthLayout({ children, onExit }: Props) {
   return (
     <div className="min-h-dvh bg-page text-ink">
-      <header className="sticky top-0 z-30 bg-page/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-30 bg-page pt-[env(safe-area-inset-top)]">
         <div className="mx-auto flex h-18 max-w-6xl items-center justify-between px-5 sm:px-8">
           <button
             type="button"
