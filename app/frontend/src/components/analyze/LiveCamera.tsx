@@ -1,4 +1,4 @@
-import { Camera, CircleDot, ScanLine, Square } from "lucide-react";
+import { Camera, CircleDot, Square, SwitchCamera } from "lucide-react";
 import { useLiveCamera } from "../../features/live/useLiveCamera";
 import { Button, Notice, seconds } from "../shared/UI";
 import { useEffect } from "react";
@@ -25,14 +25,8 @@ export function LiveCamera({
 
   return (
     <section className="space-y-4 rounded-2xl border border-line bg-panel p-3 sm:p-5">
-      <div className="flex items-start justify-between gap-4 px-1">
-        <div>
-          <h2 className="text-lg font-semibold tracking-tight">Live camera</h2>
-          <p className="mt-1 text-sm leading-5 text-muted">
-            See a provisional rep count as you curl. Finish the set to analyze
-            the recording.
-          </p>
-        </div>
+      <div className="flex items-center justify-between gap-4 px-1">
+        <h2 className="text-lg font-semibold tracking-tight">Live camera</h2>
         {camera.state === "idle" && (
           <button
             type="button"
@@ -44,46 +38,44 @@ export function LiveCamera({
         )}
       </div>
 
-      <div className="relative aspect-4/3 overflow-hidden rounded-xl bg-stage sm:aspect-video">
+      <div className="flex min-h-60 items-center justify-center overflow-hidden rounded-xl bg-stage">
         <video
           ref={camera.video}
           muted
           playsInline
           autoPlay
-          className="h-full w-full object-contain"
+          className="block max-h-[65dvh] w-full object-contain"
           aria-label="Live camera preview"
         />
-        {active && (
-          <div className="absolute left-3 top-3 flex items-center gap-2 rounded-full bg-black/75 px-3 py-1.5 text-xs font-medium text-white">
-            <CircleDot size={13} className="text-red-400" />
-            Recording · {seconds(camera.elapsed)}
-          </div>
-        )}
-        {active && (
-          <div className="absolute bottom-3 left-3 rounded-xl bg-black/80 px-4 py-3 text-white">
-            <span className="block text-[11px] text-white/70">
-              Provisional reps
-            </span>
-            <strong className="text-3xl tabular-nums">
-              {camera.repState.count}
-            </strong>
-          </div>
-        )}
       </div>
 
       {active && (
-        <div
-          role="status"
-          className="flex items-center gap-2 text-xs text-muted"
-        >
-          <ScanLine size={16} />
-          {camera.repState.tracking
-            ? "Both arms visible · count complete up-and-down curls"
-            : "Keep both shoulders, elbows and wrists in view"}
+        <div className="flex items-end justify-between gap-3 px-1" role="status">
+          <div>
+            <strong className="text-3xl tabular-nums">{camera.repState.count}</strong>
+            <span className="ml-2 text-sm text-muted">reps</span>
+          </div>
+          <span className="flex items-center gap-1.5 pb-1 text-xs text-muted">
+            <CircleDot size={13} className="text-red-400" />
+            {seconds(camera.elapsed)}
+          </span>
         </div>
+      )}
+      {active && !camera.repState.tracking && (
+        <p className="px-1 text-xs text-muted">Keep both arms in view.</p>
       )}
       {camera.error && (
         <Notice onClose={() => camera.setError("")}>{camera.error}</Notice>
+      )}
+      {camera.state === "idle" && (
+        <button
+          type="button"
+          onClick={() => camera.setFacing(camera.facing === "environment" ? "user" : "environment")}
+          className="flex min-h-11 items-center gap-2 px-1 text-sm font-medium text-accent"
+        >
+          <SwitchCamera size={18} />
+          Use {camera.facing === "environment" ? "front" : "rear"} camera
+        </button>
       )}
       {camera.state === "idle" ? (
         <Button className="w-full" onClick={() => void camera.start()}>
@@ -92,11 +84,11 @@ export function LiveCamera({
         </Button>
       ) : camera.state === "starting" ? (
         <Button className="w-full" busy>
-          Starting camera and tracker
+          Starting camera…
         </Button>
       ) : camera.state === "stopping" ? (
         <Button className="w-full" busy>
-          Preparing recording
+          Saving video…
         </Button>
       ) : (
         <Button className="w-full" onClick={camera.stop}>
@@ -104,11 +96,6 @@ export function LiveCamera({
           Finish set
         </Button>
       )}
-      <p className="px-1 text-xs leading-5 text-muted">
-        Live counting is a preview and may miss reps. RIR is unavailable during
-        recording. The completed video is checked by the server; review its rep
-        count before using the result.
-      </p>
     </section>
   );
 }
