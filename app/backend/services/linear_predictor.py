@@ -86,14 +86,17 @@ class LinearPredictor:
         except ValueError as exc:
             return None, str(exc)
 
-    def predict(self, path, reps, progress, cancelled, pose_frames):
+    def predict(self, path, reps, progress, cancelled, pose_frames, motion_flows=None):
         metadata = {**self.metadata, "rep_quality": []}
         predictions = [None] * len(reps)
 
         if len(reps) < 4:
             return predictions, metadata
 
-        if self.metadata["family"] == "ridge_speed_only":
+        if motion_flows is not None:
+            original = motion_flows[False]
+            persistent = motion_flows.get(True)
+        elif self.metadata["family"] == "ridge_speed_only":
             original = pixel_motion(
                 path,
                 pose_frames,

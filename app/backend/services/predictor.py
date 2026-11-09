@@ -109,9 +109,12 @@ class Predictor:
             return delegate
 
     def predict(
-        self, path, reps, progress, cancelled, pose_frames=None, model_choice=None
+        self, path, reps, progress, cancelled, pose_frames=None, model_choice=None,
+        motion_flows=None,
     ):
         delegate = self.load(model_choice)
         if pose_frames is None:
             raise ValueError("Wrist locations are required for the signal model.")
-        return delegate.predict(path, reps, progress, cancelled, pose_frames)
+        return delegate.predict(
+            path, reps, progress, cancelled, pose_frames, motion_flows
+        )
