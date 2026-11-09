@@ -6,7 +6,13 @@ export type LiveRepState = {
   count: number;
   tracking: boolean;
   phase: Phase;
+  movement: "building" | "steady" | "slowing" | "unavailable";
 };
+
+function median(values: number[]) {
+  const ordered = [...values].sort((a, b) => a - b);
+  return ordered[Math.floor(ordered.length / 2)];
+}
 
 function bend(points: NormalizedLandmark[], side: "left" | "right") {
   const [shoulderIndex, elbowIndex, wristIndex] =
@@ -44,6 +50,18 @@ export class LiveRepCounter {
   private count = 0;
   private phaseSince = 0;
   private lastVisible = 0;
+  private durations: number[] = [];
+
+  private movement(tracking: boolean): LiveRepState["movement"] {
+    if (!tracking) return "unavailable";
+    if (this.durations.length < 5) return "building";
+
+    const early = median(this.durations.slice(0, 3));
+    const recent = median(this.durations.slice(-2));
+    return recent > early * 1.3 && recent - early > 250
+      ? "slowing"
+      : "steady";
+  }
 
   update(
     points: NormalizedLandmark[] | undefined,
@@ -57,7 +75,12 @@ export class LiveRepCounter {
       if (timestamp - this.lastVisible > 750) {
         this.phase = "seeking_start";
       }
-      return { count: this.count, tracking: false, phase: this.phase };
+      return {
+        count: this.count,
+        tracking: false,
+        phase: this.phase,
+        movement: this.movement(false),
+      };
     }
 
     this.lastVisible = timestamp;
@@ -78,6 +101,7 @@ export class LiveRepCounter {
         timestamp - this.phaseSince >= 650 &&
         timestamp - this.phaseSince < 12000
       ) {
+        this.durations.push(timestamp - this.phaseSince);
         this.count++;
       }
       this.phase = "lifting";
@@ -89,6 +113,11 @@ export class LiveRepCounter {
       this.phaseSince = timestamp;
     }
 
-    return { count: this.count, tracking: true, phase: this.phase };
+    return {
+      count: this.count,
+      tracking: true,
+      phase: this.phase,
+      movement: this.movement(true),
+    };
   }
 }

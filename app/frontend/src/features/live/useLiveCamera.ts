@@ -27,6 +27,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
     count: 0,
     tracking: false,
     phase: "seeking_start",
+    movement: "building",
   });
   const [elapsed, setElapsed] = useState(0);
   const video = useRef<HTMLVideoElement>(null);
@@ -36,6 +37,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
   const animation = useRef<number | null>(null);
   const startedAt = useRef(0);
   const lastSample = useRef(0);
+  const lastElapsedUpdate = useRef(0);
   const chunks = useRef<Blob[]>([]);
   const recordingFailed = useRef(false);
   const counter = useRef(new LiveRepCounter());
@@ -82,7 +84,7 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
     setState("starting");
     setError("");
     setElapsed(0);
-    setRepState({ count: 0, tracking: false, phase: "seeking_start" });
+    setRepState({ count: 0, tracking: false, phase: "seeking_start", movement: "building" });
     counter.current = new LiveRepCounter();
     chunks.current = [];
     recordingFailed.current = false;
@@ -155,13 +157,17 @@ export function useLiveCamera(onRecorded: (file: File) => void) {
       };
       startedAt.current = performance.now();
       lastSample.current = 0;
+      lastElapsedUpdate.current = 0;
       mediaRecorder.start(1000);
       setState("recording");
 
       const frame = (now: number) => {
         if (!mounted.current || recorder.current?.state !== "recording") return;
         const seconds = (now - startedAt.current) / 1000;
-        setElapsed(seconds);
+        if (now - lastElapsedUpdate.current >= 250) {
+          lastElapsedUpdate.current = now;
+          setElapsed(seconds);
+        }
         if (seconds >= 180) {
           stop();
           return;
