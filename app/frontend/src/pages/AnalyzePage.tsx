@@ -95,9 +95,7 @@ export function AnalyzePage({
           className="surface-card group flex w-full items-center gap-4 px-5 py-5 text-left transition hover:border-accent/60 hover:bg-soft"
           onClick={() => setLiveOpen(true)}
         >
-          <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">
-            <Camera size={21} />
-          </span>
+          <Camera size={26} strokeWidth={1.7} className="shrink-0 text-accent" />
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold">Open live camera</span>
           </span>

@@ -53,9 +53,7 @@ export function HistoryPage({
         </section>
       ) : !sessions.length ? (
         <section className="surface-card flex min-h-72 flex-col items-center justify-center p-7 text-center">
-          <span className="mb-5 grid size-12 place-items-center rounded-xl bg-accent text-accent-ink">
-            <Clock3 size={21} strokeWidth={1.5} />
-          </span>
+          <Clock3 size={34} strokeWidth={1.5} className="mb-5 text-accent" />
           <h2 className="font-medium">Room for your first set.</h2>
           <p className="mb-6 mt-2 max-w-xs text-sm leading-6 text-muted">
             Analyze a video, then save the result to find it here.
@@ -65,7 +63,7 @@ export function HistoryPage({
       ) : (
         <div className="space-y-3">
           <div className="surface-card flex items-center gap-4 p-5">
-            <span className="grid size-12 place-items-center rounded-xl bg-accent/15 text-accent"><TrendingUp size={22} /></span>
+            <TrendingUp size={26} strokeWidth={1.7} className="shrink-0 text-accent" />
             <div><p className="text-xs text-muted">Sets reviewed</p><p className="text-2xl font-semibold tracking-[-.02em]">{sessions.length}</p></div>
             <div className="ml-auto text-right"><p className="text-xs text-muted">Total reps</p><p className="text-2xl font-semibold tracking-[-.02em]">{sessions.reduce((sum, session) => sum + session.result.rep_count, 0)}</p></div>
           </div>

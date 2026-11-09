@@ -54,9 +54,7 @@ export function InfoPage({
           },
         ].map(({ icon: Icon, title, text }) => (
           <section key={title} className="surface-card p-5">
-            <span className="grid size-9 place-items-center rounded-lg bg-accent/15 text-accent">
-              <Icon size={18} />
-            </span>
+            <Icon size={23} strokeWidth={1.7} className="text-accent" />
             <h2 className="mt-4 text-sm font-semibold">{title}</h2>
             <p className="mt-1 text-xs leading-5 text-muted">{text}</p>
           </section>
