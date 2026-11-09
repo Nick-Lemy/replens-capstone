@@ -205,10 +205,89 @@ def pixel_motion_dual(video, pose_path, progress=None, cancelled=None):
     return tables[False], tables[True]
 
 
+class MotionTracker:
+    def __init__(self, modes, fps):
+        self.modes = modes
+        self.fps = fps
+        self.rows = {mode: [] for mode in modes}
+        self.previous = None
+        self.previous_time = None
+        self.previous_pose = None
+        self.tracked = {mode: {side: None for side in SIDES} for mode in modes}
+        if True in modes:
+            cv2.setRNGSeed(42)
+
+    def add(self, gray, time, current_pose):
+        previous = self.previous
+        previous_time = self.previous_time
+        previous_pose = self.previous_pose
+        tracked = self.tracked
+        modes = self.modes
+        if (
+            previous is not None
+            and previous_pose is not None
+            and 0 < time - previous_time < 1.5 / self.fps
+        ):
+            h, w = gray.shape
+            shoulders = (
+                previous_pose[POSE_PAIR["left", "shoulder"]]
+                - previous_pose[POSE_PAIR["right", "shoulder"]]
+            ) * [w, h]
+            width = float(np.linalg.norm(shoulders))
+            groups = {"background": _background_points(previous, previous_pose)}
+            for persistent in modes:
+                for side in SIDES:
+                    groups[persistent, side] = _wrist_points(
+                        previous,
+                        previous_pose,
+                        width,
+                        side,
+                        persistent,
+                        tracked[persistent][side],
+                    )
+            flows = _grouped_flow_vectors(previous, gray, groups)
+            affine, inlier_fraction, noise, width = _background_camera(
+                previous_pose, gray.shape, *flows["background"]
+            )
+            for persistent in modes:
+                item = {
+                    "time_s": time,
+                    "dt": time - previous_time,
+                    "shoulder_px": width,
+                    "camera_inliers": inlier_fraction,
+                    "background_error_px": noise,
+                }
+                _track_wrists(
+                    affine,
+                    inlier_fraction,
+                    persistent,
+                    tracked[persistent],
+                    item,
+                    flows,
+                )
+                self.rows[persistent].append(item)
+        else:
+            self.tracked = {mode: {side: None for side in SIDES} for mode in modes}
+        self.previous, self.previous_time, self.previous_pose = gray, time, current_pose
+
+    def tables(self):
+        return {mode: pd.DataFrame(self.rows[mode]) for mode in self.modes}
+
+
+def motion_pose(row):
+    values = []
+    for side in SIDES:
+        shoulder = np.array([row[f"{side}_shoulder_{axis}"] for axis in ("x", "y")])
+        values.extend(shoulder)
+        for joint in ("elbow", "wrist"):
+            relative = np.array([row[f"{side}_{joint}_{axis}"] for axis in ("x", "y")])
+            values.extend(shoulder + relative)
+    return np.asarray(values, dtype=float)
+
+
 def _pixel_motion_modes(video, pose, modes, progress, cancelled):
-    if True in modes:
-        cv2.setRNGSeed(42)
-    for side in ("left", "right"):
+    pose = pose.copy()
+    for side in SIDES:
         for joint in ("wrist", "elbow"):
             for axis in ("x", "y"):
                 pose[f"{side}_{joint}_{axis}"] += pose[f"{side}_shoulder_{axis}"]
@@ -219,11 +298,7 @@ def _pixel_motion_modes(video, pose, modes, progress, cancelled):
         raise ValueError(
             "Small-movement analysis needs at least 25 frames per second. Try a 30 fps video."
         )
-    rows = {mode: [] for mode in modes}
-    previous = None
-    previous_time = None
-    previous_pose = None
-    tracked = {mode: {side: None for side in SIDES} for mode in modes}
+    tracker = MotionTracker(modes, fps)
     pose_times = pose.time_s.to_numpy()
     pose_values = pose[POSE_COLUMNS].to_numpy(float)
     try:
@@ -260,55 +335,10 @@ def _pixel_motion_modes(video, pose, modes, progress, cancelled):
                 if abs(pose_times[index] - time) <= 1.5 / fps
                 else None
             )
-            if (
-                previous is not None
-                and previous_pose is not None
-                and 0 < time - previous_time < 1.5 / fps
-            ):
-                h, w = gray.shape
-                shoulders = (
-                    previous_pose[POSE_PAIR["left", "shoulder"]]
-                    - previous_pose[POSE_PAIR["right", "shoulder"]]
-                ) * [w, h]
-                width = float(np.linalg.norm(shoulders))
-                groups = {"background": _background_points(previous, previous_pose)}
-                for persistent in modes:
-                    for side in SIDES:
-                        groups[persistent, side] = _wrist_points(
-                            previous,
-                            previous_pose,
-                            width,
-                            side,
-                            persistent,
-                            tracked[persistent][side],
-                        )
-                flows = _grouped_flow_vectors(previous, gray, groups)
-                affine, inlier_fraction, noise, width = _background_camera(
-                    previous_pose, gray.shape, *flows["background"]
-                )
-                for persistent in modes:
-                    item = {
-                        "time_s": time,
-                        "dt": time - previous_time,
-                        "shoulder_px": width,
-                        "camera_inliers": inlier_fraction,
-                        "background_error_px": noise,
-                    }
-                    _track_wrists(
-                        affine,
-                        inlier_fraction,
-                        persistent,
-                        tracked[persistent],
-                        item,
-                        flows,
-                    )
-                    rows[persistent].append(item)
-            else:
-                tracked = {mode: {side: None for side in SIDES} for mode in modes}
-            previous, previous_time, previous_pose = gray, time, current_pose
+            tracker.add(gray, time, current_pose)
     finally:
         capture.release()
-    return {mode: pd.DataFrame(rows[mode]) for mode in modes}
+    return tracker.tables()
 
 
 def candidate_features(flow, start, end, rep_start):

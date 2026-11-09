@@ -6,10 +6,11 @@ import numpy as np
 import pandas as pd
 
 from ..config.settings import POSE_MODEL, ROOT
-from .rep_signals import _landmarks
+from .motion_features import MotionTracker, motion_pose
+from .pose_landmarks import extract_landmarks
 
 
-def track_pose(path: Path, progress, cancelled):
+def track_pose(path: Path, progress, cancelled, motion_modes=None):
     model_path = POSE_MODEL
     if not model_path.is_file():
         matches = list((ROOT / "training/models").rglob("*heavy*.task"))
@@ -37,6 +38,7 @@ def track_pose(path: Path, progress, cancelled):
         raise ValueError("Choose a single set lasting no more than 3 minutes.")
 
     rows, index, last_timestamp = [], 0, -1
+    motion = MotionTracker(motion_modes, fps) if motion_modes else None
 
     try:
         with mp.tasks.vision.PoseLandmarker.create_from_options(options) as detector:
@@ -57,6 +59,20 @@ def track_pose(path: Path, progress, cancelled):
                 h, w = frame.shape[:2]
                 if h * w > 17000000:
                     raise ValueError("Video resolution is too large. Export at 1080p.")
+                if motion is not None:
+                    scale = min(1.0, 1280 / max(frame.shape[:2]))
+                    motion_frame = (
+                        cv2.resize(
+                            frame,
+                            None,
+                            fx=scale,
+                            fy=scale,
+                            interpolation=cv2.INTER_AREA,
+                        )
+                        if scale < 1
+                        else frame
+                    )
+                    gray = cv2.cvtColor(motion_frame, cv2.COLOR_BGR2GRAY)
                 if w > 960:
                     frame = cv2.resize(frame, (960, round(h * 960 / w)))
 
@@ -64,15 +80,26 @@ def track_pose(path: Path, progress, cancelled):
                 pose = detector.detect_for_video(
                     mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb), timestamp
                 )
-                row = _landmarks(pose, rgb)
+                row = extract_landmarks(pose)
                 row["time_s"] = timestamp / 1000
                 rows.append(row)
+                if motion is not None:
+                    motion.add(
+                        gray,
+                        capture.get(cv2.CAP_PROP_POS_MSEC) / 1000,
+                        motion_pose(row),
+                    )
                 index += 1
 
                 if index % 30 == 0:
+                    progress_span = 88 if motion else 45
                     progress(
-                        5 + min(45, int(index / max(1, total) * 45)),
-                        "Finding completed curls",
+                        5 + min(progress_span, int(index / max(1, total) * progress_span)),
+                        (
+                            "Finding curls and measuring movement"
+                            if motion
+                            else "Finding completed curls"
+                        ),
                     )
     finally:
         capture.release()
@@ -82,4 +109,6 @@ def track_pose(path: Path, progress, cancelled):
     if not rows:
         raise ValueError("The video contains no readable frames.")
 
+    if motion is not None:
+        return pd.DataFrame(rows), fps, motion.tables()
     return pd.DataFrame(rows), fps

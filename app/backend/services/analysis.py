@@ -10,7 +10,8 @@ predictor = Predictor()
 
 
 def analyze(path: Path, progress, cancelled, model_choice="speed_shaking"):
-    frames, fps = track_pose(path, progress, cancelled)
+    modes = (False,) if model_choice == "speed_only" else (False, True)
+    frames, fps, motion = track_pose(path, progress, cancelled, motion_modes=modes)
     proposed = detect_reps(frames, fps)
     frames.attrs.clear()
 
@@ -44,6 +45,7 @@ def analyze(path: Path, progress, cancelled, model_choice="speed_shaking"):
                 cancelled,
                 pose_frames=frames,
                 model_choice=model_choice,
+                motion_flows=motion,
             )
         except (RuntimeError, ValueError, OSError) as exc:
             unavailable = str(exc)

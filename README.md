@@ -89,6 +89,7 @@ On 33 quality-filtered examples from four people, speed plus candidate shaking r
 
 ```sh
 python3 scripts/check_submission.py
+python -m unittest discover -s app/backend/tests -v
 cd app/frontend
 pnpm build
 ```
