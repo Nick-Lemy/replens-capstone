@@ -3,7 +3,7 @@ import { AnalysisProgress } from "../components/analyze/AnalysisProgress";
 import { Notice } from "../components/shared/UI";
 import { LiveCamera } from "../components/analyze/LiveCamera";
 import { useState } from "react";
-import { ArrowUpRight, Camera, ScanLine, Sparkles } from "lucide-react";
+import { ArrowUpRight, Camera, ScanLine } from "lucide-react";
 import type { ModelChoice, ModelCatalog, AnalysisJob } from "../lib/types";
 
 export function AnalyzePage({
@@ -41,19 +41,11 @@ export function AnalyzePage({
 
   return (
     <div className="animate-enter space-y-6">
-      <div className="space-y-2">
-        <p className="eyebrow">Your training companion</p>
-        <h1 className="text-[34px] font-semibold leading-[1.08] tracking-[-.035em] sm:text-[48px]">
-          Know your set.
-          <br />
-          <span className="text-accent">Own your next rep.</span>
-        </h1>
-        <p className="max-w-lg text-sm leading-6 text-muted sm:text-[15px]">
-          Record a curl set. See your reps and estimated effort.
-        </p>
-      </div>
+      <h1 className="text-[30px] font-semibold leading-tight tracking-[-.035em] sm:text-[42px]">
+        Track muscle fatigue<span className="text-accent">.</span>
+      </h1>
       {!file && !busy && !liveOpen && (
-        <section className="relative min-h-[235px] overflow-hidden rounded-2xl border border-line bg-stage p-6 text-white sm:min-h-[300px] sm:p-8">
+        <section className="relative flex min-h-[210px] items-end overflow-hidden rounded-2xl border border-line bg-stage p-6 text-white sm:min-h-[270px] sm:p-8">
           <img
             src="/curl-hero.webp"
             alt="Athlete lifting dumbbells in a gym"
@@ -61,21 +53,9 @@ export function AnalyzePage({
           />
           <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(10,11,14,.93)_0%,rgba(10,11,14,.79)_38%,rgba(10,11,14,.15)_100%)]" />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-lg bg-white/10 px-3 py-1.5 text-[11px] font-medium text-white/80">
-              <Sparkles size={13} className="text-accent" />
-              Featured workout
-            </span>
-          </div>
-          <div className="relative mt-6 sm:mt-11">
-            <p className="text-xs font-semibold uppercase tracking-[.14em] text-accent">
-              Curl analysis
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-[-.03em] sm:text-3xl">
-              Your effort, in focus.
+            <h2 className="text-2xl font-semibold tracking-[-.03em] sm:text-3xl">
+              Review every rep.
             </h2>
-            <p className="mt-2 max-w-sm text-sm leading-6 text-white/65">
-              Capture one set. Review every rep.
-            </p>
             <button
               type="button"
               onClick={() =>
@@ -83,10 +63,10 @@ export function AnalyzePage({
                   .getElementById("video-input")
                   ?.scrollIntoView({ behavior: "smooth", block: "start" })
               }
-              className="mt-5 flex min-h-11 items-center gap-2 text-xs font-semibold text-accent"
+              className="mt-3 flex min-h-11 items-center gap-2 text-sm font-semibold text-accent"
             >
               <ScanLine size={15} />
-              Start a set
+              Choose a video
               <ArrowUpRight size={14} />
             </button>
           </div>
@@ -120,9 +100,6 @@ export function AnalyzePage({
           </span>
           <span className="min-w-0 flex-1">
             <span className="block text-sm font-semibold">Open live camera</span>
-            <span className="mt-1 block text-xs leading-5 text-muted">
-              Count reps while recording.
-            </span>
           </span>
           <ArrowUpRight size={19} className="shrink-0 text-muted transition group-hover:text-accent" />
         </button>

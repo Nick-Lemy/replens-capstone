@@ -45,6 +45,9 @@ export function ThemeSwitch() {
         document
           .querySelector('meta[name="theme-color"]')
           ?.setAttribute("content", next ? "#17191e" : "#f5f5f2");
+        document
+          .querySelector("#app-icon")
+          ?.setAttribute("href", next ? "/icon-192.png" : "/icon-light-192.png");
       }}
     >
       {dark ? <Sun size={19} /> : <Moon size={19} />}

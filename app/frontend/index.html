@@ -11,15 +11,22 @@
             name="description"
             content="Review your curl set with experimental video-based repetition estimates."
         />
-        <link rel="icon" href="/icon-192.png" type="image/png" />
+        <link id="app-icon" rel="icon" href="/icon-192.png" type="image/png" />
         <title>RepLens</title>
         <script>
             try {
                 const t = localStorage.getItem("replens-theme");
+                const light = t === "light";
                 document.documentElement.classList.toggle(
                     "dark",
-                    t !== "light",
+                    !light,
                 );
+                document.querySelector('#app-icon').href = light
+                    ? '/icon-light-192.png'
+                    : '/icon-192.png';
+                document.querySelector('meta[name="theme-color"]').content = light
+                    ? '#f5f5f2'
+                    : '#17191e';
             } catch {}
         </script>
     </head>

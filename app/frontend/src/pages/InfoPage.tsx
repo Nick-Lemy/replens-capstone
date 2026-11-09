@@ -30,8 +30,8 @@ export function InfoPage({
           A clearer view of your set.
         </h1>
         <p className="mt-2 max-w-xl text-sm leading-6 text-muted">
-          RepLens reviews simultaneous dumbbell curls from a recorded video and
-          estimates repetitions remaining after each clear rep.
+          RepLens estimates muscle fatigue during simultaneous dumbbell curls
+          using the number of reps likely remaining after each clear rep.
         </p>
       </div>
 
@@ -78,8 +78,8 @@ export function InfoPage({
           unclear, RepLens shows that an estimate is unavailable.
         </p>
         <p className="text-sm leading-6 text-muted">
-          The model is experimental and does not directly measure muscle
-          fatigue or confirm that another rep is safe.
+          This is an indirect estimate based on movement, not a physiological
+          measurement or a guarantee that another rep is safe.
         </p>
       </section>
 

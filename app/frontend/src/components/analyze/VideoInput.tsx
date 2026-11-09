@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { ArrowUpRight, Camera, Film, ScanLine, Upload, X } from "lucide-react";
+import { Camera, Film, ScanLine, Upload, X } from "lucide-react";
 import { Button, Notice, seconds } from "../shared/UI";
 
 export function VideoInput({
@@ -87,9 +87,7 @@ export function VideoInput({
               <Upload size={23} strokeWidth={1.7} />
             </span>
             <span className="text-base font-semibold">Upload your curl set</span>
-            <span className="mt-2 text-sm text-muted">
-              Keep both arms visible from the first rep to the last.
-            </span>
+            <span className="mt-2 text-sm text-muted">Keep both arms visible.</span>
             <div className="mt-6 flex w-full max-w-sm flex-col gap-2 sm:flex-row">
               <Button
                 className="w-full"
@@ -110,13 +108,6 @@ export function VideoInput({
             <span className="mt-4 text-xs text-muted">
               MP4, MOV or WebM · Up to 3 minutes
             </span>
-          </div>
-          <div className="flex items-center justify-between gap-2 px-4 py-3 text-xs text-muted">
-            <span className="flex items-center gap-2">
-            <Film size={14} />
-              One complete set works best.
-            </span>
-            <ArrowUpRight size={14} />
           </div>
         </div>
       ) : (

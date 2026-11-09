@@ -19,17 +19,11 @@ export function AppHeader({ tab, setTab, onAccount }: Props) {
           }}
           className="flex items-center gap-3 text-left"
         >
-          <img
-            src="/icon-192.png"
-            alt=""
-            className="size-11 rounded-xl"
-          />
+          <img src="/icon-light-192.png" alt="" className="size-11 rounded-xl dark:hidden" />
+          <img src="/icon-192.png" alt="" className="hidden size-11 rounded-xl dark:block" />
           <span>
             <span className="block text-lg font-semibold leading-tight tracking-[-.025em]">
               RepLens<span className="text-accent">.</span>
-            </span>
-            <span className="block text-[10px] leading-tight text-muted">
-              Train with a clearer view
             </span>
           </span>
         </button>
@@ -66,7 +60,7 @@ export function AppNavigation({ tab, setTab }: Props) {
   return (
     <nav
       aria-label="Main navigation"
-      className="fixed inset-x-0 bottom-[calc(12px+env(safe-area-inset-bottom))] z-20 px-5 sm:hidden"
+      className="fixed inset-x-0 bottom-[calc(2px+env(safe-area-inset-bottom))] z-20 px-5 sm:hidden"
     >
       <div className="mx-auto grid h-[68px] max-w-[320px] grid-cols-4 rounded-full border border-line bg-panel/95 p-1 shadow-[0_18px_45px_rgba(0,0,0,.3)] backdrop-blur-xl">
         {(
