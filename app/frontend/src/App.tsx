@@ -11,6 +11,9 @@ import type { SavedSession } from "./lib/types";
 import { AnalyzePage } from "./pages/AnalyzePage";
 import { ResultsPage } from "./pages/ResultsPage";
 import { HistoryPage } from "./pages/HistoryPage";
+import { InfoPage } from "./pages/InfoPage";
+import { AccountPage } from "./pages/AccountPage";
+import type { AppTab } from "./lib/navigation";
 import { useAnalysisJob } from "./hooks/useAnalysisJob";
 import { useActiveSession } from "./hooks/useActiveSession";
 import { useBrowserStatus } from "./hooks/useBrowserStatus";
@@ -18,8 +21,15 @@ import { useObjectUrl } from "./hooks/useObjectUrl";
 import { useModels } from "./hooks/useModels";
 import { useHealth } from "./hooks/useHealth";
 
+function tabFromHash(): AppTab {
+  const value = window.location.hash.slice(1);
+  return value === "history" || value === "info" || value === "account"
+    ? value
+    : "analyze";
+}
+
 export default function App() {
-  const [tab, setTab] = useState<"analyze" | "history">("analyze");
+  const [tab, setTab] = useState<AppTab>(tabFromHash);
   const [message, setMessage] = useState("");
   const [liveActive, setLiveActive] = useState(false);
   const [authOpen, setAuthOpen] = useState(() =>
@@ -29,10 +39,16 @@ export default function App() {
   const refreshAuth = useCallback(() => auth.refresh(), [auth.refresh]);
 
   useEffect(() => {
-    const onPopState = () =>
+    const onPopState = () => {
       setAuthOpen(new URLSearchParams(window.location.search).has("auth"));
+      setTab(tabFromHash());
+    };
     window.addEventListener("popstate", onPopState);
-    return () => window.removeEventListener("popstate", onPopState);
+    window.addEventListener("hashchange", onPopState);
+    return () => {
+      window.removeEventListener("popstate", onPopState);
+      window.removeEventListener("hashchange", onPopState);
+    };
   }, []);
 
   const analysis = useAnalysisJob();
@@ -78,7 +94,7 @@ export default function App() {
   function reset() {
     analysis.reset();
     active.reset();
-    setTab("analyze");
+    navigate("analyze");
     setMessage("");
   }
 
@@ -87,13 +103,13 @@ export default function App() {
       setMessage(
         "An analysis is running. Finish or cancel it before opening another session.",
       );
-      setTab("analyze");
+      navigate("analyze");
 
       return;
     }
     analysis.reset();
     active.open(session);
-    setTab("analyze");
+    navigate("analyze");
   }
 
   const errors = [
@@ -105,23 +121,25 @@ export default function App() {
     active.sessions.error,
   ].filter(Boolean);
 
-  function openAuth() {
+  function openAuth(
+    mode: "login" | "signup" | "forgot" | "account" | "change" = "login",
+  ) {
     if (
       liveActive &&
       !window.confirm("Leave the live camera and discard this recording?")
     ) {
       return;
     }
-    window.history.pushState({}, "", "/?auth=login");
+    window.history.pushState({}, "", `/?auth=${mode}#${tab}`);
     setAuthOpen(true);
   }
 
   function closeAuth() {
-    window.history.pushState({}, "", "/");
+    window.history.pushState({}, "", `/#${tab}`);
     setAuthOpen(false);
   }
 
-  function navigate(next: "analyze" | "history") {
+  function navigate(next: AppTab) {
     if (
       liveActive &&
       next !== "analyze" &&
@@ -129,7 +147,10 @@ export default function App() {
     ) {
       return;
     }
-    setTab(next);
+    if (next !== tab) {
+      window.history.pushState({}, "", `/#${next}`);
+      setTab(next);
+    }
   }
 
   if (authOpen && auth.enabled) {
@@ -150,11 +171,10 @@ export default function App() {
       <AppHeader
         tab={tab}
         setTab={navigate}
-        accountName={auth.account?.name}
-        onAccount={auth.enabled ? openAuth : undefined}
+        onAccount={() => navigate("account")}
       />
       <main
-        className="relative mx-auto max-w-[760px] space-y-6 px-5 pb-36 pt-5 sm:px-8 sm:pt-10"
+        className="relative mx-auto max-w-[760px] space-y-6 px-5 pb-[calc(112px+env(safe-area-inset-bottom))] pt-4 sm:px-8 sm:pb-16 sm:pt-10"
         id="main"
       >
         <PwaUpdateNotice busy={busy} />
@@ -169,7 +189,27 @@ export default function App() {
           errors={errors}
           job={job.data}
         />
-        {tab === "history" ? (
+        {tab === "account" ? (
+          <AccountPage
+            account={auth.account}
+            authEnabled={auth.enabled}
+            authReady={auth.ready}
+            onAuth={openAuth}
+            onSignOut={() => auth.logout.mutateAsync().then(() => undefined)}
+          />
+        ) : tab === "info" ? (
+          <InfoPage
+            model={analysis.model}
+            onModel={analysis.setModel}
+            models={models.data}
+            modelsLoading={models.isPending}
+            modelsError={models.isError}
+            retryModels={() => {
+              void models.refetch();
+            }}
+            busy={busy}
+          />
+        ) : tab === "history" ? (
           <HistoryPage
             sessions={active.sessions.data ?? []}
             loading={active.sessions.isPending}
@@ -180,7 +220,7 @@ export default function App() {
             synced={Boolean(auth.account)}
             onOpen={open}
             onRemove={(id) => active.remove.mutate(id)}
-            onAnalyze={() => (busy ? setTab("analyze") : reset())}
+            onAnalyze={() => (busy ? navigate("analyze") : reset())}
           />
         ) : result && review ? (
           <ResultsPage
@@ -203,13 +243,13 @@ export default function App() {
             job={job.data}
             onFile={analysis.choose}
             model={analysis.model}
-            onModel={analysis.setModel}
             models={models.data}
             modelsLoading={models.isPending}
             modelsError={models.isError}
             retryModels={() => {
               void models.refetch();
             }}
+            onInfo={() => navigate("info")}
             onLiveActivityChange={setLiveActive}
             onStart={() => {
               if (
@@ -225,11 +265,13 @@ export default function App() {
             onCancel={analysis.cancelJob}
           />
         )}
-        <InstallAppPrompt
-          install={install}
-          busy={busy}
-          dismissInstall={dismissInstall}
-        />
+        {tab === "account" && (
+          <InstallAppPrompt
+            install={install}
+            busy={busy}
+            dismissInstall={dismissInstall}
+          />
+        )}
         <footer className="pt-3 text-center text-[11px] text-muted">
           RepLens · Make every rep count.
         </footer>

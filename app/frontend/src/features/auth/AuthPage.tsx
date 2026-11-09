@@ -74,7 +74,7 @@ export function AuthPage({
 
   const navigate = useCallback((next: AuthMode, notice = "") => {
     const route = next === "register" ? "signup" : next;
-    window.history.pushState({}, "", `/?auth=${route}`);
+    window.history.pushState({}, "", `/?auth=${route}${window.location.hash}`);
     setMode(next);
     setMessage(notice);
     setError("");
@@ -185,12 +185,12 @@ export function AuthPage({
   return (
     <AuthLayout onExit={onExit}>
       {mode === "login" || mode === "register" ? (
-        <div className="mb-10 inline-flex rounded-full border border-line bg-soft p-1 text-sm">
+        <div className="mb-10 inline-flex rounded-xl border border-line bg-soft p-1 text-sm">
           <button
             type="button"
             onClick={() => navigate("login")}
             aria-current={mode === "login" ? "page" : undefined}
-            className={`rounded-full px-5 py-2 transition ${mode === "login" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+            className={`rounded-lg px-5 py-2 transition ${mode === "login" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
           >
             Sign in
           </button>
@@ -198,7 +198,7 @@ export function AuthPage({
             type="button"
             onClick={() => navigate("register")}
             aria-current={mode === "register" ? "page" : undefined}
-            className={`rounded-full px-5 py-2 transition ${mode === "register" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+            className={`rounded-lg px-5 py-2 transition ${mode === "register" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
           >
             Create account
           </button>
@@ -217,7 +217,7 @@ export function AuthPage({
         <p className="text-xs font-medium uppercase tracking-[.18em] text-muted">
           RepLens account
         </p>
-        <h1 className="text-[34px] font-semibold leading-tight tracking-[-.055em] sm:text-[42px]">
+        <h1 className="text-[34px] font-semibold leading-tight tracking-[-.035em] sm:text-[42px]">
           {title[mode]}
         </h1>
         <p className="text-sm leading-6 text-muted">{description[mode]}</p>
@@ -225,7 +225,7 @@ export function AuthPage({
 
       {mode === "account" ? (
         <div className="space-y-4">
-          <div className="rounded-2xl border border-line bg-panel p-5">
+          <div className="surface-card p-5">
             <p className="text-sm font-semibold">{account?.name}</p>
             <p className="mt-1 text-sm text-muted">{account?.email}</p>
           </div>

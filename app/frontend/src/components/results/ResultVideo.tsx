@@ -19,8 +19,8 @@ export function ResultVideo({
   const rep = result.reps[selected];
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-line bg-panel p-2">
-      <div className="relative overflow-hidden rounded-[18px] bg-stage">
+    <div className="overflow-hidden rounded-2xl border border-line bg-panel p-2">
+      <div className="relative overflow-hidden rounded-xl bg-stage">
         {!url ? (
           <p
             role="status"

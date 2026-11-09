@@ -29,7 +29,7 @@ export function HistoryPage({
     <div className="animate-enter space-y-6">
       <div>
         <p className="eyebrow mb-2">Your training journal</p>
-        <h1 className="text-[34px] font-bold tracking-[-.055em] sm:text-[46px]">
+        <h1 className="text-[34px] font-semibold tracking-[-.035em] sm:text-[46px]">
           Every set counts<span className="text-accent">.</span>
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">
@@ -53,7 +53,7 @@ export function HistoryPage({
         </section>
       ) : !sessions.length ? (
         <section className="surface-card flex min-h-72 flex-col items-center justify-center p-7 text-center">
-          <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-accent text-accent-ink">
+          <span className="mb-5 grid size-12 place-items-center rounded-xl bg-accent text-accent-ink">
             <Clock3 size={21} strokeWidth={1.5} />
           </span>
           <h2 className="font-medium">Room for your first set.</h2>
@@ -65,9 +65,9 @@ export function HistoryPage({
       ) : (
         <div className="space-y-3">
           <div className="surface-card flex items-center gap-4 p-5">
-            <span className="grid size-12 place-items-center rounded-2xl bg-accent/15 text-accent"><TrendingUp size={22} /></span>
-            <div><p className="text-xs text-muted">Sets reviewed</p><p className="text-2xl font-bold tracking-[-.04em]">{sessions.length}</p></div>
-            <div className="ml-auto text-right"><p className="text-xs text-muted">Total reps</p><p className="text-2xl font-bold tracking-[-.04em]">{sessions.reduce((sum, session) => sum + session.result.rep_count, 0)}</p></div>
+            <span className="grid size-12 place-items-center rounded-xl bg-accent/15 text-accent"><TrendingUp size={22} /></span>
+            <div><p className="text-xs text-muted">Sets reviewed</p><p className="text-2xl font-semibold tracking-[-.02em]">{sessions.length}</p></div>
+            <div className="ml-auto text-right"><p className="text-xs text-muted">Total reps</p><p className="text-2xl font-semibold tracking-[-.02em]">{sessions.reduce((sum, session) => sum + session.result.rep_count, 0)}</p></div>
           </div>
           <h2 className="pt-2 text-sm font-semibold">Recent sessions</h2>
           {sessions.map((session) => (

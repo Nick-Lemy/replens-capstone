@@ -69,6 +69,7 @@ export function VideoInput({
       />
       {!file ? (
         <div
+          id="video-input"
           className={`surface-card overflow-hidden p-2 transition-colors ${dragging ? "!border-accent" : ""}`}
           onDragOver={(e) => {
             e.preventDefault();
@@ -81,8 +82,8 @@ export function VideoInput({
             choose(e.dataTransfer.files[0]);
           }}
         >
-          <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-[20px] bg-soft p-6 text-center sm:min-h-72">
-            <span className="mb-5 grid size-14 place-items-center rounded-2xl bg-panel text-accent shadow-sm">
+          <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-xl bg-soft p-6 text-center sm:min-h-72">
+            <span className="mb-5 grid size-14 place-items-center rounded-xl bg-panel text-accent shadow-sm">
               <Upload size={23} strokeWidth={1.7} />
             </span>
             <span className="text-base font-semibold">Upload your curl set</span>
@@ -119,8 +120,8 @@ export function VideoInput({
           </div>
         </div>
       ) : (
-        <section className="surface-card overflow-hidden p-2">
-          <div className="relative overflow-hidden rounded-[18px] bg-stage">
+        <section id="video-input" className="surface-card overflow-hidden p-2">
+          <div className="relative overflow-hidden rounded-xl bg-stage">
             <video
               src={url ?? undefined}
               controls

@@ -16,7 +16,7 @@ export function Button({
     <button
       {...props}
       disabled={props.disabled || busy}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-150 active:scale-[.98] disabled:pointer-events-none disabled:opacity-45 ${secondary ? "border border-line bg-soft text-ink hover:border-accent/60 hover:bg-panel" : "bg-accent text-accent-ink shadow-[0_8px_22px_rgba(248,198,37,.15)] hover:brightness-110"} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-5 text-sm font-semibold transition duration-150 active:scale-[.98] disabled:pointer-events-none disabled:opacity-45 ${secondary ? "border border-line bg-soft text-ink hover:border-accent/60 hover:bg-panel" : "bg-accent text-accent-ink shadow-[0_8px_22px_rgba(248,198,37,.15)] hover:brightness-110"} ${className}`}
     >
       {busy && <LoaderCircle size={16} className="animate-spin" />}
       {children}
@@ -31,7 +31,7 @@ export function ThemeSwitch() {
 
   return (
     <button
-      className="grid size-11 place-items-center rounded-full text-muted transition hover:bg-soft hover:text-ink"
+      className="grid size-11 place-items-center rounded-xl text-muted transition hover:bg-soft hover:text-ink"
       aria-label={`Switch to ${dark ? "light" : "dark"} mode`}
       onClick={() => {
         const next = !dark;

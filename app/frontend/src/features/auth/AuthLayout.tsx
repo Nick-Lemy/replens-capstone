@@ -40,7 +40,7 @@ export function AuthLayout({ children, onExit }: Props) {
       </header>
 
       <main className="mx-auto grid w-full max-w-6xl gap-10 px-5 py-10 sm:px-8 lg:min-h-[calc(100dvh-4.5rem)] lg:grid-cols-[1fr_1.05fr] lg:items-center lg:gap-20 lg:py-12">
-        <aside className="relative hidden min-h-[600px] overflow-hidden rounded-[2rem] border border-line bg-stage p-10 text-white lg:flex lg:flex-col lg:justify-between">
+        <aside className="relative hidden min-h-[600px] overflow-hidden rounded-2xl border border-line bg-stage p-10 text-white lg:flex lg:flex-col lg:justify-between">
           <div className="absolute -right-30 -top-30 size-100 rounded-full border border-white/12" />
           <div className="absolute -right-18 -top-18 size-76 rounded-full border border-white/12" />
           <div className="absolute right-3 top-3 size-44 rounded-full border border-white/12" />

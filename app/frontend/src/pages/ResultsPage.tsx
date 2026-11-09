@@ -56,7 +56,7 @@ export function ResultsPage({
       <div className="flex items-end justify-between gap-3">
         <div>
           <p className="eyebrow mb-2">Your set, in focus</p>
-          <h1 className="text-[32px] font-bold tracking-[-.055em] sm:text-[42px]">
+          <h1 className="text-[32px] font-semibold tracking-[-.035em] sm:text-[42px]">
             Your set review<span className="text-accent">.</span>
           </h1>
         </div>
