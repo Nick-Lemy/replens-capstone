@@ -75,8 +75,9 @@ export function InfoPage({
           unclear, RepLens shows that an estimate is unavailable.
         </p>
         <p className="text-sm leading-6 text-muted">
-          The live camera shows a provisional rep count. Fatigue estimates appear
-          after the recorded set is analyzed.
+          The live camera counts reps and flags when recent reps take noticeably
+          longer than early reps. RIR estimates appear after the recorded set is
+          analyzed.
         </p>
         <p className="text-sm leading-6 text-muted">
           This is an indirect estimate based on movement, not a physiological

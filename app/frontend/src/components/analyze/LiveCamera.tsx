@@ -64,6 +64,14 @@ export function LiveCamera({
       {active && !camera.repState.tracking && (
         <p className="px-1 text-xs text-muted">Keep both arms in view.</p>
       )}
+      {active && camera.repState.tracking && camera.repState.movement === "slowing" && (
+        <p className="px-1 text-sm font-medium text-accent" role="status">
+          Possible fatigue: your recent reps are slower.
+        </p>
+      )}
+      {active && camera.repState.tracking && camera.repState.movement === "building" && (
+        <p className="px-1 text-xs text-muted">Tracking rep pace…</p>
+      )}
       {camera.error && (
         <Notice onClose={() => camera.setError("")}>{camera.error}</Notice>
       )}
