@@ -23,7 +23,7 @@ export function AuthField({ label, hint, id, type, ...props }: Props) {
           {...props}
           id={id}
           type={password && visible ? "text" : type}
-          className={`min-h-12 w-full rounded-xl border border-line bg-panel px-4 text-sm text-ink outline-none transition placeholder:text-muted/70 focus:border-ink ${password ? "pr-12" : ""}`}
+          className={`min-h-12 w-full rounded-xl border border-line bg-panel px-4 text-base text-ink outline-none transition placeholder:text-muted/70 focus:border-ink ${password ? "pr-12" : ""}`}
         />
         {password && (
           <button
