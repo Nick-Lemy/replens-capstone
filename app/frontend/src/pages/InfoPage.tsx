@@ -1,5 +1,6 @@
 import { Camera, CircleHelp, ScanLine, ShieldCheck } from "lucide-react";
 import { FilmingTips } from "../components/analyze/FilmingTips";
+import { ProcessingBenchmark } from "../components/analyze/ProcessingBenchmark";
 import { ModelSelector } from "../components/analyze/ModelSelector";
 import type { ModelCatalog, ModelChoice } from "../lib/types";
 
@@ -105,6 +106,8 @@ export function InfoPage({
           />
         </div>
       </details>
+
+      <ProcessingBenchmark />
     </div>
   );
 }

@@ -30,6 +30,7 @@ export default defineConfig({
       workbox: {
         navigateFallbackDenylist: [/^\/api/],
         maximumFileSizeToCacheInBytes: 3000000,
+        globIgnores: ["**/processingBenchmark.worker-*.js"],
       },
     }),
   ],
