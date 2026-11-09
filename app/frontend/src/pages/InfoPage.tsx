@@ -25,7 +25,6 @@ export function InfoPage({
   return (
     <div className="animate-enter space-y-5">
       <div>
-        <p className="eyebrow mb-2">About RepLens</p>
         <h1 className="text-[32px] font-semibold tracking-[-.035em] sm:text-[42px]">
           A clearer view of your set.
         </h1>

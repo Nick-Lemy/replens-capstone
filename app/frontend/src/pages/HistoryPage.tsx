@@ -28,7 +28,6 @@ export function HistoryPage({
   return (
     <div className="animate-enter space-y-6">
       <div>
-        <p className="eyebrow mb-2">Your training journal</p>
         <h1 className="text-[34px] font-semibold tracking-[-.035em] sm:text-[46px]">
           Every set counts<span className="text-accent">.</span>
         </h1>
