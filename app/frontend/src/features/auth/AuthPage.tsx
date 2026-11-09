@@ -190,7 +190,7 @@ export function AuthPage({
             type="button"
             onClick={() => navigate("login")}
             aria-current={mode === "login" ? "page" : undefined}
-            className={`rounded-lg px-5 py-2 transition ${mode === "login" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+            className={`rounded-lg px-5 py-2 transition ${mode === "login" ? "bg-panel font-medium text-ink" : "text-muted hover:text-ink"}`}
           >
             Sign in
           </button>
@@ -198,7 +198,7 @@ export function AuthPage({
             type="button"
             onClick={() => navigate("register")}
             aria-current={mode === "register" ? "page" : undefined}
-            className={`rounded-lg px-5 py-2 transition ${mode === "register" ? "bg-panel font-medium text-ink shadow-sm" : "text-muted hover:text-ink"}`}
+            className={`rounded-lg px-5 py-2 transition ${mode === "register" ? "bg-panel font-medium text-ink" : "text-muted hover:text-ink"}`}
           >
             Create account
           </button>

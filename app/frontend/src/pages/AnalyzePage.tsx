@@ -92,7 +92,7 @@ export function AnalyzePage({
       {!file && !busy && !liveOpen && (
         <button
           type="button"
-          className="surface-card group flex w-full items-center gap-4 px-5 py-5 text-left transition hover:border-accent/60 hover:bg-soft"
+          className="surface-card group flex w-full items-center gap-4 px-5 py-5 text-left shadow-none transition hover:border-accent/60 hover:bg-soft"
           onClick={() => setLiveOpen(true)}
         >
           <Camera size={26} strokeWidth={1.7} className="shrink-0 text-accent" />
