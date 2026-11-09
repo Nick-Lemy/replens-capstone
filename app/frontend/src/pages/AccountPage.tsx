@@ -43,7 +43,6 @@ export function AccountPage({
   return (
     <div className="animate-enter space-y-5">
       <div>
-        <p className="eyebrow mb-2">Your space</p>
         <h1 className="text-[32px] font-semibold tracking-[-.035em] sm:text-[42px]">
           Account
         </h1>
