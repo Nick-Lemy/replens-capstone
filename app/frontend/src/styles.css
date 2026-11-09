@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 @theme inline {
-    --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+    --font-sans: "Comfortaa Variable", ui-sans-serif, system-ui, sans-serif;
     --color-page: var(--page);
     --color-panel: var(--panel);
     --color-ink: var(--ink);
@@ -57,7 +57,7 @@
         min-width: 320px;
         font-family: var(--font-sans);
         font-weight: 400;
-        letter-spacing: -.01em;
+        letter-spacing: 0;
         -webkit-font-smoothing: antialiased;
         background: var(--page);
     }
