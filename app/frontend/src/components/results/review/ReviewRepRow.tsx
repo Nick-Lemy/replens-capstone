@@ -67,7 +67,7 @@ export function ReviewRepRow({
               step="any"
               value={row[field]}
               onChange={(e) => updateRow(row.id, { [field]: e.target.value })}
-              className="mt-1 w-full rounded-lg border border-line bg-page px-2 py-2 text-sm text-ink"
+              className="mt-1 w-full rounded-lg border border-line bg-page px-2 py-2 text-base text-ink"
             />
           </label>
         ))}
