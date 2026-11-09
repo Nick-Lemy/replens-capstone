@@ -1,6 +1,6 @@
 import { SessionCard } from "../components/history/SessionCard";
 import { useState } from "react";
-import { Clock3 } from "lucide-react";
+import { Clock3, TrendingUp } from "lucide-react";
 import type { SavedSession } from "../lib/types";
 import { Button } from "../components/shared/UI";
 
@@ -28,9 +28,9 @@ export function HistoryPage({
   return (
     <div className="animate-enter space-y-6">
       <div>
-        <p className="mb-2 text-sm text-muted">A little perspective</p>
-        <h1 className="text-[32px] font-semibold tracking-[-.04em]">
-          Your sessions
+        <p className="eyebrow mb-2">Your training journal</p>
+        <h1 className="text-[34px] font-bold tracking-[-.055em] sm:text-[46px]">
+          Every set counts<span className="text-accent">.</span>
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">
           {synced
@@ -43,7 +43,7 @@ export function HistoryPage({
           Loading sessions…
         </p>
       ) : error ? (
-        <section className="rounded-2xl border border-line bg-panel p-6 text-center">
+        <section className="surface-card p-6 text-center">
           <p className="mb-4 text-sm text-muted">
             Could not load your saved sessions.
           </p>
@@ -52,8 +52,8 @@ export function HistoryPage({
           </Button>
         </section>
       ) : !sessions.length ? (
-        <section className="flex min-h-72 flex-col items-center justify-center rounded-3xl border border-line bg-panel p-7 text-center">
-          <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-soft">
+        <section className="surface-card flex min-h-72 flex-col items-center justify-center p-7 text-center">
+          <span className="mb-5 grid size-12 place-items-center rounded-2xl bg-accent text-accent-ink">
             <Clock3 size={21} strokeWidth={1.5} />
           </span>
           <h2 className="font-medium">Room for your first set.</h2>
@@ -64,6 +64,12 @@ export function HistoryPage({
         </section>
       ) : (
         <div className="space-y-3">
+          <div className="surface-card flex items-center gap-4 p-5">
+            <span className="grid size-12 place-items-center rounded-2xl bg-accent/15 text-accent"><TrendingUp size={22} /></span>
+            <div><p className="text-xs text-muted">Sets reviewed</p><p className="text-2xl font-bold tracking-[-.04em]">{sessions.length}</p></div>
+            <div className="ml-auto text-right"><p className="text-xs text-muted">Total reps</p><p className="text-2xl font-bold tracking-[-.04em]">{sessions.reduce((sum, session) => sum + session.result.rep_count, 0)}</p></div>
+          </div>
+          <h2 className="pt-2 text-sm font-semibold">Recent sessions</h2>
           {sessions.map((session) => (
             <SessionCard
               key={session.id}

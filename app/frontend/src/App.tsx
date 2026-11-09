@@ -154,7 +154,7 @@ export default function App() {
         onAccount={auth.enabled ? openAuth : undefined}
       />
       <main
-        className="mx-auto max-w-155 space-y-5 px-5 pb-32 pt-9 sm:px-8 sm:pt-12"
+        className="relative mx-auto max-w-[760px] space-y-6 px-5 pb-36 pt-5 sm:px-8 sm:pt-10"
         id="main"
       >
         <PwaUpdateNotice busy={busy} />
@@ -231,7 +231,7 @@ export default function App() {
           dismissInstall={dismissInstall}
         />
         <footer className="pt-3 text-center text-[11px] text-muted">
-          RepLens · A closer look at your effort.
+          RepLens · Make every rep count.
         </footer>
       </main>
       <AppNavigation tab={tab} setTab={navigate} />

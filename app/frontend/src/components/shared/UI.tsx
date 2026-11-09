@@ -16,7 +16,7 @@ export function Button({
     <button
       {...props}
       disabled={props.disabled || busy}
-      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-4 text-sm font-medium transition duration-150 active:scale-[.98] disabled:pointer-events-none disabled:opacity-45 ${secondary ? "border border-line bg-panel text-ink hover:bg-soft" : "bg-ink text-page hover:opacity-85"} ${className}`}
+      className={`inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-5 text-sm font-semibold transition duration-150 active:scale-[.98] disabled:pointer-events-none disabled:opacity-45 ${secondary ? "border border-line bg-soft text-ink hover:border-accent/60 hover:bg-panel" : "bg-accent text-accent-ink shadow-[0_8px_22px_rgba(248,198,37,.15)] hover:brightness-110"} ${className}`}
     >
       {busy && <LoaderCircle size={16} className="animate-spin" />}
       {children}
@@ -44,7 +44,7 @@ export function ThemeSwitch() {
         }
         document
           .querySelector('meta[name="theme-color"]')
-          ?.setAttribute("content", next ? "#161719" : "#fafafa");
+          ?.setAttribute("content", next ? "#17191e" : "#f5f5f2");
       }}
     >
       {dark ? <Sun size={19} /> : <Moon size={19} />}

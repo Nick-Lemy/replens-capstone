@@ -6,7 +6,7 @@ export function ModelMetadata({ result }: { result: AnalysisResult }) {
       {result.warnings.map((w) => (
         <p key={w}>{w}</p>
       ))}
-      <details className="rounded-2xl border border-line bg-panel p-4">
+      <details className="surface-card p-5">
         <summary className="cursor-pointer text-sm font-medium text-ink">
           How this estimate works
         </summary>

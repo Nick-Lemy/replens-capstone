@@ -4,7 +4,7 @@ import type { Rep } from "../../lib/types";
 export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
   if (!rep || rep.rir === null) {
     return (
-      <section className="rounded-2xl border border-line bg-panel p-5" role="status">
+      <section className="surface-card p-5" role="status">
         <h2 className="text-sm font-medium">Fatigue-related estimate</h2>
         <p className="mt-2 text-sm text-muted">
           {rep?.prediction_status === "building_history"
@@ -18,14 +18,14 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
   const nearLimit = rep.rir <= 2;
 
   return (
-    <section className="rounded-2xl border border-line bg-panel p-5" role="status">
+    <section className="surface-card p-5" role="status">
       <div className="flex items-start gap-3">
-        <span className="grid size-9 shrink-0 place-items-center rounded-xl bg-soft">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">
           {nearLimit ? <CircleAlert size={18} /> : <Activity size={18} />}
         </span>
         <div>
           <h2 className="text-sm font-medium">Fatigue-related estimate</h2>
-          <p className="mt-1 text-lg font-semibold">
+          <p className="mt-1 text-xl font-bold tracking-[-.03em]">
             {nearLimit
               ? "Estimated near your lifting limit"
               : "Reps remaining estimated"}

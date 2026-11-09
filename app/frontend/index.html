@@ -6,7 +6,7 @@
             name="viewport"
             content="width=device-width, initial-scale=1, viewport-fit=cover"
         />
-        <meta name="theme-color" content="#fafafa" />
+        <meta name="theme-color" content="#17191e" />
         <meta
             name="description"
             content="Review your curl set with experimental video-based repetition estimates."
@@ -18,9 +18,7 @@
                 const t = localStorage.getItem("replens-theme");
                 document.documentElement.classList.toggle(
                     "dark",
-                    t === "dark" ||
-                        (!t &&
-                            matchMedia("(prefers-color-scheme: dark)").matches),
+                    t !== "light",
                 );
             } catch {}
         </script>

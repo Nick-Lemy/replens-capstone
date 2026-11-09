@@ -22,7 +22,7 @@ export function SetReviewCard({
   );
 
   return (
-    <section className="space-y-4 rounded-2xl border border-line bg-panel p-5">
+    <section className="surface-card space-y-4 p-5">
       <div>
         <h2 className="text-sm font-medium">Review completed set</h2>
         <p className="mt-2 text-xs leading-5 text-muted">

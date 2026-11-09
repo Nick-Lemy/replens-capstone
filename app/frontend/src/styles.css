@@ -9,6 +9,8 @@
     --color-line: var(--line);
     --color-soft: var(--soft);
     --color-stage: var(--stage);
+    --color-accent: var(--accent);
+    --color-accent-ink: var(--accent-ink);
     --animate-enter: enter 0.26s cubic-bezier(0.2, 0, 0, 1) both;
     @keyframes enter {
         from {
@@ -24,24 +26,28 @@
 }
 
 :root {
-    --page: #fafafa;
+    --page: #f5f5f2;
     --panel: #ffffff;
-    --ink: #202226;
-    --muted: #73767c;
-    --line: #e7e7e9;
-    --soft: #f2f2f3;
-    --stage: #171819;
+    --ink: #202126;
+    --muted: #6f7279;
+    --line: #e5e5e1;
+    --soft: #ecece8;
+    --stage: #202228;
+    --accent: #f8c625;
+    --accent-ink: #17191d;
     color-scheme: light;
 }
 
 .dark {
-    --page: #161719;
-    --panel: #1b1c1f;
-    --ink: #eeeeef;
-    --muted: #a0a2a8;
-    --line: #2c2d31;
-    --soft: #232428;
-    --stage: #101113;
+    --page: #17191e;
+    --panel: #24272f;
+    --ink: #f7f7f8;
+    --muted: #a5a8b1;
+    --line: #343840;
+    --soft: #2d3038;
+    --stage: #111318;
+    --accent: #f8c625;
+    --accent-ink: #17191d;
     color-scheme: dark;
 }
 
@@ -52,6 +58,15 @@
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
         background: var(--page);
+    }
+
+    body::before {
+        content: "";
+        position: fixed;
+        inset: 0 0 auto;
+        height: 26rem;
+        pointer-events: none;
+        background: radial-gradient(ellipse at 75% 5%, rgb(248 198 37 / 7%), transparent 60%);
     }
 
     button,
@@ -69,13 +84,30 @@
     }
 
     :focus-visible {
-        outline: 2px solid var(--ink);
+        outline: 2px solid var(--accent);
         outline-offset: 4px;
     }
 
     ::selection {
-        background: var(--ink);
-        color: var(--page);
+        background: var(--accent);
+        color: var(--accent-ink);
+    }
+}
+
+@layer components {
+    .surface-card {
+        border: 1px solid var(--line);
+        border-radius: 1.5rem;
+        background: var(--panel);
+        box-shadow: 0 16px 40px rgb(0 0 0 / 5%);
+    }
+
+    .eyebrow {
+        color: var(--accent);
+        font-size: .68rem;
+        font-weight: 750;
+        letter-spacing: .18em;
+        text-transform: uppercase;
     }
 }
 
