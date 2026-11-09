@@ -16,6 +16,7 @@ type Props = {
   account: Account | null | undefined;
   onExit: () => void;
   onAuthenticated: () => Promise<void>;
+  onVerified: () => void;
   onLogout: () => Promise<void>;
 };
 
@@ -62,6 +63,7 @@ export function AuthPage({
   account,
   onExit,
   onAuthenticated,
+  onVerified,
   onLogout,
 }: Props) {
   const [mode, setMode] = useState<AuthMode>(() => modeFromUrl(account));
@@ -104,11 +106,11 @@ export function AuthPage({
       .verify(token)
       .then(async () => {
         await onAuthenticated();
-        navigate("account", "Email verified. Your account is ready.");
+        onVerified();
       })
       .catch((failure: Error) => setError(failure.message))
       .finally(() => setBusy(false));
-  }, [mode, token, onAuthenticated, navigate]);
+  }, [mode, token, onAuthenticated, onVerified]);
 
   function update(key: keyof AuthFormValues, value: string) {
     setForm((current) => ({ ...current, [key]: value }));
