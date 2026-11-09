@@ -61,9 +61,7 @@ export function AccountPage({
       ) : account ? (
         <>
           <section className="surface-card flex items-center gap-4 p-5">
-            <span className="grid size-12 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">
-              <UserRound size={23} />
-            </span>
+            <UserRound size={27} strokeWidth={1.7} className="shrink-0 text-accent" />
             <div className="min-w-0">
               <p className="truncate text-sm font-semibold">{account.name}</p>
               <p className="mt-1 truncate text-xs text-muted">{account.email}</p>
@@ -98,9 +96,7 @@ export function AccountPage({
         </>
       ) : authEnabled ? (
         <section className="surface-card space-y-4 p-6">
-          <span className="grid size-12 place-items-center rounded-xl bg-accent/15 text-accent">
-            <LogIn size={22} />
-          </span>
+          <LogIn size={27} strokeWidth={1.7} className="text-accent" />
           <div>
             <h2 className="text-lg font-semibold">Sign in to RepLens</h2>
             <p className="mt-1 text-sm leading-6 text-muted">

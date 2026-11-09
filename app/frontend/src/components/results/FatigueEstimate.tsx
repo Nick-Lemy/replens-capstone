@@ -20,9 +20,11 @@ export function FatigueEstimate({ rep }: { rep: Rep | undefined }) {
   return (
     <section className="surface-card p-5" role="status">
       <div className="flex items-start gap-3">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-accent text-accent-ink">
-          {nearLimit ? <CircleAlert size={18} /> : <Activity size={18} />}
-        </span>
+        {nearLimit ? (
+          <CircleAlert size={25} strokeWidth={1.7} className="shrink-0 text-accent" />
+        ) : (
+          <Activity size={25} strokeWidth={1.7} className="shrink-0 text-accent" />
+        )}
         <div>
           <h2 className="text-sm font-medium">Muscle fatigue estimate</h2>
           <p className="mt-1 text-xl font-bold tracking-[-.03em]">

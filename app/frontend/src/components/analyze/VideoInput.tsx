@@ -83,9 +83,7 @@ export function VideoInput({
           }}
         >
           <div className="flex min-h-64 w-full flex-col items-center justify-center rounded-xl bg-soft p-6 text-center sm:min-h-72">
-            <span className="mb-5 grid size-14 place-items-center rounded-xl bg-panel text-accent shadow-sm">
-              <Upload size={23} strokeWidth={1.7} />
-            </span>
+            <Upload size={30} strokeWidth={1.7} className="mb-5 text-accent" />
             <span className="text-base font-semibold">Upload your curl set</span>
             <span className="mt-2 text-sm text-muted">Keep both arms visible.</span>
             <div className="mt-6 flex w-full max-w-sm flex-col gap-2 sm:flex-row">

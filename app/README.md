@@ -4,6 +4,8 @@ React + TypeScript + Tailwind frontend, with TanStack Query and a FastAPI video 
 
 ## First-time setup
 
+For a one-command local run of the frontend, backend and PostgreSQL, use `docker compose up --build` from the repository root. The root README explains local account credentials. Production keeps using Neon.
+
 Install Python 3.12, Node, pnpm 11.25.0 and FFmpeg (including `ffprobe`). On macOS, FFmpeg is available with `brew install ffmpeg`; on Ubuntu, use `sudo apt-get install ffmpeg libgl1`.
 
 Then, from the repository root:

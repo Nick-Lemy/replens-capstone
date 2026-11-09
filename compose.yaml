@@ -1,0 +1,53 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: replens
+      POSTGRES_USER: replens
+      POSTGRES_PASSWORD: replens-local-only
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U replens -d replens"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql+psycopg://replens:replens-local-only@db:5432/replens
+      FRONTEND_ORIGINS: http://localhost:${REPLENS_FRONTEND_PORT:-5173},http://127.0.0.1:${REPLENS_FRONTEND_PORT:-5173}
+      AUTH_FRONTEND_URL: http://localhost:${REPLENS_FRONTEND_PORT:-5173}
+      JWT_SECRET: ${JWT_SECRET:-}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      EMAIL_FROM: ${EMAIL_FROM:-}
+    ports:
+      - "127.0.0.1:${REPLENS_API_PORT:-8000}:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health', timeout=10)"]
+      interval: 15s
+      timeout: 15s
+      start_period: 90s
+      retries: 5
+    init: true
+
+  frontend:
+    build:
+      context: ./app/frontend
+    environment:
+      API_PROXY_TARGET: http://backend:8000
+    ports:
+      - "127.0.0.1:${REPLENS_FRONTEND_PORT:-5173}:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    init: true
+
+volumes:
+  postgres_data:

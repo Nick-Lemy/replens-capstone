@@ -26,9 +26,7 @@ export function SessionCard({
           onClick={() => onOpen(session)}
           className="flex min-w-0 flex-1 items-center gap-4 text-left"
         >
-          <span className="grid size-14 shrink-0 place-items-center rounded-xl bg-[radial-gradient(circle_at_top_right,rgba(168,170,247,.25),transparent_75%)] text-accent">
-            <Dumbbell size={23} strokeWidth={1.6} />
-          </span>
+          <Dumbbell size={27} strokeWidth={1.6} className="shrink-0 text-accent" />
           <div className="min-w-0">
             <p className="truncate text-sm font-semibold">{session.title}</p>
             <p className="mt-1 text-xs text-muted">
