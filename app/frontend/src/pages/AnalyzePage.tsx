@@ -20,6 +20,7 @@ export function AnalyzePage({
   modelsError,
   retryModels,
   onInfo,
+  onPrivacy,
   onLiveActivityChange,
 }: {
   file: File | null;
@@ -35,6 +36,7 @@ export function AnalyzePage({
   modelsError: boolean;
   retryModels: () => void;
   onInfo: () => void;
+  onPrivacy: () => void;
   onLiveActivityChange: (active: boolean) => void;
 }) {
   const [liveOpen, setLiveOpen] = useState(false);
@@ -116,6 +118,7 @@ export function AnalyzePage({
           busy={busy}
           onFile={onFile}
           onStart={onStart}
+          onPrivacy={onPrivacy}
           canStart={
             !modelsLoading &&
             !modelsError &&

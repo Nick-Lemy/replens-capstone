@@ -13,6 +13,7 @@ import { ResultsPage } from "./pages/ResultsPage";
 import { HistoryPage } from "./pages/HistoryPage";
 import { InfoPage } from "./pages/InfoPage";
 import { AccountPage } from "./pages/AccountPage";
+import { PrivacyPage } from "./pages/PrivacyPage";
 import type { AppTab } from "./lib/navigation";
 import { useAnalysisJob } from "./hooks/useAnalysisJob";
 import { useActiveSession } from "./hooks/useActiveSession";
@@ -23,7 +24,10 @@ import { useHealth } from "./hooks/useHealth";
 
 function tabFromHash(): AppTab {
   const value = window.location.hash.slice(1);
-  return value === "history" || value === "info" || value === "account"
+  return value === "history" ||
+    value === "info" ||
+    value === "account" ||
+    value === "privacy"
     ? value
     : "analyze";
 }
@@ -203,6 +207,8 @@ export default function App() {
             onAuth={openAuth}
             onSignOut={() => auth.logout.mutateAsync().then(() => undefined)}
           />
+        ) : tab === "privacy" ? (
+          <PrivacyPage />
         ) : tab === "info" ? (
           <InfoPage
             model={analysis.model}
@@ -256,6 +262,7 @@ export default function App() {
               void models.refetch();
             }}
             onInfo={() => navigate("info")}
+            onPrivacy={() => navigate("privacy")}
             onLiveActivityChange={setLiveActive}
             onStart={() => {
               if (
@@ -278,8 +285,15 @@ export default function App() {
             dismissInstall={dismissInstall}
           />
         )}
-        <footer className="pt-3 text-center text-[11px] text-muted">
-          RepLens · Make every rep count.
+        <footer className="pt-3 text-center text-xs text-muted">
+          <button
+            type="button"
+            onClick={() => navigate("privacy")}
+            aria-current={tab === "privacy" ? "page" : undefined}
+            className="min-h-11 underline underline-offset-4 hover:text-ink"
+          >
+            Privacy Policy
+          </button>
         </footer>
       </main>
       <AppNavigation tab={tab} setTab={navigate} />

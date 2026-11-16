@@ -1,1 +1,1 @@
-export type AppTab = "analyze" | "history" | "info" | "account";
+export type AppTab = "analyze" | "history" | "info" | "account" | "privacy";

@@ -8,6 +8,7 @@ export function VideoInput({
   busy,
   onFile,
   onStart,
+  onPrivacy,
   canStart,
 }: {
   file: File | null;
@@ -15,6 +16,7 @@ export function VideoInput({
   busy: boolean;
   onFile: (file: File | null) => void;
   onStart: () => void;
+  onPrivacy: () => void;
   canStart: boolean;
 }) {
   const picker = useRef<HTMLInputElement>(null);
@@ -142,14 +144,26 @@ export function VideoInput({
       )}
       {error && <Notice onClose={() => setError("")}>{error}</Notice>}
       {file && !busy && (
-        <Button
-          className="w-full"
-          onClick={onStart}
-          disabled={!canStart || (duration !== null && duration > 180)}
-        >
-          <ScanLine size={17} />
-          Analyze set
-        </Button>
+        <div className="space-y-2">
+          <p className="text-xs leading-5 text-muted">
+            Analyze set uploads this video for temporary server processing.{" "}
+            <button
+              type="button"
+              onClick={onPrivacy}
+              className="font-medium text-ink underline underline-offset-4 hover:text-accent"
+            >
+              Read the Privacy Policy
+            </button>
+          </p>
+          <Button
+            className="w-full"
+            onClick={onStart}
+            disabled={!canStart || (duration !== null && duration > 180)}
+          >
+            <ScanLine size={17} />
+            Analyze set
+          </Button>
+        </div>
       )}
     </>
   );

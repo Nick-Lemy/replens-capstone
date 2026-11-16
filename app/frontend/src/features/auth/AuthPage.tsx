@@ -223,6 +223,20 @@ export function AuthPage({
           {title[mode]}
         </h1>
         <p className="text-sm leading-6 text-muted">{description[mode]}</p>
+        {mode === "register" && (
+          <p className="text-xs leading-5 text-muted">
+            Read how RepLens uses account information in the{" "}
+            <a
+              href="/#privacy"
+              target="_blank"
+              rel="noopener"
+              className="font-medium text-ink underline underline-offset-4"
+            >
+              Privacy Policy
+            </a>
+            .
+          </p>
+        )}
       </div>
 
       {mode === "account" ? (
