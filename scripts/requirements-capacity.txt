@@ -1,0 +1,3 @@
+# Optional local load and resource-measurement tools; not runtime dependencies.
+locust==2.47.0
+psutil>=5.9,<8

@@ -25,3 +25,6 @@ models/
 dist/
 *.tsbuildinfo
 *.sqlite3
+.coverage
+app/frontend/playwright-report/
+app/frontend/test-results/

@@ -5,7 +5,10 @@ ROOT = Path(__file__).resolve().parents[3]
 BUNDLE = Path(
     os.environ.get("REPLENS_MODEL_PATH") or ROOT / "app/backend/assets/rir_model.json"
 )
-POSE_MODEL = ROOT / "training/models/pose_landmarker_heavy.task"
+POSE_MODEL = Path(
+    os.environ.get("REPLENS_POSE_MODEL_PATH")
+    or ROOT / "training/models/pose_landmarker_heavy.task"
+)
 OPENCV_THREADS = 2
 FRONTEND_ORIGINS = [
     origin.strip()

@@ -70,7 +70,7 @@ def check_origin(request: Request, settings: AuthSettings = Depends(require_enab
 
 def current_user(
     session_token: str | None = Cookie(None, alias=COOKIE_NAME),
-    session: Session = Depends(get_session),
+    session: Session = Depends(get_session, scope="function"),
     settings: AuthSettings = Depends(require_enabled),
 ) -> User:
     return authenticated_user(session_token, session, settings)
@@ -95,7 +95,7 @@ def status():
 
 
 @router.post("/register", dependencies=[Depends(check_origin)])
-async def register(data: Registration, request: Request, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+async def register(data: Registration, request: Request, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     email = normalize_email(data.email)
     limit(request, "register", email, 3, 3600)
     name = data.name.strip()
@@ -121,7 +121,7 @@ async def register(data: Registration, request: Request, session: Session = Depe
 
 
 @router.post("/verify", dependencies=[Depends(check_origin)])
-def verify(data: TokenRequest, response: Response, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+def verify(data: TokenRequest, response: Response, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     user = consume_email_token(data.token, "verify", session)
     user.verified_at = now()
     session.commit()
@@ -130,7 +130,7 @@ def verify(data: TokenRequest, response: Response, session: Session = Depends(ge
 
 
 @router.post("/login", dependencies=[Depends(check_origin)])
-def login(data: Credentials, request: Request, response: Response, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+def login(data: Credentials, request: Request, response: Response, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     email = normalize_email(data.email)
     limit(request, "login", email, 10, 600)
     user = session.scalar(select(User).where(User.email == email))
@@ -149,7 +149,7 @@ def me(response: Response, user: User = Depends(current_user), settings: AuthSet
 
 
 @router.post("/logout", dependencies=[Depends(check_origin)])
-def logout(response: Response, user: User = Depends(current_user), session: Session = Depends(get_session)):
+def logout(response: Response, user: User = Depends(current_user), session: Session = Depends(get_session, scope="function")):
     user.token_version += 1
     session.commit()
     response.delete_cookie(COOKIE_NAME, path="/api")
@@ -158,7 +158,7 @@ def logout(response: Response, user: User = Depends(current_user), session: Sess
 
 
 @router.post("/forgot-password", dependencies=[Depends(check_origin)])
-async def forgot_password(data: EmailRequest, request: Request, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+async def forgot_password(data: EmailRequest, request: Request, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     email = normalize_email(data.email)
     limit(request, "forgot", email, 2, 300)
     user = session.scalar(select(User).where(User.email == email))
@@ -173,7 +173,7 @@ async def forgot_password(data: EmailRequest, request: Request, session: Session
 
 
 @router.post("/resend-verification", dependencies=[Depends(check_origin)])
-async def resend_verification(data: EmailRequest, request: Request, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+async def resend_verification(data: EmailRequest, request: Request, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     email = normalize_email(data.email)
     limit(request, "resend", email, 2, 300)
     user = session.scalar(select(User).where(User.email == email))
@@ -188,7 +188,7 @@ async def resend_verification(data: EmailRequest, request: Request, session: Ses
 
 
 @router.post("/reset-password", dependencies=[Depends(check_origin)])
-def reset_password(data: PasswordReset, response: Response, session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+def reset_password(data: PasswordReset, response: Response, session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     user = consume_email_token(data.token, "reset", session)
     user.password_hash = passwords.hash(data.password)
     user.token_version += 1
@@ -199,7 +199,7 @@ def reset_password(data: PasswordReset, response: Response, session: Session = D
 
 
 @router.post("/change-password", dependencies=[Depends(check_origin)])
-def change_password(data: PasswordChange, response: Response, user: User = Depends(current_user), session: Session = Depends(get_session), settings: AuthSettings = Depends(require_enabled)):
+def change_password(data: PasswordChange, response: Response, user: User = Depends(current_user), session: Session = Depends(get_session, scope="function"), settings: AuthSettings = Depends(require_enabled)):
     if not passwords.verify(data.current_password, user.password_hash):
         raise HTTPException(401, "Current password is incorrect")
     user.password_hash = passwords.hash(data.new_password)

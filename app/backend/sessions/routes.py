@@ -33,7 +33,7 @@ def owned_record(session: Session, user: User, session_id: UUID) -> SavedSession
 
 
 @router.get("", response_model=list[SessionOutput])
-def list_sessions(user: User = Depends(current_user), session: Session = Depends(get_session)):
+def list_sessions(user: User = Depends(current_user), session: Session = Depends(get_session, scope="function")):
     records = session.scalars(
         select(SavedSession)
         .where(SavedSession.user_id == user.id)
@@ -43,12 +43,12 @@ def list_sessions(user: User = Depends(current_user), session: Session = Depends
 
 
 @router.get("/{session_id}", response_model=SessionOutput)
-def get_saved_session(session_id: UUID, user: User = Depends(current_user), session: Session = Depends(get_session)):
+def get_saved_session(session_id: UUID, user: User = Depends(current_user), session: Session = Depends(get_session, scope="function")):
     return output(owned_record(session, user, session_id))
 
 
 @router.put("/{session_id}", response_model=SessionOutput, dependencies=[Depends(check_origin)])
-def save_session(session_id: UUID, data: SessionInput, user: User = Depends(current_user), session: Session = Depends(get_session)):
+def save_session(session_id: UUID, data: SessionInput, user: User = Depends(current_user), session: Session = Depends(get_session, scope="function")):
     record = session.get(SavedSession, str(session_id))
     if record is not None and record.user_id != user.id:
         raise HTTPException(404, "Saved session not found")
@@ -64,7 +64,7 @@ def save_session(session_id: UUID, data: SessionInput, user: User = Depends(curr
 
 
 @router.delete("/{session_id}", status_code=204, dependencies=[Depends(check_origin)])
-def delete_session(session_id: UUID, user: User = Depends(current_user), session: Session = Depends(get_session)):
+def delete_session(session_id: UUID, user: User = Depends(current_user), session: Session = Depends(get_session, scope="function")):
     record = owned_record(session, user, session_id)
     session.delete(record)
     session.commit()
