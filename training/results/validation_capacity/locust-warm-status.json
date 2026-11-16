@@ -1,0 +1,36 @@
+{
+  "endpoint": "GET /api/sessions",
+  "fixture": "one verified synthetic user, ten synthetic sessions",
+  "counts_by_stage": {
+    "repeat1_users10": {
+      "200": 120
+    },
+    "repeat1_users50": {
+      "200": 539
+    },
+    "repeat1_users100": {
+      "200": 972
+    },
+    "repeat2_users10": {
+      "200": 454
+    },
+    "repeat2_users50": {
+      "200": 533
+    },
+    "repeat2_users100": {
+      "200": 971
+    },
+    "repeat3_users10": {
+      "200": 463
+    },
+    "repeat3_users50": {
+      "200": 525
+    },
+    "repeat3_users100": {
+      "200": 958
+    }
+  },
+  "total": {
+    "200": 5535
+  }
+}

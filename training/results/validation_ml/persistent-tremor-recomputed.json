@@ -1,0 +1,121 @@
+{
+  "speed_only": {
+    "n_examples": 33,
+    "pooled_mae_reps": 3.0173085952021137,
+    "participant_macro_mae_reps": 2.251165610786304,
+    "participant_mae_reps": {
+      "P001": 2.948275957232454,
+      "P002": 0.3929475193959826,
+      "P003": 4.025808644977809,
+      "P005": 1.637630321538971
+    }
+  },
+  "speed_plus_persistent_transverse": {
+    "n_examples": 33,
+    "pooled_mae_reps": 3.0656334729701817,
+    "participant_macro_mae_reps": 2.2214538383660685,
+    "participant_mae_reps": {
+      "P001": 2.9331443532569708,
+      "P002": 0.00100034714031505,
+      "P003": 4.0509129083871835,
+      "P005": 1.9007577446798045
+    }
+  },
+  "training_median": {
+    "n_examples": 33,
+    "pooled_mae_reps": 3.1818181818181817,
+    "participant_macro_mae_reps": 2.452838827838828,
+    "participant_mae_reps": {
+      "P001": 2.8333333333333335,
+      "P002": 0.5,
+      "P003": 4.1923076923076925,
+      "P005": 2.2857142857142856
+    }
+  },
+  "quality_filter": {
+    "candidate_examples": 97,
+    "accepted_examples": 33,
+    "rejected_examples": 64,
+    "rejected_reasons": {
+      "less than 85% valid wrist/camera tracking": 42,
+      "tracking gap exceeds two frames or reaches an edge": 22
+    },
+    "candidate_quality_evidence": "training/results/candidate_tremor_20261101T103627645167Z/quality.csv",
+    "persistent_run_quality_evidence": "training/results/persistent_tremor_20261101T105947439502Z/quality.csv (accepted rows only)"
+  },
+  "comparison": {
+    "same_sample_ids": true,
+    "n_examples": 33,
+    "n_participants": 4,
+    "frozen_bundle": "app/backend/assets/rir_model.json (ridge_speed_transverse, version persistent_tremor_20261101T105947439502Z) vs app/backend/assets/rir_speed_only.json (ridge_speed_only)",
+    "prediction_artifact": "training/results/persistent_tremor_20261101T105947439502Z/predictions.csv",
+    "examples_per_participant": {
+      "P001": 12,
+      "P002": 1,
+      "P003": 13,
+      "P005": 7
+    },
+    "metric_definition": "relative reduction in participant-macro MAE; each participant contributes equal weight",
+    "relative_mae_reduction_vs_speed_only": 0.013198394768414059,
+    "relative_reduction_percent": 1.319839476841406,
+    "15_percent_target_met": false,
+    "near_final_reps_left_le_2": {
+      "n": 10,
+      "pooled_speed_only_mae_reps": 3.2192703925275366,
+      "pooled_speed_plus_transverse_mae_reps": 3.5958119737050134,
+      "participant_macro_speed_only_mae_reps": 2.8014631693842844,
+      "participant_macro_speed_plus_transverse_mae_reps": 3.182679859236334
+    },
+    "final_reps_left_le_1": {
+      "n": 7,
+      "pooled_speed_only_mae_reps": 3.7426242155753267,
+      "pooled_speed_plus_transverse_mae_reps": 4.130359340303092,
+      "participants": [
+        "P001",
+        "P003",
+        "P005"
+      ],
+      "participant_macro_speed_only_mae_reps": 3.1905667493359,
+      "participant_macro_speed_plus_transverse_mae_reps": 3.59089648606936
+    }
+  },
+  "limitations": [
+    "Frozen exploratory predictions; this script does not retrain or alter model bundles.",
+    "The nested leave-person-out run reused exploratory test folds after prior result inspection; it is not untouched confirmation evidence.",
+    "The cohort has four participants with uneven representation; pooled and participant-macro errors are both reported.",
+    "The 15% reduction is a historical proposal target and is not met by this matched comparison.",
+    "Ground truth is retrospective RIR labels; the estimates are not direct physiological fatigue measurements."
+  ],
+  "stored_comparison_rows": [
+    {
+      "task": "rir",
+      "model": "speed_only",
+      "examples": "8.25",
+      "mae": "2.2511656107863036"
+    },
+    {
+      "task": "rir",
+      "model": "speed_plus_original_shaking",
+      "examples": "8.25",
+      "mae": "2.88179786927759"
+    },
+    {
+      "task": "rir",
+      "model": "speed_plus_persistent_2d",
+      "examples": "8.25",
+      "mae": "2.7340696266616598"
+    },
+    {
+      "task": "rir",
+      "model": "speed_plus_persistent_transverse",
+      "examples": "8.25",
+      "mae": "2.221453838366069"
+    },
+    {
+      "task": "rir",
+      "model": "training_median",
+      "examples": "8.25",
+      "mae": "2.452838827838828"
+    }
+  ]
+}

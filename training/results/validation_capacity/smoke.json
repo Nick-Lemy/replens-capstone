@@ -1,0 +1,37 @@
+{
+  "metadata": {
+    "base_url": "http://127.0.0.1:8101",
+    "endpoint": "GET /api/sessions",
+    "database": "loopback _test database",
+    "configured_users_per_stage": [
+      1
+    ],
+    "seconds_per_stage": 2,
+    "repeats": 1,
+    "request_interval_seconds_per_user": 1,
+    "timeout_seconds": 3.0,
+    "python": "3.12.14 (main, Aug 12 2026, 13:57:54) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "commit": "8a74834184d842ef47df11459f02c1192a0f21c3"
+  },
+  "stages": [
+    {
+      "repeat": 1,
+      "users": 1,
+      "configured_seconds": 2,
+      "actual_seconds": 1.016,
+      "attempts": 2,
+      "achieved_rps": 1.97,
+      "status_counts": {
+        "200": 2
+      },
+      "success_latency_ms": {
+        "p50": 11.35,
+        "p95": 87.94,
+        "p99": 87.94
+      },
+      "client_timeouts": 0,
+      "client_errors": 0,
+      "stuck_threads": 0
+    }
+  ]
+}

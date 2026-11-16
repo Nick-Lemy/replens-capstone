@@ -1,0 +1,55 @@
+{
+  "date": "2026-11-15",
+  "method": "Direct local call to app.backend.services.analysis.analyze on read-only source clips; no API, account, database, or persistent video copy. This diagnostic captures prediction availability/statuses, not accuracy or user-visible timing.",
+  "model_choice": "speed_only",
+  "model_family": "ridge_speed_only",
+  "model_bundle": "app/backend/assets/rir_speed_only.json",
+  "model_bundle_sha256": "fb036c04305e941a1046693f707f0c8badd7cc6419ec52fdca4e51a7c82736b1",
+  "clip_1": {
+    "source_sha256": "b39d46dbcf83080c4fb174a58cfbc38d03d9612af31039832cb5a087fc335c7a",
+    "rep_count": 9,
+    "tracking_coverage": 1.0,
+    "prediction_status_counts": {
+      "building_history": 3,
+      "available": 6,
+      "unavailable": 0
+    },
+    "unavailable_reasons": {},
+    "prediction_unavailable_reason": null,
+    "note": "Matched the corrected API capacity counter: 6 available predictions, 3 history-building reps."
+  },
+  "clip_3": {
+    "source_sha256": "fa95333c40291e36f5c51f7ca6e69838ac94895318277e9f7c513f126d4ebb59",
+    "rep_count": 18,
+    "tracking_coverage": 0.9808043875685558,
+    "prediction_status_counts": {
+      "building_history": 3,
+      "available": 7,
+      "unavailable": 8
+    },
+    "unavailable_reasons": {
+      "tracking gap exceeds two frames or reaches an edge": 8
+    },
+    "unavailable_rep_numbers": [
+      4,
+      5,
+      6,
+      7,
+      13,
+      14,
+      15,
+      16
+    ],
+    "available_rep_numbers": [
+      8,
+      9,
+      10,
+      11,
+      12,
+      17,
+      18
+    ],
+    "note": "Direct rerun of analysis on the same source/model after the API result exposed 8 unavailable reps. This confirms the current code quality-gates those windows; it does not establish the same per-rep mask was returned by the earlier API process."
+  },
+  "interpretation": "The initial video-jobs counter bug caused every availability count to be reported as zero because it read rep.prediction/rep.rir_prediction. The current API field is rep.rir. After correction, clip 1 has 6 available and clip 3 has 7 available; there is no evidence of a model/scaling regression. Clip 3 still has 8 unavailable estimates from the two-frame tracking-gap quality gate."
+}

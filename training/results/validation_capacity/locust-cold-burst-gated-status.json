@@ -1,0 +1,35 @@
+{
+  "endpoint": "GET /api/sessions",
+  "fixture": "one verified synthetic user, ten synthetic sessions",
+  "counts_by_stage": {
+    "cold_burst": {
+      "503": 85,
+      "200": 15
+    }
+  },
+  "latency_ms_by_stage": {
+    "cold_burst": {
+      "all": {
+        "p50": 90.68,
+        "p95": 141.5,
+        "p99": 142.21
+      },
+      "success_200": {
+        "p50": 138.88,
+        "p95": 142.21,
+        "p99": 142.63
+      }
+    }
+  },
+  "recovery_probes": [
+    {
+      "elapsed_after_burst_s": 4.73,
+      "latency_ms": 26.73,
+      "status": 200
+    }
+  ],
+  "total": {
+    "503": 85,
+    "200": 15
+  }
+}

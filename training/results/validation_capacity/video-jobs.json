@@ -1,0 +1,168 @@
+{
+  "metadata": {
+    "run_started_at_utc": "2026-11-15T19:56:46.919414+00:00",
+    "commit": "8a74834184d842ef47df11459f02c1192a0f21c3",
+    "local_api": "http://127.0.0.1:8101",
+    "worker_count": 1,
+    "model_choice": "speed_only",
+    "host": {
+      "platform": "macOS-26.6.2-arm64-arm-64bit",
+      "architecture": "arm64",
+      "logical_cpus": 10,
+      "physical_cpus": 10,
+      "total_memory_gib": 16.0,
+      "python": "3.12.14 (main, Aug 12 2026, 13:57:54) [Clang 21.0.0 (clang-2100.1.1.101)]",
+      "cpu_model": "Apple M5"
+    },
+    "pose_model_sha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b",
+    "model_bundle_sha256": "fb036c04305e941a1046693f707f0c8badd7cc6419ec52fdca4e51a7c82736b1",
+    "source_clips": {
+      "clip_1": {
+        "clip": "clip_1",
+        "source_sha256": "b39d46dbcf83080c4fb174a58cfbc38d03d9612af31039832cb5a087fc335c7a",
+        "size_bytes": 28350799,
+        "duration_s": 19.432,
+        "codec": "h264",
+        "width": 1076,
+        "height": 1706,
+        "avg_frame_rate": "349800/11659",
+        "r_frame_rate": "30/1"
+      },
+      "clip_3": {
+        "clip": "clip_3",
+        "source_sha256": "fa95333c40291e36f5c51f7ca6e69838ac94895318277e9f7c513f126d4ebb59",
+        "size_bytes": 53996809,
+        "duration_s": 36.463,
+        "codec": "h264",
+        "width": 1080,
+        "height": 1746,
+        "avg_frame_rate": "328200/10939",
+        "r_frame_rate": "30/1"
+      }
+    },
+    "job_policy": {
+      "single_jobs": 2,
+      "synchronized_burst_uploads": 5,
+      "expected_burst_admitted": 3,
+      "expected_burst_rejected_429": 2
+    }
+  },
+  "single_jobs": [
+    {
+      "status": 202,
+      "job_id": "1e285c6ee1c84795ad06faff5b4c1b08",
+      "accepted_after_upload_s": 0.062,
+      "accepted_at_monotonic": 7878.006522333,
+      "clip": "clip_1",
+      "first_processing_after_accept_s": 0.004,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 18.829,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 6,
+      "prediction_status_counts": {
+        "available": 6,
+        "building_history": 3,
+        "unavailable": 0
+      }
+    },
+    {
+      "status": 202,
+      "job_id": "40693dae195b46bbaea551b82a2191c9",
+      "accepted_after_upload_s": 0.092,
+      "accepted_at_monotonic": 7896.927523041,
+      "clip": "clip_3",
+      "first_processing_after_accept_s": 0.003,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 34.071,
+      "model_choice": "speed_only",
+      "rep_count": 18,
+      "available_predictions": 7,
+      "prediction_status_counts": {
+        "available": 7,
+        "building_history": 3,
+        "unavailable": 8
+      }
+    }
+  ],
+  "burst5": [
+    {
+      "status": 202,
+      "job_id": "4abb4b1df85340a3872c1a2214c150a8",
+      "accepted_after_upload_s": 0.11,
+      "accepted_at_monotonic": 7931.11458525,
+      "clip": "burst_clip_1_1",
+      "first_processing_after_accept_s": 37.544,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 55.874,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 6,
+      "prediction_status_counts": {
+        "available": 6,
+        "building_history": 3,
+        "unavailable": 0
+      }
+    },
+    {
+      "status": 202,
+      "job_id": "eeb72091164c4ffc9ddfab7c29183bb0",
+      "accepted_after_upload_s": 0.109,
+      "accepted_at_monotonic": 7931.113596958,
+      "clip": "burst_clip_1_2",
+      "first_processing_after_accept_s": 0.007,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 19.111,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 6,
+      "prediction_status_counts": {
+        "available": 6,
+        "building_history": 3,
+        "unavailable": 0
+      }
+    },
+    {
+      "status": 429,
+      "upload_elapsed_s": 0.095,
+      "body": "{\"detail\":\"The analyzer is busy. Please try again shortly.\"}",
+      "first_processing_after_accept_s": null,
+      "terminal_state": null
+    },
+    {
+      "status": 202,
+      "job_id": "7b1f2c8349264c72a9b516006572e7a9",
+      "accepted_after_upload_s": 0.11,
+      "accepted_at_monotonic": 7931.11379225,
+      "clip": "burst_clip_1_4",
+      "first_processing_after_accept_s": 19.114,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 37.549,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 6,
+      "prediction_status_counts": {
+        "available": 6,
+        "building_history": 3,
+        "unavailable": 0
+      }
+    },
+    {
+      "status": 429,
+      "upload_elapsed_s": 0.095,
+      "body": "{\"detail\":\"The analyzer is busy. Please try again shortly.\"}",
+      "first_processing_after_accept_s": null,
+      "terminal_state": null
+    }
+  ],
+  "api_process_resources": {
+    "sample_count": 216,
+    "peak_rss_mb": 611.2,
+    "average_cpu_percent": 211.9
+  }
+}

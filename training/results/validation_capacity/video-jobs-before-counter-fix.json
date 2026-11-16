@@ -1,0 +1,143 @@
+{
+  "metadata": {
+    "run_started_at_utc": "2026-11-15T19:46:03.007339+00:00",
+    "commit": "8a74834184d842ef47df11459f02c1192a0f21c3",
+    "local_api": "http://127.0.0.1:8101",
+    "worker_count": 1,
+    "model_choice": "speed_only",
+    "host": {
+      "platform": "macOS-26.6.2-arm64-arm-64bit",
+      "architecture": "arm64",
+      "logical_cpus": 10,
+      "physical_cpus": 10,
+      "total_memory_gib": 16.0,
+      "python": "3.12.14 (main, Aug 12 2026, 13:57:54) [Clang 21.0.0 (clang-2100.1.1.101)]",
+      "cpu_model": "Apple M5"
+    },
+    "pose_model_sha256": "64437af838a65d18e5ba7a0d39b465540069bc8aae8308de3e318aad31fcbc7b",
+    "model_bundle_sha256": "fb036c04305e941a1046693f707f0c8badd7cc6419ec52fdca4e51a7c82736b1",
+    "source_clips": {
+      "clip_1": {
+        "clip": "clip_1",
+        "source_sha256": "b39d46dbcf83080c4fb174a58cfbc38d03d9612af31039832cb5a087fc335c7a",
+        "size_bytes": 28350799,
+        "duration_s": 19.432,
+        "codec": "h264",
+        "width": 1076,
+        "height": 1706,
+        "avg_frame_rate": "349800/11659",
+        "r_frame_rate": "30/1"
+      },
+      "clip_3": {
+        "clip": "clip_3",
+        "source_sha256": "fa95333c40291e36f5c51f7ca6e69838ac94895318277e9f7c513f126d4ebb59",
+        "size_bytes": 53996809,
+        "duration_s": 36.463,
+        "codec": "h264",
+        "width": 1080,
+        "height": 1746,
+        "avg_frame_rate": "328200/10939",
+        "r_frame_rate": "30/1"
+      }
+    },
+    "job_policy": {
+      "single_jobs": 2,
+      "synchronized_burst_uploads": 5,
+      "expected_burst_admitted": 3,
+      "expected_burst_rejected_429": 2
+    }
+  },
+  "single_jobs": [
+    {
+      "status": 202,
+      "job_id": "667c192f129e4a58805213dce4123680",
+      "accepted_after_upload_s": 0.061,
+      "accepted_at_monotonic": 7233.547691291,
+      "clip": "clip_1",
+      "first_processing_after_accept_s": 0.005,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 18.826,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 0
+    },
+    {
+      "status": 202,
+      "job_id": "70d23bddb96c4ec790f5f0dd7ade4628",
+      "accepted_after_upload_s": 0.082,
+      "accepted_at_monotonic": 7252.455271833,
+      "clip": "clip_3",
+      "first_processing_after_accept_s": 0.004,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 34.086,
+      "model_choice": "speed_only",
+      "rep_count": 18,
+      "available_predictions": 0
+    }
+  ],
+  "burst5": [
+    {
+      "status": 202,
+      "job_id": "6c9a299b10f0461c9e48300dd534a378",
+      "accepted_after_upload_s": 0.122,
+      "accepted_at_monotonic": 7286.670803208,
+      "clip": "burst_clip_1_1",
+      "first_processing_after_accept_s": 0.006,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 19.142,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 0
+    },
+    {
+      "status": 429,
+      "upload_elapsed_s": 0.108,
+      "body": "{\"detail\":\"The analyzer is busy. Please try again shortly.\"}",
+      "first_processing_after_accept_s": null,
+      "terminal_state": null
+    },
+    {
+      "status": 202,
+      "job_id": "6c62e68b41634a87a906417725f5e7e5",
+      "accepted_after_upload_s": 0.124,
+      "accepted_at_monotonic": 7286.672488791,
+      "clip": "burst_clip_1_3",
+      "first_processing_after_accept_s": 37.611,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 56.431,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 0
+    },
+    {
+      "status": 429,
+      "upload_elapsed_s": 0.108,
+      "body": "{\"detail\":\"The analyzer is busy. Please try again shortly.\"}",
+      "first_processing_after_accept_s": null,
+      "terminal_state": null
+    },
+    {
+      "status": 202,
+      "job_id": "bc763486edf746ac9cb335caa9213055",
+      "accepted_after_upload_s": 0.124,
+      "accepted_at_monotonic": 7286.672018333,
+      "clip": "burst_clip_1_5",
+      "first_processing_after_accept_s": 18.632,
+      "terminal_state": "completed",
+      "state": "completed",
+      "terminal_after_accept_s": 37.615,
+      "model_choice": "speed_only",
+      "rep_count": 9,
+      "available_predictions": 0
+    }
+  ],
+  "api_process_resources": {
+    "sample_count": 217,
+    "peak_rss_mb": 610.5,
+    "average_cpu_percent": 211.6
+  }
+}

@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+GET,GET /api/sessions [cold burst],CatchResponseError('expected-overload-503'),85,2026-11-15T19:38:05Z,2026-11-15T19:38:05Z

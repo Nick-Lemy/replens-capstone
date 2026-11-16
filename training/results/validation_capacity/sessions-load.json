@@ -1,0 +1,101 @@
+{
+  "metadata": {
+    "base_url": "http://127.0.0.1:8101",
+    "endpoint": "GET /api/sessions",
+    "database": "loopback _test database",
+    "configured_users_per_stage": [
+      10,
+      50,
+      100
+    ],
+    "seconds_per_stage": 10,
+    "repeats": 3,
+    "request_interval_seconds_per_user": 1,
+    "timeout_seconds": 3.0,
+    "python": "3.12.14 (main, Aug 12 2026, 13:57:54) [Clang 21.0.0 (clang-2100.1.1.101)]",
+    "commit": "8a74834184d842ef47df11459f02c1192a0f21c3"
+  },
+  "stages": [
+    {
+      "repeat": 1,
+      "users": 10,
+      "configured_seconds": 10,
+      "actual_seconds": 9.312,
+      "attempts": 100,
+      "achieved_rps": 10.0,
+      "status_counts": {
+        "200": 100
+      },
+      "success_latency_ms": {
+        "p50": 15.73,
+        "p95": 117.47,
+        "p99": 119.39
+      },
+      "all_request_latency_ms": {
+        "p50": 15.73,
+        "p95": 117.47,
+        "p99": 119.39
+      },
+      "process_resource_peak_rss_mb": 268.0,
+      "process_resource_avg_cpu_percent": 7.9,
+      "resource_sample_count": 37,
+      "client_timeouts": 0,
+      "client_errors": 0,
+      "stuck_threads": 0
+    },
+    {
+      "repeat": 1,
+      "users": 50,
+      "configured_seconds": 10,
+      "actual_seconds": 9.421,
+      "attempts": 500,
+      "achieved_rps": 50.0,
+      "status_counts": {
+        "200": 500
+      },
+      "success_latency_ms": {
+        "p50": 28.71,
+        "p95": 65.0,
+        "p99": 74.09
+      },
+      "all_request_latency_ms": {
+        "p50": 28.71,
+        "p95": 65.0,
+        "p99": 74.09
+      },
+      "process_resource_peak_rss_mb": 271.9,
+      "process_resource_avg_cpu_percent": 21.7,
+      "resource_sample_count": 38,
+      "client_timeouts": 0,
+      "client_errors": 0,
+      "stuck_threads": 0
+    },
+    {
+      "repeat": 1,
+      "users": 100,
+      "configured_seconds": 10,
+      "actual_seconds": 11.094,
+      "attempts": 300,
+      "achieved_rps": 30.0,
+      "status_counts": {
+        "timeout": 300
+      },
+      "success_latency_ms": {
+        "p50": null,
+        "p95": null,
+        "p99": null
+      },
+      "all_request_latency_ms": {
+        "p50": 3015.47,
+        "p95": 3047.8,
+        "p99": 3052.17
+      },
+      "process_resource_peak_rss_mb": 279.1,
+      "process_resource_avg_cpu_percent": 1.8,
+      "resource_sample_count": 44,
+      "client_timeouts": 300,
+      "client_errors": 0,
+      "stuck_threads": 0
+    }
+  ]
+}

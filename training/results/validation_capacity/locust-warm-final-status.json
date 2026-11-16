@@ -1,0 +1,60 @@
+{
+  "endpoint": "GET /api/sessions",
+  "fixture": "one verified synthetic user, ten synthetic sessions",
+  "counts_by_stage": {
+    "repeat1_users10": {
+      "200": 112
+    },
+    "transition_repeat1_target10": {
+      "200": 40
+    },
+    "repeat1_users50": {
+      "200": 516
+    },
+    "transition_repeat1_target50": {
+      "200": 63
+    },
+    "repeat1_users100": {
+      "200": 1045
+    },
+    "transition_repeat1_target100": {
+      "200": 3
+    },
+    "repeat2_users10": {
+      "200": 105
+    },
+    "transition_repeat2_target10": {
+      "200": 44
+    },
+    "repeat2_users50": {
+      "200": 516
+    },
+    "transition_repeat2_target50": {
+      "200": 58
+    },
+    "repeat2_users100": {
+      "200": 1050
+    },
+    "repeat3_users10": {
+      "200": 110
+    },
+    "transition_repeat3_target10": {
+      "200": 40
+    },
+    "repeat3_users50": {
+      "200": 528
+    },
+    "transition_repeat3_target50": {
+      "200": 50
+    },
+    "repeat3_users100": {
+      "200": 1053
+    },
+    "finished": {
+      "200": 1
+    }
+  },
+  "total": {
+    "200": 5334
+  }
+}
